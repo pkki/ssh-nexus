@@ -41,6 +41,8 @@ const state = {
   terminalClipboardShortcuts: true,
   sftpTransferActive: false,
   sftpCancelRequested: false,
+  sftpSortKey: 'name',
+  sftpSortDirection: 1,
   monitorTimer: null,
   paletteItems: [],
   paletteIndex: 0,
@@ -838,9 +840,12 @@ function normalizeRemotePath(p) {
 }
 function remoteJoin(base,name){ return normalizeRemotePath((base==='/'?'':base)+'/'+name); }
 function formatBytes(n){ if(n<1024)return n+' B'; if(n<1048576)return (n/1024).toFixed(1)+' KB'; if(n<1073741824)return (n/1048576).toFixed(1)+' MB'; return (n/1073741824).toFixed(1)+' GB'; }
+let sftpDragDepth=0;
 
 function setSftpTransferActive(active){state.sftpTransferActive=active;const button=document.getElementById('sftpCancel');if(button)button.disabled=!active;['sftpUpload','sftpUploadDir','sftpDownloadDir'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=active;});}
 async function runSftpTransfer(task){if(state.sftpTransferActive){toast('別のSFTP転送が実行中です。完了または中止してから実行してください。',6000);return null;}state.sftpCancelRequested=false;setSftpTransferActive(true);try{return await task();}catch(e){if(state.sftpCancelRequested){toast('SFTP転送を中止しました',6000);return null;}toast('SFTP転送失敗: '+e.message,9000);return null;}finally{state.sftpCancelRequested=false;setSftpTransferActive(false);}}
+function renderSftpBreadcrumbs(remotePath){const nav=document.getElementById('sftpBreadcrumbs');nav.innerHTML='';const root=el('button',null,'/');root.type='button';root.onclick=()=>loadSftpPath('/');nav.appendChild(root);let current='';normalizeRemotePath(remotePath).split('/').filter(Boolean).forEach(part=>{nav.appendChild(el('span',null,'›'));current+='/'+part;const target=current,b=el('button',null,part);b.type='button';b.onclick=()=>loadSftpPath(target);nav.appendChild(b);});requestAnimationFrame(()=>{nav.scrollLeft=nav.scrollWidth;});}
+async function uploadDroppedSftpItems(files,targetPath){if(!files?.length)return;if(state.sftpTransferActive){toast('転送中です。完了または中止してからドロップしてください。',6000);return;}const droppedFiles=Array.from(files),names=droppedFiles.slice(0,5).map(file=>file.name).join('\n'),extra=droppedFiles.length>5?`\nほか ${droppedFiles.length-5}件`:'';if(!confirm(`${droppedFiles.length}件を ${targetPath} へアップロードしますか？\n\n${names}${extra}\n\nフォルダは再帰的にアップロードされ、既存フォルダへ統合されます。同名ファイルは上書きされます。`))return;const result=await runSftpTransfer(()=>bridgeApi.sftp.uploadDropped(state.sftpSessionId,targetPath,droppedFiles,state.verifySftpTransfers));if(result){const skipped=result.skipped?`・${result.skipped}件スキップ`:'';toast(`${result.files}ファイル・${result.directories}フォルダをアップロードしました${skipped}`,9000);await loadSftpPath(state.sftpPath);}}
 async function openSftp(sessionId) {
   if(state.sftpSessionId!==sessionId)state.sftpPath='/';
   state.sftpSessionId=sessionId; state.sftpPath=state.sftpPath||'/';
@@ -851,11 +856,12 @@ async function openSftp(sessionId) {
 async function loadSftpPath(remotePath) {
   const listEl=document.getElementById('sftpList');
   const normalized=normalizeRemotePath(remotePath); state.sftpPath=normalized;
-  document.getElementById('sftpPath').value=normalized;
+  document.getElementById('sftpPath').value=normalized;renderSftpBreadcrumbs(normalized);
+  document.getElementById('sftpSummary').textContent='読み込み中…';
   listEl.innerHTML='<div class="sftp-empty">読み込み中…</div>';
   try {
-    const items=await bridgeApi.sftp.list(state.sftpSessionId,normalized);
-    items.sort((a,b)=>Number(b.isDirectory)-Number(a.isDirectory)||a.name.localeCompare(b.name));
+    const items=await bridgeApi.sftp.list(state.sftpSessionId,normalized),direction=state.sftpSortDirection;
+    const compare=(a,b)=>{if(a.isDirectory!==b.isDirectory)return Number(b.isDirectory)-Number(a.isDirectory);if(state.sftpSortKey==='size')return ((a.size||0)-(b.size||0))*direction||a.name.localeCompare(b.name);if(state.sftpSortKey==='mtime')return ((a.mtime||0)-(b.mtime||0))*direction||a.name.localeCompare(b.name);return a.name.localeCompare(b.name,undefined,{numeric:true,sensitivity:'base'})*direction;};items.sort(compare);
     listEl.innerHTML='';
     if(!items.length) listEl.appendChild(el('div','sftp-empty','このフォルダは空です'));
     items.filter(x=>x.name!=='.'&&x.name!=='..').forEach(item=>{
@@ -865,7 +871,8 @@ async function loadSftpPath(remotePath) {
       row.appendChild(el('span','sftp-name',item.name));
       row.appendChild(el('span','sftp-size',item.isDirectory?'':formatBytes(item.size||0)));
       row.appendChild(el('span','sftp-date',item.mtime?new Date(item.mtime*1000).toLocaleDateString():''));
-      if(!item.isDirectory){const edit=el('button','secondary','✎');edit.title='テキスト編集';edit.onclick=e=>{e.stopPropagation();openRemoteEditor(remoteJoin(normalized,item.name),item.name);};row.appendChild(edit);}else row.appendChild(el('span'));
+      const more=el('button','secondary sftp-more','⋯');more.title='操作メニュー';more.setAttribute('aria-label',`${item.name} の操作メニュー`);more.onclick=e=>{e.stopPropagation();showSftpActions(item,normalized);};row.appendChild(more);
+      if(item.isDirectory){const folderTarget=remoteJoin(normalized,item.name);row.addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();row.classList.add('drop-target');document.getElementById('sftpPanel').classList.add('folder-target');document.getElementById('sftpDropTarget').textContent=`${item.name} へアップロード`;}});row.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();e.dataTransfer.dropEffect='copy';}});row.addEventListener('dragleave',e=>{if(!row.contains(e.relatedTarget))row.classList.remove('drop-target');});row.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();row.classList.remove('drop-target');sftpDragDepth=0;document.getElementById('sftpPanel').classList.remove('dragging','folder-target');uploadDroppedSftpItems(e.dataTransfer.files,folderTarget);});}
       row.ondblclick=async()=>{
         const full=remoteJoin(normalized,item.name);
         if(item.isDirectory) loadSftpPath(full);
@@ -874,7 +881,9 @@ async function loadSftpPath(remotePath) {
       row.oncontextmenu=e=>{e.preventDefault();showSftpActions(item,normalized);};
       listEl.appendChild(row);
     });
-  } catch(e) { listEl.innerHTML=''; listEl.appendChild(el('div','sftp-empty','SFTPエラー: '+e.message)); }
+    const visible=items.filter(x=>x.name!=='.'&&x.name!=='..'),folders=visible.filter(x=>x.isDirectory).length,totalBytes=visible.filter(x=>!x.isDirectory).reduce((sum,x)=>sum+(x.size||0),0);document.getElementById('sftpSummary').textContent=`${folders}フォルダ・${visible.length-folders}ファイル${totalBytes?`・${formatBytes(totalBytes)}`:''}　｜　ドラッグ＆ドロップでアップロード`;
+    document.querySelectorAll('.sftp-list-head button').forEach(button=>{button.classList.toggle('active',button.dataset.sort===state.sftpSortKey);button.textContent=button.dataset.sort==='name'?'名前':button.dataset.sort==='size'?'サイズ':'更新日';if(button.dataset.sort===state.sftpSortKey)button.textContent+=(state.sftpSortDirection>0?' ▲':' ▼');});
+  } catch(e) { listEl.innerHTML='';document.getElementById('sftpSummary').textContent='読み込みに失敗しました';listEl.appendChild(el('div','sftp-empty','SFTPエラー: '+e.message)); }
 }
 
 function showSftpActions(item,basePath){const full=remoteJoin(basePath,item.name);showModal(`${item.isDirectory?'📁':'📄'} ${item.name}`,body=>{const actions=el('div');actions.style.cssText='display:grid;grid-template-columns:repeat(2,1fr);gap:7px';const add=(label,cls,fn)=>{const b=el('button',cls,label);b.onclick=fn;actions.appendChild(b);};if(item.isDirectory)add('フォルダを開く','secondary',()=>{hideModal();loadSftpPath(full);});else{add('ダウンロード','secondary',async()=>{const r=await runSftpTransfer(()=>bridgeApi.sftp.download(state.sftpSessionId,full,state.verifySftpTransfers));if(r)toast((r.resumed?'ダウンロードを再開して完了しました: ':'ダウンロードしました: ')+r.localPath+(r.verified?'（SHA-256検証済み）':''));hideModal();});add('テキスト編集','secondary',()=>{hideModal();openRemoteEditor(full,item.name);});}add('名前を変更','secondary',async()=>{const name=prompt('新しい名前',item.name);if(!name||name===item.name)return;try{await bridgeApi.sftp.rename(state.sftpSessionId,full,remoteJoin(basePath,name));hideModal();loadSftpPath(basePath);toast('名前を変更しました');}catch(e){toast('名前変更失敗: '+e.message,7000);}});add('権限を変更','secondary',async()=>{const mode=prompt('権限（例: 755 または 644）',item.isDirectory?'755':'644');if(!mode)return;try{await bridgeApi.sftp.chmod(state.sftpSessionId,full,mode);hideModal();loadSftpPath(basePath);toast('権限を変更しました');}catch(e){toast('権限変更失敗: '+e.message,7000);}});add('削除','danger',async()=>{if(!confirm(`${item.name} を削除しますか？`))return;try{await bridgeApi.sftp.remove(state.sftpSessionId,full,item.isDirectory);hideModal();loadSftpPath(basePath);toast('削除しました');}catch(e){toast('削除失敗: '+e.message,7000);}});body.appendChild(actions);},hideModal,'閉じる');}
@@ -903,6 +912,13 @@ document.getElementById('sftpGo').onclick=()=>loadSftpPath(document.getElementBy
 document.getElementById('sftpPath').addEventListener('keydown',e=>{if(e.key==='Enter')loadSftpPath(e.target.value);});
 document.getElementById('sftpUp').onclick=()=>loadSftpPath(remoteJoin(state.sftpPath,'..'));
 document.getElementById('sftpRefresh').onclick=()=>loadSftpPath(state.sftpPath);
+document.querySelectorAll('.sftp-list-head button').forEach(button=>button.onclick=()=>{const key=button.dataset.sort;if(state.sftpSortKey===key)state.sftpSortDirection*=-1;else{state.sftpSortKey=key;state.sftpSortDirection=key==='name'?1:-1;}loadSftpPath(state.sftpPath);});
+const sftpPanel=document.getElementById('sftpPanel');
+sftpPanel.addEventListener('dragenter',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();sftpDragDepth++;sftpPanel.classList.add('dragging');document.getElementById('sftpDropTarget').textContent=`${state.sftpPath} へファイル・フォルダをアップロード`;}});
+sftpPanel.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files')){e.preventDefault();e.dataTransfer.dropEffect='copy';}});
+sftpPanel.addEventListener('dragleave',e=>{if(e.dataTransfer?.types?.includes('Files')){sftpDragDepth=Math.max(0,sftpDragDepth-1);if(!sftpDragDepth){sftpPanel.classList.remove('dragging','folder-target');document.querySelectorAll('.sftp-row.drop-target').forEach(row=>row.classList.remove('drop-target'));}}});
+sftpPanel.addEventListener('drop',e=>{if(!e.dataTransfer?.files?.length)return;e.preventDefault();sftpDragDepth=0;sftpPanel.classList.remove('dragging','folder-target');document.querySelectorAll('.sftp-row.drop-target').forEach(row=>row.classList.remove('drop-target'));uploadDroppedSftpItems(e.dataTransfer.files,state.sftpPath);});
+document.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files'))e.preventDefault();});document.addEventListener('drop',e=>{if(e.dataTransfer?.files?.length)e.preventDefault();});
 document.getElementById('sftpCancel').onclick=async()=>{if(!state.sftpTransferActive||!state.sftpSessionId)return;if(!confirm('実行中のSFTP転送を中止しますか？\n途中ファイルは再開用に残ります。'))return;const cancelled=await bridgeApi.sftp.cancel(state.sftpSessionId);if(cancelled){state.sftpCancelRequested=true;setStatus('SFTP転送を中止しています…');}};
 document.getElementById('sftpUpload').onclick=async()=>{try{const r=await runSftpTransfer(()=>bridgeApi.sftp.upload(state.sftpSessionId,state.sftpPath,state.verifySftpTransfers));if(r){toast((r.resumed?'アップロードを再開して完了しました: ':'アップロードしました: ')+r.remotePath+(r.verified?'（SHA-256検証済み）':''));loadSftpPath(state.sftpPath);}}catch(e){toast('アップロード失敗: '+e.message,7000);}};
 document.getElementById('sftpUploadDir').onclick=async()=>{if(!confirm('選択したローカルフォルダを、現在のリモートフォルダへ再帰アップロードしますか？'))return;try{const r=await runSftpTransfer(()=>bridgeApi.sftp.uploadDirectory(state.sftpSessionId,state.sftpPath));if(r){toast(`${r.files}ファイルをアップロードしました`,7000);loadSftpPath(state.sftpPath);}}catch(e){toast('フォルダアップロード失敗: '+e.message,9000);}};

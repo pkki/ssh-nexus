@@ -1,6 +1,6 @@
 {
   "name": "ssh-nexus",
-  "version": "2.27.0",
+  "version": "2.28.0",
   "description": "Powerful SSH client: tabbed & split terminals, encrypted credential vault unlocked by PIN",
   "main": "main.js",
   "scripts": {

@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, webUtils } = require('electron');
 ipcRenderer.send('diagnostics:log', 'preload.js started');
 
 // If renderer initialization ever fails, replace the silent blank box with a
@@ -112,6 +112,7 @@ contextBridge.exposeInMainWorld('api', {
     stat: (id, remotePath) => ipcRenderer.invoke('sftp:stat', id, remotePath),
     cancel: (id) => ipcRenderer.invoke('sftp:cancel', id),
     upload: (id, remoteDir, verify) => ipcRenderer.invoke('sftp:upload', id, remoteDir, !!verify),
+    uploadDropped: (id, remoteDir, files, verify) => {const paths=Array.from(files||[]).slice(0,100).map(file=>{try{return webUtils.getPathForFile(file);}catch(e){return'';}}).filter(Boolean);return ipcRenderer.invoke('sftp:uploadDropped',id,remoteDir,paths,!!verify);},
     download: (id, remotePath, verify) => ipcRenderer.invoke('sftp:download', id, remotePath, !!verify),
     uploadDirectory: (id, remoteDir) => ipcRenderer.invoke('sftp:uploadDirectory', id, remoteDir),
     downloadDirectory: (id, remoteDir) => ipcRenderer.invoke('sftp:downloadDirectory', id, remoteDir),

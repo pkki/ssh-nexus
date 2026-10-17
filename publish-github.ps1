@@ -1,4 +1,14 @@
 ﻿$ErrorActionPreference = 'Stop'
+# Keep Japanese status/error messages readable in Windows PowerShell 5.1 as
+# well as PowerShell 7, including output from native commands such as gh/npm.
+try {
+  $Utf8NoBom = New-Object System.Text.UTF8Encoding($false)
+  [Console]::InputEncoding = $Utf8NoBom
+  [Console]::OutputEncoding = $Utf8NoBom
+  $OutputEncoding = $Utf8NoBom
+} catch {
+  # Some redirected/non-interactive hosts do not expose a console handle.
+}
 Set-Location $PSScriptRoot
 
 function Find-CommandPath([string]$Name, [string[]]$Fallbacks) {

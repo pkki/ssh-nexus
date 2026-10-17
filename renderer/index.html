@@ -102,9 +102,25 @@
   .sftp-path { display:flex; padding:8px; gap:5px; border-bottom:1px solid #3c3c3c; }
   .sftp-path input { flex:1; min-width:0; background:#181818; color:#ddd; border:1px solid #555; padding:6px; border-radius:4px; }
   .sftp-actions { padding:6px 8px; display:flex; flex-wrap:wrap; gap:5px; border-bottom:1px solid #3c3c3c; }
-  #sftpList { flex:1; overflow:auto; }
+  .sftp-breadcrumbs { display:flex; align-items:center; gap:3px; padding:5px 8px; overflow-x:auto; border-bottom:1px solid #353535; background:#202020; min-height:32px; }
+  .sftp-breadcrumbs button { padding:3px 7px; background:transparent; border:0; color:#9cdcfe; cursor:pointer; white-space:nowrap; }
+  .sftp-breadcrumbs button:hover { background:#343434; }
+  .sftp-breadcrumbs span { color:#666; }
+  .sftp-summary { padding:5px 9px; color:#8d8d8d; font-size:10px; border-bottom:1px solid #333; }
+  .sftp-list-head { display:grid; grid-template-columns:24px minmax(0,1fr) 70px 70px 32px; gap:5px; padding:4px 9px; border-bottom:1px solid #3b3b3b; background:#202020; }
+  .sftp-list-head button { border:0; background:transparent; color:#999; padding:2px; font-size:10px; text-align:right; cursor:pointer; }
+  .sftp-list-head button[data-sort="name"] { text-align:left; }
+  .sftp-list-head button.active { color:#4fc1ff; }
+  #sftpList { flex:1; overflow:auto; position:relative; }
   .sftp-row { display:grid; grid-template-columns:24px minmax(0,1fr) 70px 70px 32px; align-items:center; gap:5px; padding:6px 9px; border-bottom:1px solid #303030; cursor:default; font-size:12px; }
   .sftp-row:hover { background:#2a2d2e; }
+  .sftp-row.drop-target { background:#123a52; outline:1px solid #28a8e0; outline-offset:-1px; }
+  .sftp-row .sftp-more { padding:2px 7px; min-width:0; }
+  .sftp-drop-overlay { display:none; position:absolute; inset:90px 12px 34px; z-index:5; align-items:center; justify-content:center; flex-direction:column; gap:7px; border:2px dashed #35b9ee; background:rgba(8,35,51,.94); color:#dff6ff; pointer-events:none; text-align:center; }
+  .sftp-drop-overlay strong { font-size:16px; }
+  .sftp-drop-overlay span { color:#8fdcf7; font-size:12px; }
+  #sftpPanel.dragging .sftp-drop-overlay { display:flex; }
+  #sftpPanel.folder-target .sftp-drop-overlay { display:none; }
   .sftp-name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
   .sftp-size,.sftp-date { color:#999; text-align:right; font-size:10px; }
   .sftp-empty { color:#888; text-align:center; padding:30px 10px; }
@@ -207,9 +223,13 @@
 <div id="authChallenge"><div class="modal"><h3 id="authChallengeTitle">SSH追加認証</h3><div id="authChallengeInstructions" class="hint"></div><div id="authChallengeFields"></div><div class="modal-actions"><button id="authChallengeCancel" class="secondary">キャンセル</button><button id="authChallengeSubmit">認証</button></div></div></div>
 <div id="sftpPanel">
   <div class="sftp-head"><strong>⇅ SFTP ファイル</strong><span id="sftpSession" class="badge"></span><button id="sftpClose" class="secondary">✕</button></div>
-  <div class="sftp-path"><button id="sftpUp" class="secondary">↑</button><input id="sftpPath" value="/"><button id="sftpGo">移動</button></div>
-  <div class="sftp-actions"><button id="sftpRefresh" class="secondary">↻</button><button id="sftpUpload">↑ ファイル</button><button id="sftpUploadDir">↑ フォルダ</button><button id="sftpDownloadDir" class="secondary">↓ 現在フォルダ</button><button id="sftpMkdir" class="secondary">＋ 作成</button><button id="sftpCancel" class="danger" disabled>■ 転送中止</button></div>
+  <div class="sftp-path"><button id="sftpUp" class="secondary" title="親フォルダへ">↑</button><input id="sftpPath" value="/" aria-label="リモートパス"><button id="sftpGo">移動</button></div>
+  <nav id="sftpBreadcrumbs" class="sftp-breadcrumbs" aria-label="リモートフォルダ階層"></nav>
+  <div class="sftp-actions"><button id="sftpRefresh" class="secondary" title="再読み込み">↻</button><button id="sftpUpload">↑ ファイル</button><button id="sftpUploadDir">↑ フォルダ</button><button id="sftpDownloadDir" class="secondary">↓ 現在フォルダ</button><button id="sftpMkdir" class="secondary">＋ 作成</button><button id="sftpCancel" class="danger" disabled>■ 転送中止</button></div>
+  <div id="sftpSummary" class="sftp-summary">ファイルやフォルダをここへドラッグ＆ドロップできます</div>
+  <div class="sftp-list-head"><span></span><button type="button" data-sort="name">名前</button><button type="button" data-sort="size">サイズ</button><button type="button" data-sort="mtime">更新日</button><span></span></div>
   <div id="sftpList"></div>
+  <div id="sftpDropOverlay" class="sftp-drop-overlay"><strong>このフォルダへアップロード</strong><span id="sftpDropTarget">ファイル・フォルダをドロップ</span></div>
 </div>
 
 <div id="unlockScreen">

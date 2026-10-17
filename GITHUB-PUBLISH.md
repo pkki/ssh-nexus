@@ -1,4 +1,4 @@
-# GitHubへ公開する
+﻿# GitHubへ公開する
 
 1. `SSH-Nexus-GitHub-Publish-<version>.zip` を展開します。
 2. `publish.cmd` をダブルクリックします（文字コード問題を避けるため、英数字名のファイルを使用してください）。
