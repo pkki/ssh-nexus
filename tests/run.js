@@ -1,0 +1,128 @@
+const assert = require('assert');
+const fs = require('fs');
+const crypto = require('crypto');
+const os = require('os');
+const path = require('path');
+const vm = require('vm');
+const { EventEmitter } = require('events');
+const iconv = require('iconv-lite');
+const { Vault } = require('../vault');
+const { SshManager, friendlyError, connectionOptions } = require('../sshManager');
+const { parseExternalConnect } = require('../externalConnect');
+const { buildJumpChain } = require('../jumpChain');
+const { parseOpenSshConfig } = require('../openSshConfig');
+
+const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ssh-nexus-test-'));
+(async () => { try {
+  const vault = new Vault(dir);
+  assert.strictEqual(vault.exists(), false);
+  assert.throws(()=>vault.setup('2468'),/at least 16/);
+  const recovery='Strong-Recovery!2468',newRecovery='New-Recovery!1357-Long';
+  vault.setup(recovery);
+  assert.strictEqual(vault.isUnlocked(), true);
+  assert.strictEqual(vault.securityInfo().fullyEncrypted,true);
+
+  const id = vault.add({
+    name: 'Test server', host: '127.0.0.1', port: 2222,
+    username: 'alice', authType: 'password', password: 'top-secret',
+    keepaliveIntervalSeconds:30,keepaliveCountMax:5,encoding:'shift_jis',agentForward:true,
+    autoTunnels: [{type:'local',localHost:'127.0.0.1',localPort:5000,remoteHost:'127.0.0.1',remotePort:8080}]
+  });
+  assert.strictEqual(vault.list().length, 1);
+  assert.strictEqual(vault.list()[0].autoTunnels[0].remotePort, 8080);
+  assert.strictEqual(vault.list()[0].keepaliveIntervalSeconds, 30);
+  assert.strictEqual(vault.list()[0].keepaliveCountMax, 5);
+  assert.strictEqual(vault.list()[0].encoding, 'shift_jis');
+  assert.strictEqual(vault.list()[0].agentForward, true);
+  assert.strictEqual(vault.get(id).password, 'top-secret');
+  assert.strictEqual(vault.get(id).timeoutSeconds, 8);
+
+  // Secret must never appear in the encrypted on-disk store.
+  const disk = fs.readFileSync(path.join(dir, 'vault.json'), 'utf8');
+  for(const plaintext of ['top-secret','Test server','127.0.0.1','alice','shift_jis'])assert.strictEqual(disk.includes(plaintext),false);
+  const stored=JSON.parse(disk);assert.strictEqual(stored.version,2);assert.ok(stored.payload);assert.strictEqual(stored.connections,undefined);
+  vault.setKnownHost('127.0.0.1:2222','SHA256:secret-fingerprint');assert.strictEqual(vault.getKnownHosts()['127.0.0.1:2222'],'SHA256:secret-fingerprint');assert.strictEqual(fs.readFileSync(path.join(dir,'vault.json'),'utf8').includes('secret-fingerprint'),false);
+  const sealed=vault.seal({connection:'private-host',events:[[0,'data','secret output']]},'recording');assert.strictEqual(sealed.includes('private-host'),false);assert.strictEqual(vault.unseal(sealed,'recording').connection,'private-host');assert.throws(()=>vault.unseal(sealed,'audit'));
+  vault.setAppData('settings',{customSnippets:[{name:'Private command',command:'sudo secret-task'}],fontSize:15});
+  vault.setAppData('workspaces',[{name:'Production layout',connectionId:id}]);
+  assert.strictEqual(vault.getAppData('settings').customSnippets[0].command,'sudo secret-task');
+  const appDataDisk=fs.readFileSync(path.join(dir,'vault.json'),'utf8');for(const plaintext of ['Private command','sudo secret-task','Production layout'])assert.strictEqual(appDataDisk.includes(plaintext),false);
+
+  vault.lock();
+  assert.throws(() => vault.list(), /locked/);
+  assert.throws(() => vault.unlock('wrong recovery phrase that is long'), /Invalid/);
+  vault.unlock(recovery);
+  assert.strictEqual(vault.get(id).password, 'top-secret');
+
+  vault.changePin(recovery,newRecovery);
+  vault.lock();
+  assert.throws(() => vault.unlock(recovery), /Invalid/);
+  vault.unlock(newRecovery);
+  assert.strictEqual(vault.get(id).password, 'top-secret');
+
+  const osWrappedKey = vault.exportKeyForOsProtection();
+  vault.lock();
+  vault.unlockWithKey(osWrappedKey);
+  assert.strictEqual(vault.get(id).username, 'alice');
+
+  // Legacy v1 vaults require the old PIN once, then migrate transactionally to
+  // a random master key with a strong recovery passphrase and encrypted metadata.
+  const legacyDir=fs.mkdtempSync(path.join(os.tmpdir(),'ssh-nexus-legacy-')),legacyPin='2468',legacySalt=crypto.randomBytes(32),legacyKey=crypto.scryptSync(legacyPin,legacySalt,32,{N:1<<15,maxmem:64*1024*1024});
+  const legacyEncrypt=value=>{const iv=crypto.randomBytes(12),cipher=crypto.createCipheriv('aes-256-gcm',legacyKey,iv),ct=Buffer.concat([cipher.update(Buffer.from(value)),cipher.final()]);return Buffer.concat([iv,cipher.getAuthTag(),ct]).toString('base64');};
+  fs.writeFileSync(path.join(legacyDir,'vault.meta.json'),JSON.stringify({version:1,salt:legacySalt.toString('base64'),verifier:legacyEncrypt('SSH_NEXUS_OK')}));
+  fs.writeFileSync(path.join(legacyDir,'vault.json'),JSON.stringify({connections:[{id:'legacy',name:'Legacy Secret Server',host:'10.20.30.40',port:22,username:'root',password:legacyEncrypt('legacy-password'),privateKey:'',passphrase:''}]}));
+  const legacyVault=new Vault(legacyDir),legacyResult=legacyVault.unlock(legacyPin);assert.strictEqual(legacyResult.migrationRequired,true);legacyVault.migrateLegacy('Migrated-Recovery!2026',{'10.20.30.40:22':'SHA256:legacy-host-key'});const migratedDisk=fs.readFileSync(path.join(legacyDir,'vault.json'),'utf8');for(const value of ['Legacy Secret Server','10.20.30.40','root','legacy-password','legacy-host-key'])assert.strictEqual(migratedDisk.includes(value),false);legacyVault.lock();legacyVault.unlock('Migrated-Recovery!2026');assert.strictEqual(legacyVault.get('legacy').password,'legacy-password');assert.strictEqual(legacyVault.getKnownHosts()['10.20.30.40:22'],'SHA256:legacy-host-key');
+
+  vault.remove(id);
+  assert.strictEqual(vault.list().length, 0);
+  assert.match(friendlyError(new Error('Timed out while waiting for handshake'), {host:'example.com',port:22}), /ハンドシェイク/);
+  assert.match(friendlyError(new Error('All configured authentication methods failed'), {}), /認証に失敗/);
+  const negotiated=connectionOptions({host:'example.com',port:22,username:'alice',password:'x'});assert.strictEqual(negotiated.algorithms,undefined);assert.strictEqual(negotiated.hostHash,'sha256');
+  assert.deepStrictEqual(parseExternalConnect(['--connect','alice@example.com:2200']),{host:'example.com',username:'alice',port:2200,source:'external'});
+  assert.deepStrictEqual(parseExternalConnect(['sshnexus://connect?host=server.local&user=bob&port=2222&password=ignored']),{host:'server.local',username:'bob',port:2222,source:'external'});
+  assert.deepStrictEqual(parseExternalConnect(['--connect','root@[2001:db8::1]:22']),{host:'2001:db8::1',username:'root',port:22,source:'external'});
+  assert.strictEqual(parseExternalConnect(['--connect','bad host:22']),null);assert.strictEqual(parseExternalConnect(['--connect','host:70000']),null);
+  const jumpProfiles=new Map([['a',{id:'a',host:'a'}],['b',{id:'b',host:'b',jumpHostId:'a'}],['c',{id:'c',host:'c',jumpHostId:'b'}]]);assert.deepStrictEqual(buildJumpChain(jumpProfiles.get('c'),id=>jumpProfiles.get(id)).map(x=>x.id),['a','b']);jumpProfiles.get('a').jumpHostId='c';assert.throws(()=>buildJumpChain(jumpProfiles.get('c'),id=>jumpProfiles.get(id)),/循環参照/);jumpProfiles.get('a').jumpHostId='';assert.throws(()=>buildJumpChain({id:'z',jumpHostId:'c'},id=>jumpProfiles.get(id),2),/最大2段/);
+  const imported=parseOpenSshConfig('Host jump-a\n HostName 10.0.0.1\n User bastion\nHost jump-b\n HostName 10.0.0.2\nHost app\n HostName app.internal\n User deploy\n Port 2222\n ProxyJump jump-a,jump-b\n IdentityFile "~/.ssh/id_ed25519"\n Compression yes\n ServerAliveInterval 25\n ForwardAgent yes\nHost *\n ServerAliveCountMax 7');const importedByName=new Map(imported.map(x=>[x.name,x]));assert.strictEqual(importedByName.get('app').host,'app.internal');assert.strictEqual(importedByName.get('app').port,2222);assert.strictEqual(importedByName.get('app').compression,true);assert.strictEqual(importedByName.get('app').agentForward,true);assert.strictEqual(importedByName.get('app').keepaliveIntervalSeconds,25);assert.strictEqual(importedByName.get('app').keepaliveCountMax,7);assert.strictEqual(importedByName.get('app').jumpHostId,importedByName.get('jump-b').id);assert.strictEqual(importedByName.get('jump-b').jumpHostId,importedByName.get('jump-a').id);assert.match(importedByName.get('app').notes,/IdentityFile/);const proxyStub=parseOpenSshConfig('Host internal\n ProxyJump bob@gateway.example:2200');assert.ok(proxyStub.some(x=>x.host==='gateway.example'&&x.port===2200&&x.username==='bob'));
+  const i18nSource=fs.readFileSync(path.join(__dirname,'../renderer/i18n.js'),'utf8');const loadI18n=(preference,navigatorLanguage='en-US')=>{const storage={sshNexusLocale:preference};const context={window:{},localStorage:{getItem:k=>storage[k]||null,setItem:(k,v)=>{storage[k]=v;}},navigator:{language:navigatorLanguage,languages:[navigatorLanguage]},document:{},NodeFilter:{SHOW_TEXT:4},MutationObserver:function(){}};vm.runInNewContext(i18nSource,context);return context.window.I18n;};const expectedLocales=['ja','en','zh-CN','ko','es','fr','de','pt-BR'];for(const locale of expectedLocales){const tr=loadI18n(locale);assert.ok(tr.locales.includes(locale));if(locale==='ja')assert.strictEqual(tr.t('設定'),'設定');else assert.notStrictEqual(tr.t('設定'),'設定');}assert.strictEqual(loadI18n('auto','de-DE').locale,'de');assert.strictEqual(loadI18n('en').t('設定'),'Settings');assert.strictEqual(loadI18n('zh-CN').t('設定'),'设置');assert.strictEqual(loadI18n('ko').t('設定'),'설정');
+  const rendererSource=fs.readFileSync(path.join(__dirname,'../renderer/app.js'),'utf8');
+  const extractFunction=name=>{const start=rendererSource.indexOf('function '+name+'(');assert.ok(start>=0,'missing function '+name);const brace=rendererSource.indexOf('{',start);let depth=0,i=brace;for(;i<rendererSource.length;i++){if(rendererSource[i]==='{')depth++;else if(rendererSource[i]==='}'&&--depth===0)return rendererSource.slice(start,i+1);}throw new Error('unterminated function '+name);};
+  const splitContext={state:{maximizedPaneId:null,panes:{p1:{connected:true}}},newPaneId:()=> 'p2',getActiveTab:()=>splitContext.tab,renderTabs:()=>{},renderActiveTab:()=>{},transformNode:null,tab:{root:{type:'leaf',paneId:'p1'}}};vm.runInNewContext(extractFunction('transformNode')+'\n'+extractFunction('splitPane'),splitContext);splitContext.transformNode=splitContext.transformNode||undefined;splitContext.splitPane('p1','h',true);assert.strictEqual(splitContext.tab.root.type,'split');assert.strictEqual(splitContext.tab.root.dir,'h');assert.deepStrictEqual(JSON.parse(JSON.stringify(splitContext.tab.root.children)),[{type:'leaf',paneId:'p2'},{type:'leaf',paneId:'p1'}]);assert.ok(splitContext.state.panes.p2);
+  const checkDraggedOrientation=(side,dir,expected)=>{const c={state:{tabs:[],activeTabId:'tab1',activePaneId:'original',maximizedPaneId:null,panes:{original:{connected:true,sessionId:'s1'},empty1:{connected:false},empty2:{connected:false}}},sessionToPane:{s1:'original'},bridgeApi:{ssh:{disconnect:()=>{}}},newPaneId:()=> 'blank',renderTabs:()=>{},renderActiveTab:()=>{},saveRecoveryState:()=>{},toast:()=>{},t:x=>x,confirm:()=>true,cancelAnimationFrame:()=>{},clearTimeout,finishPaneRecording:()=>{}};c.tab={id:'tab1',root:{type:'split',dir:'v',sizes:[1,1],children:[{type:'split',dir:'h',sizes:[1,1],children:[{type:'leaf',paneId:'original'},{type:'leaf',paneId:'empty1'}]},{type:'leaf',paneId:'empty2'}]}};c.state.tabs=[c.tab];c.getActiveTab=()=>c.tab;vm.runInNewContext(['firstPaneId','nodeHasPane','forEachPane','transformNode','splitPane','discardPaneForSnap','snapCurrentTabToEdge','splitDraggedTab'].map(extractFunction).join('\n'),c);assert.strictEqual(c.splitDraggedTab('tab1',side),true);assert.strictEqual(c.tab.root.dir,dir);assert.strictEqual(c.tab.root.children.length,2);assert.deepStrictEqual(JSON.parse(JSON.stringify(c.tab.root.children)).map(x=>x.paneId),expected);assert.deepStrictEqual(Object.keys(c.state.panes).sort(),['blank','original']);};checkDraggedOrientation('top','v',['original','blank']);checkDraggedOrientation('bottom','v',['blank','original']);checkDraggedOrientation('left','h',['original','blank']);checkDraggedOrientation('right','h',['blank','original']);
+  assert.match(rendererSource,/const orphanSessionData = new Map/);assert.match(rendererSource,/function openConnection\(connId\) \{[\s\S]*?newTab\(connId\)/);assert.match(rendererSource,/\[SSH接続済み\]/);assert.match(rendererSource,/接続テスト成功（診断のみ・未接続）/);assert.match(rendererSource,/function fitAndResizePane/);assert.match(rendererSource,/schedulePaneFit\(pane,true\)/);assert.match(rendererSource,/terminalClipboardShortcuts:\s*true/);assert.doesNotMatch(rendererSource,/const newPaneId\s*=\s*newPaneId\(\)/);assert.match(rendererSource,/const createdPaneId\s*=\s*newPaneId\(\)/);assert.doesNotMatch(rendererSource,/const t\s*=\s*el\('div',\s*'tab'/);assert.match(rendererSource,/const tabEl\s*=\s*el\('div',\s*'tab'/);assert.match(rendererSource,/tabEl\.title=t\(/);assert.match(rendererSource,/function beginTabHoldGesture/);assert.match(rendererSource,/setTimeout\(\(\)=>\{[\s\S]*?showTabSplitOverlay\(tab\.id\)[\s\S]*?\},350\)/);assert.match(rendererSource,/overlay\.classList\.add\('chooser'\)/);assert.match(rendererSource,/zone\.onclick=[\s\S]*?splitDraggedTab\(source,side\)/);assert.match(rendererSource,/document\.addEventListener\('pointermove',move,true\)/);assert.match(rendererSource,/function nodeHasPane/);assert.match(rendererSource,/function tabSplitSideAt/);assert.match(rendererSource,/function snapCurrentTabToEdge/);assert.match(rendererSource,/ids\.filter\(id=>id!==primaryId\)\.forEach\(discardPaneForSnap\)/);assert.match(rendererSource,/primaryFirst\?\[primary,blank\]:\[blank,primary\]/);assert.match(rendererSource,/if\(source\.id===target\.id\)return snapCurrentTabToEdge\(target,side\)/);assert.match(rendererSource,/function splitDraggedTab/);assert.match(rendererSource,/before\?\[source\.root,target\.root\]/);assert.match(rendererSource,/attachCustomKeyEventHandler/);assert.match(rendererSource,/key==='c'&&term\.hasSelection\(\)/);assert.match(rendererSource,/key==='v'/);assert.match(rendererSource,/addEventListener\('contextmenu'[\s\S]*?pasteTerminalClipboard\(pane\)/);assert.match(rendererSource,/setClipboardShortcuts/);assert.match(rendererSource,/value\.length>500\|\|hasControl/);assert.match(rendererSource,/version:2/);assert.match(rendererSource,/recording\.events\.push\(\[Date\.now\(\)-pane\.recording\.startedAt,'resize',cols,rows\]\)/);assert.match(rendererSource,/events\.push\(\[Date\.now\(\)-pane\.recording\.startedAt,'data',data\]\)/);const replaySource=rendererSource.slice(rendererSource.indexOf('function startReplay'),rendererSource.indexOf('// ---------- Settings'));assert.match(replaySource,/event\[1\]==='resize'/);assert.match(replaySource,/event\[1\]==='data'/);assert.match(replaySource,/replaySeek/);assert.match(replaySource,/function startReplay/);assert.match(replaySource,/const seekTo=/);assert.match(replaySource,/term\.reset\(\)/);assert.match(replaySource,/updateProgress/);assert.doesNotMatch(replaySource,/loadAddon\(fit/i);
+  // Sensitive renderer state must use the encrypted vault appData bridge. Only
+  // locale and sidebar geometry are intentionally allowed in localStorage.
+  assert.match(rendererSource,/secureData\.set\('settings'/);assert.match(rendererSource,/secureData\.set\('workspaces'/);assert.match(rendererSource,/secureData\.set\('recovery'/);assert.doesNotMatch(rendererSource,/localStorage\.setItem\(['"]sshNexus(?:Settings|Workspaces|Recovery)/);assert.doesNotMatch(rendererSource,/dialog\.saveText\(name,JSON\.stringify\(payload\)\)/);assert.match(rendererSource,/const autoHelloOnLaunch=sessionStorage\.getItem\('sshNexusHelloAttempted'\)!=='1'/);assert.match(rendererSource,/addWinHello\(box,err,!legacy&&autoHelloOnLaunch\)/);assert.match(rendererSource,/if\(autoStart\)setTimeout\(\(\)=>\{if\(!state\.unlocked&&btn\.isConnected&&!btn\.disabled\)btn\.click\(\);\},300\)/);
+  const rendererHtml=fs.readFileSync(path.join(__dirname,'../renderer/index.html'),'utf8');assert.match(rendererHtml,/<meta[^>]+http-equiv=["']Content-Security-Policy["'][^>]+default-src 'self'/i);assert.match(rendererHtml,/script-src 'self';/);assert.doesNotMatch(rendererHtml,/script-src[^;]*unsafe-inline/);assert.match(rendererHtml,/<script src="boot\.js"><\/script>/);assert.match(rendererHtml,/#termArea\s*\{[^}]*display:flex/);assert.match(rendererHtml,/#termArea\s*>\s*\.pane\s*\{[^}]*height:100%/);assert.match(rendererHtml,/#toolbar\s*\{[^}]*flex-direction:column/);assert.match(rendererHtml,/#tabs\s*\{[^}]*order:2/);assert.match(rendererHtml,/\.toolbar-actions\s*\{[^}]*order:1/);assert.match(rendererHtml,/#tabSplitOverlay\s*\{[^}]*position:absolute/);assert.match(rendererHtml,/#tabSplitOverlay\.preview-left \.tab-split-preview/);assert.match(rendererHtml,/#tabSplitOverlay\.preview-right \.tab-split-preview/);assert.match(rendererHtml,/#tabSplitOverlay\.chooser \.tab-split-zone/);assert.match(rendererHtml,/\.modal\.replay-modal\s*\{[^}]*96vw/);assert.match(rendererHtml,/\.replay-host\s*\{[^}]*overflow:auto/);assert.doesNotMatch(rendererHtml,/\.xterm-screen\s*\{[^}]*width\s*:\s*100%\s*!important/);
+  const mainSource=fs.readFileSync(path.join(__dirname,'../main.js'),'utf8');assert.match(mainSource,/async function focusMainWindowForHello/);assert.match(mainSource,/if \(mainWindow\.isMinimized\(\)\) mainWindow\.restore\(\)/);assert.doesNotMatch(mainSource,/setAlwaysOnTop\(true/);assert.doesNotMatch(mainSource,/ShowWindowAsync/);assert.match(mainSource,/function mainWindowHwnd\(\)/);assert.match(mainSource,/getNativeWindowHandle\(\)/);assert.match(mainSource,/RequestVerificationForWindowAsync/);assert.match(mainSource,/39E050C3-4E74-441A-8DC0-B81104DF949C/);assert.match(mainSource,/SshNexusOwnedHello/);assert.match(mainSource,/await focusMainWindowForHello\(\)/);assert.match(mainSource,/setPermissionRequestHandler/);assert.match(mainSource,/setPermissionCheckHandler/);assert.match(mainSource,/allowedRendererPermissions/);assert.match(mainSource,/will-navigate/);assert.match(mainSource,/setWindowOpenHandler/);assert.match(mainSource,/devTools:\s*!app\.isPackaged/);assert.match(mainSource,/secureData:get/);assert.match(mainSource,/secureData:set/);assert.match(mainSource,/secureData:delete/);assert.match(mainSource,/updates:check/);assert.match(mainSource,/updates:download/);assert.match(mainSource,/api\.github\.com\/repos/);assert.match(mainSource,/isNewerVersion/);assert.match(mainSource,/github-release\.json/);assert.match(mainSource,/Security-Migration-/);assert.match(mainSource,/catch\(err\)\{fs\.writeFileSync\(path\.join\(userData\(\),'vault\.meta\.json'\),oldMeta\)/);assert.match(mainSource,/migrateAllRecordings\(\)/);assert.match(mainSource,/recordings:save/);assert.match(mainSource,/recordings:list/);assert.match(mainSource,/encodeRecording\(data\)/);assert.match(mainSource,/vault\.seal\(data,'recording'\)/);assert.match(mainSource,/audit\.log\.enc/);assert.match(mainSource,/vault\.seal\(safe,'audit'\)/);assert.match(mainSource,/vault:migrateSecurity/);assert.match(mainSource,/deleteLegacyKnownHosts/);assert.match(mainSource,/i18n:setLocale/);assert.match(mainSource,/function normalizeUiLocale/);const preloadSource=fs.readFileSync(path.join(__dirname,'../preload.js'),'utf8');assert.match(preloadSource,/i18n:setLocale/);assert.match(preloadSource,/migrateSecurity/);assert.match(preloadSource,/updates:check/);assert.match(preloadSource,/updates:download/);assert.match(preloadSource,/updates:available/);assert.match(rendererSource,/function showSecurityMigration/);assert.match(rendererSource,/回復パスフレーズ（16文字以上）/);assert.ok(rendererHtml.indexOf('i18n.js')<rendererHtml.indexOf('app.js'));assert.match(mainSource,/recording-settings\.json/);assert.match(mainSource,/ssh-nexus-icon-256\.png/);assert.match(rendererSource,/function showRecordingLibrary/);assert.match(rendererSource,/recordings\.chooseDirectory/);assert.match(rendererSource,/finishPaneRecording/);const packageJson=require('../package.json');assert.strictEqual(packageJson.build.win.icon,'assets/ssh-nexus-icon.ico');assert.match(packageJson.scripts['build:installer:linux'],/build-installer\.sh/);const nsi=fs.readFileSync(path.join(__dirname,'../installer/ssh-nexus.nsi'),'utf8');assert.match(nsi,/WriteUninstaller/);assert.match(nsi,/CurrentVersion\\Uninstall\\SSH Nexus/);assert.match(nsi,/CreateShortcut/);assert.match(nsi,/Software\\Classes\\sshnexus/);assert.match(nsi,/RMDir \/r "\$INSTDIR"/);const ico=fs.readFileSync(path.join(__dirname,'../assets/ssh-nexus-icon.ico'));assert.strictEqual(ico.readUInt16LE(0),0);assert.strictEqual(ico.readUInt16LE(2),1);assert.ok(ico.readUInt16LE(4)>=8);
+  const manager = new SshManager();
+  const pendingPty={stream:null};manager.sessions.set('pty-size-test',pendingPty);assert.strictEqual(manager.resize('pty-size-test',132,41),true);assert.strictEqual(pendingPty.cols,132);assert.strictEqual(pendingPty.rows,41);let resizedTo;pendingPty.stream={setWindow:(rows,cols)=>{resizedTo={rows,cols};}};manager.resize('pty-size-test',144,48);assert.deepStrictEqual(resizedTo,{rows:48,cols:144});manager.sessions.delete('pty-size-test');
+  let encodedWrite;manager.sessions.set('encoding-test',{encoding:'shift_jis',stream:{write:data=>{encodedWrite=data;}}});manager.write('encoding-test','日本語');assert.strictEqual(iconv.decode(encodedWrite,'shift_jis'),'日本語');manager.sessions.delete('encoding-test');
+  const keys = manager.generateKeyPair({ type: 'ed25519', comment: 'test' });
+  assert.match(keys.public, /^ssh-ed25519 /);
+  assert.match(keys.private, /PRIVATE KEY/);
+  const fakeClient = new EventEmitter(); let challengeToken, receivedAnswers;
+  manager._attachKeyboardInteractive(fakeClient, 'unit', (token, challenge) => { challengeToken = token; assert.strictEqual(challenge.prompts[0].echo, false); }, 'test');
+  fakeClient.emit('keyboard-interactive', 'OTP', 'Enter code', '', [{ prompt:'Code: ', echo:false }], answers => { receivedAnswers = answers; });
+  assert.ok(challengeToken); manager.respondChallenge(challengeToken, ['123456']); assert.deepStrictEqual(receivedAnswers, ['123456']);
+  manager.sessions.set('remote-test', { connected:true, client:new EventEmitter(), tunnels:new Map(), transferStreams:new Set() });
+  await assert.rejects(manager.startRemoteTunnel('remote-test', { targetPort:0 }), /ポートが不正/);
+  let channelEnded=false,streamDestroyed=false;const fakeTransfer={destroy:()=>{streamDestroyed=true;}};manager.sessions.set('cancel-test',{connected:true,sftp:{end:()=>{channelEnded=true;}},transferStreams:new Set([fakeTransfer]),tunnels:new Map()});assert.strictEqual(manager.cancelSftpTransfers('cancel-test'),true);assert.strictEqual(channelEnded,true);assert.strictEqual(streamDestroyed,true);assert.strictEqual(manager.sessions.get('cancel-test').sftp,null);
+
+  // Resumable SFTP stream paths preserve the existing prefix and append only missing bytes.
+  const remoteFile=path.join(dir,'remote.bin').replace(/\\/g,'/'),downloadFile=path.join(dir,'download.bin'),uploadSource=path.join(dir,'upload-source.bin'),uploadRemote=path.join(dir,'upload-remote.bin').replace(/\\/g,'/');
+  fs.writeFileSync(remoteFile,Buffer.from('abcdefghij'));fs.writeFileSync(downloadFile,Buffer.from('abcd'));
+  fs.writeFileSync(uploadSource,Buffer.from('0123456789'));fs.writeFileSync(uploadRemote,Buffer.from('01234'));
+  const resumeManager=new SshManager();
+  const fakeSftp={stat:(p,cb)=>fs.stat(p,(e,s)=>cb(e,s&&{size:s.size,mode:s.mode,mtime:Math.floor(s.mtimeMs/1000)})),createReadStream:(p,o)=>fs.createReadStream(p,o),createWriteStream:(p,o)=>fs.createWriteStream(p,o),writeFile:(p,c,o,cb)=>fs.writeFile(p,c,o,cb),ext_openssh_rename:(a,b,cb)=>fs.rename(a,b,cb),unlink:(p,cb)=>fs.unlink(p,cb)};
+  resumeManager.getSftp=async()=>fakeSftp;
+  const down=await resumeManager.sftpDownload('test',remoteFile,downloadFile,null,4);assert.strictEqual(down.resumed,true);assert.strictEqual(fs.readFileSync(downloadFile,'utf8'),'abcdefghij');
+  const up=await resumeManager.sftpUpload('test',uploadSource,uploadRemote,null,5);assert.strictEqual(up.resumed,true);assert.strictEqual(fs.readFileSync(uploadRemote,'utf8'),'0123456789');
+  const verification=await resumeManager.verifySftpFile('test',remoteFile,downloadFile);assert.strictEqual(verification.ok,true);assert.strictEqual(verification.algorithm,'sha256');
+  fs.appendFileSync(downloadFile,'corrupt');const mismatch=await resumeManager.verifySftpFile('test',remoteFile,downloadFile);assert.strictEqual(mismatch.ok,false);
+  const atomic=await resumeManager.sftpWriteText('test',uploadRemote,'safe replacement');assert.strictEqual(atomic.atomic,true);assert.strictEqual(fs.readFileSync(uploadRemote,'utf8'),'safe replacement');
+  assert.strictEqual(fs.readdirSync(dir).some(x=>x.includes('.ssh-nexus-')),false);
+  console.log('PASS: fully encrypted v2 vault/metadata/host keys/recordings/audit, legacy migration, strong recovery, Hello bridge, tab snap, i18n, byobu/tmux, SFTP');
+} finally {
+  fs.rmSync(dir, { recursive: true, force: true });
+}})().catch(err => { console.error(err); process.exitCode=1; });

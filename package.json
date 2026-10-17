@@ -1,0 +1,72 @@
+{
+  "name": "ssh-nexus",
+  "version": "2.27.0",
+  "description": "Powerful SSH client: tabbed & split terminals, encrypted credential vault unlocked by PIN",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win nsis",
+    "build:installer:linux": "bash scripts/build-installer.sh",
+    "test": "node tests/run.js"
+  },
+  "dependencies": {
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-search": "^0.15.0",
+    "@xterm/addon-web-links": "^0.11.0",
+    "@xterm/xterm": "^5.5.0",
+    "iconv-lite": "^0.7.3",
+    "ssh2": "^1.15.0"
+  },
+  "devDependencies": {
+    "electron": "44.8.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "com.sshnexus.app",
+    "productName": "SSH Nexus",
+    "protocols": [
+      {
+        "name": "SSH Nexus connection request",
+        "schemes": [
+          "sshnexus"
+        ]
+      }
+    ],
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "vault.js",
+      "sshManager.js",
+      "externalConnect.js",
+      "jumpChain.js",
+      "openSshConfig.js",
+      "assets/**/*",
+      "renderer/**/*",
+      "github-release.json",
+      "package.json",
+      "README.md"
+    ],
+    "win": {
+      "icon": "assets/ssh-nexus-icon.ico",
+      "target": "nsis",
+      "artifactName": "SSH-Nexus-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

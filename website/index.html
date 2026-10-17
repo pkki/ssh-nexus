@@ -1,0 +1,100 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SSH Nexus・弩indows 11蜷代￠SSH繧ｯ繝ｩ繧､繧｢繝ｳ繝・窶・繧ｿ繝悶・蛻・牡繝ｻSFTP</title>
+  <meta name="description" content="SSH Nexus縺ｯWindows 11蜷代￠縺ｮ繝槭Ν繝√そ繝・す繝ｧ繝ｳSSH繧ｯ繝ｩ繧､繧｢繝ｳ繝医７S Code鬚ｨ繧ｿ繝悶∝ｷｦ蜿ｳ繝ｻ荳贋ｸ句・蜑ｲ縲ヾFTP縲￣roxyJump縲∵囓蜿ｷ蛹夜鹸逕ｻ縲仝indows Hello縺ｫ蟇ｾ蠢懊・>
+  <meta name="keywords" content="SSH繧ｯ繝ｩ繧､繧｢繝ｳ繝・Windows 11,Tera Term 莉｣譖ｿ,SFTP,繧ｿ繝ｼ繝溘リ繝ｫ,SSH繧ｽ繝輔ヨ,ProxyJump,Windows Hello">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+  <meta name="application-name" content="SSH Nexus"><meta name="author" content="SSH Nexus">
+  <meta name="theme-color" content="#09111d">
+  <link rel="canonical" href="https://pkki.github.io/ssh-nexus/">
+  <link rel="alternate" hreflang="ja" href="./"><link rel="alternate" hreflang="en" href="en/"><link rel="alternate" hreflang="zh-Hans" href="zh-cn/"><link rel="alternate" hreflang="ko" href="ko/"><link rel="alternate" hreflang="es" href="es/"><link rel="alternate" hreflang="fr" href="fr/"><link rel="alternate" hreflang="de" href="de/"><link rel="alternate" hreflang="pt-BR" href="pt-br/"><link rel="alternate" hreflang="x-default" href="en/">
+  <meta property="og:type" content="website"><meta property="og:url" content="https://pkki.github.io/ssh-nexus/"><meta property="og:site_name" content="SSH Nexus"><meta property="og:locale" content="ja_JP"><meta property="og:title" content="SSH Nexus・弩indows 11蜷代￠SSH繧ｯ繝ｩ繧､繧｢繝ｳ繝・><meta property="og:description" content="繧ｿ繝悶∝・蜑ｲ縲ヾFTP縲仝indows Hello縲り､・焚繧ｵ繝ｼ繝舌・縺ｮ謫堺ｽ懊ｒ縺ｲ縺ｨ縺､縺ｮ逕ｻ髱｢縺ｸ縲・><meta property="og:image" content="assets/ssh-nexus-main.png"><meta property="og:image:width" content="1917"><meta property="og:image:height" content="1020"><meta property="og:image:alt" content="SSH Nexus縺ｮ蟾ｦ蜿ｳ蛻・牡SSH繧ｿ繝ｼ繝溘リ繝ｫ逕ｻ髱｢">
+  <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="SSH Nexus・弩indows 11蜷代￠SSH繧ｯ繝ｩ繧､繧｢繝ｳ繝・><meta name="twitter:description" content="隍・焚縺ｮSSH謗･邯壹ヾFTP縲√・繝ｼ繝郁ｻ｢騾√ｒ縺ｲ縺ｨ縺､縺ｮ逕ｻ髱｢縺ｫ縲・><meta name="twitter:image" content="assets/ssh-nexus-main.png">
+  <link rel="icon" href="assets/app-icon.png"><link rel="apple-touch-icon" href="assets/app-icon.png"><link rel="manifest" href="manifest.webmanifest">
+  <link rel="preload" as="image" href="assets/ssh-nexus-main.png" fetchpriority="high"><link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"SSH Nexus","applicationCategory":"DeveloperApplication","operatingSystem":"Windows 11","softwareVersion":"2.27.0","description":"繧ｿ繝悶∝・蜑ｲ縲ヾFTP縲￣roxyJump縲仝indows Hello縺ｫ蟇ｾ蠢懊☆繧妓indows蜷代￠SSH繧ｯ繝ｩ繧､繧｢繝ｳ繝医・,"image":"assets/ssh-nexus-main.png","screenshot":["assets/ssh-nexus-main.png","assets/sftp-browser.png","assets/session-replay.png"],"downloadUrl":"https://github.com/pkki/ssh-nexus/releases/latest/download/SSH-Nexus-Setup-2.27.0.exe","featureList":["隍・焚SSH繧ｻ繝・す繝ｧ繝ｳ","蟾ｦ蜿ｳ繝ｻ荳贋ｸ句・蜑ｲ","SFTP繝輔ぃ繧､繝ｫ霆｢騾・,"Windows Hello","ProxyJump","證怜捷蛹悶そ繝・す繝ｧ繝ｳ骭ｲ逕ｻ"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Tera Term縺九ｉ謗･邯壼・繧堤ｧｻ縺帙∪縺吶°・・,"acceptedAnswer":{"@type":"Answer","text":"Tera Term縺ｮINI螻･豁ｴ縺ｨTTL繝槭け繝ｭ縲￣uTTY菫晏ｭ倥そ繝・す繝ｧ繝ｳ縲＾penSSH config縺ｮ蜿悶ｊ霎ｼ縺ｿ縺ｫ蟇ｾ蠢懊＠縺ｦ縺・∪縺吶・}},{"@type":"Question","name":"Windows Hello繧剃ｽｿ縺医↑縺・ｴ蜷医・・・,"acceptedAnswer":{"@type":"Answer","text":"蛻晏屓縺ｫ險ｭ螳壹☆繧・6譁・ｭ嶺ｻ･荳翫・蝗槫ｾｩ繝代せ繝輔Ξ繝ｼ繧ｺ縺ｧ隗｣髯､縺ｧ縺阪∪縺吶・}},{"@type":"Question","name":"繧､繝ｳ繧ｹ繝医・繝ｫ縺ｫ邂｡逅・・ｨｩ髯舌・蠢・ｦ√〒縺吶°・・,"acceptedAnswer":{"@type":"Answer","text":"繝ｦ繝ｼ繧ｶ繝ｼ蜊倅ｽ阪〒繧､繝ｳ繧ｹ繝医・繝ｫ縺吶ｋ縺溘ａ縲・壼ｸｸ縺ｯ邂｡逅・・ｨｩ髯舌ｒ蠢・ｦ√→縺励∪縺帙ｓ縲・}}]}</script>
+</head>
+<body>
+<div class="noise"></div>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/app-icon.png" alt=""><span>SSH Nexus<small>Secure terminal for Windows</small></span></a>
+    <button class="mobile-toggle" aria-label="繝｡繝九Η繝ｼ繧帝幕縺・>笘ｰ</button>
+    <nav class="nav" aria-label="繝｡繧､繝ｳ繝翫ン繧ｲ繝ｼ繧ｷ繝ｧ繝ｳ"><a href="#features">讖溯・</a><a href="#workflow">謫堺ｽ懈ｧ</a><a href="#screens">逕ｻ髱｢</a><a href="#security">繧ｻ繧ｭ繝･繝ｪ繝・ぅ</a><select class="language-select" aria-label="險隱槭ｒ驕ｸ謚・><option value="./" selected>譌･譛ｬ隱・/option><option value="en/">English</option><option value="zh-cn/">邂菴謎ｸｭ譁・/option><option value="ko/">﨑懋ｵｭ・ｴ</option><option value="es/">Espaﾃｱol</option><option value="fr/">Franﾃｧais</option><option value="de/">Deutsch</option><option value="pt-br/">Portuguﾃｪs</option></select><a class="nav-download" href="https://github.com/pkki/ssh-nexus/releases/latest/download/SSH-Nexus-Setup-2.27.0.exe" download>繝繧ｦ繝ｳ繝ｭ繝ｼ繝・/a></nav>
+  </div>
+</header>
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-content reveal">
+        <div class="eyebrow">Windows SSH Client</div>
+        <h1>縺､縺ｪ縺舌ゆｸｦ縺ｹ繧九・br>霑ｷ繧上★謇ｱ縺医ｋ縲・/h1>
+        <p class="hero-copy">隍・焚縺ｮSSH謗･邯壹ヾFTP縲√・繝ｼ繝郁ｻ｢騾√ｒ縺ｲ縺ｨ縺､縺ｮ逕ｻ髱｢縺ｫ縲８indows縺ｮ謫堺ｽ懈─縺ｨ縲∵律蟶ｸ驕狗畑縺ｫ蠢・ｦ√↑螳牙・諤ｧ繧偵∪縺ｨ繧√◆繝・せ繧ｯ繝医ャ繝励け繝ｩ繧､繧｢繝ｳ繝医〒縺吶・/p>
+        <div class="actions"><a class="button primary" href="https://github.com/pkki/ssh-nexus/releases/latest/download/SSH-Nexus-Setup-2.27.0.exe" download><span>Windows迚医ｒ繝繧ｦ繝ｳ繝ｭ繝ｼ繝・/span><span>竊・/span></a><a class="button secondary" href="#features">讖溯・繧定ｦ九ｋ</a></div>
+        <div class="meta"><span><i></i>Version 2.27.0</span><span>Windows 11 / x64</span><span>譌･譛ｬ隱槫ｯｾ蠢・/span></div>
+      </div>
+      <figure class="app-shot real-shot reveal" aria-label="SSH Nexus縺ｧ2蜿ｰ縺ｮ繧ｵ繝ｼ繝舌・縺ｸ蜷梧凾謗･邯壹＠縺ｦ縺・ｋ螳滄圀縺ｮ逕ｻ髱｢">
+        <a href="assets/ssh-nexus-main.png" target="_blank" rel="noopener"><img src="assets/ssh-nexus-main.png" fetchpriority="high" decoding="async" alt="SSH Nexus縺ｮ蟾ｦ蜿ｳ蛻・牡逕ｻ髱｢縲よ磁邯壼・荳隕ｧ縺ｨ2縺､縺ｮUbuntu SSH繧ｻ繝・す繝ｧ繝ｳ繧貞酔譎ゅ↓陦ｨ遉ｺ縺励※縺・ｋ" width="1917" height="1020"></a>
+        <figcaption>螳滄圀縺ｮWindows迚・v2.27.0 ﾂｷ 繧ｯ繝ｪ繝・け縺ｧ諡｡螟ｧ</figcaption>
+      </figure>
+    </div>
+  </section>
+  <div class="proof"><div class="wrap proof-grid"><div class="proof-item"><b>8險隱・/b><span>Windows縺ｮ陦ｨ遉ｺ險隱槭ｒ閾ｪ蜍募愛螳・/span></div><div class="proof-item"><b>譛螟ｧ5谿ｵ</b><span>ProxyJump繝√ぉ繝ｼ繝ｳ縺ｫ蟇ｾ蠢・/span></div><div class="proof-item"><b>AES-256-GCM</b><span>菫晉ｮ｡蠎ｫ蜈ｨ菴薙ｒ證怜捷蛹・/span></div><div class="proof-item"><b>Windows Hello</b><span>PIN繝ｻ鬘斐・謖・ｴ九〒隗｣髯､</span></div></div></div>
+
+  <section id="features">
+    <div class="wrap"><div class="section-head reveal"><div><div class="kicker">Built for daily work</div><h2>遶ｯ譛ｫ菴懈･ｭ繧偵・br>縺ｲ縺ｨ縺､縺ｮ蝣ｴ謇縺ｸ縲・/h2></div><p>謗･邯壼・繧呈爾縺吶→縺薙ｍ縺九ｉ縲∬､・焚繧ｵ繝ｼ繝舌・縺ｮ謫堺ｽ懊√ヵ繧｡繧､繝ｫ霆｢騾√∝・謗･邯壹∪縺ｧ縲よ勸谿ｵ縺ｮSSH驕狗畑縺ｧ陦後″譚･縺励※縺・◆讖溯・繧偵∝酔縺俶桃菴應ｽ鍋ｳｻ縺ｫ縺ｾ縺ｨ繧√∪縺励◆縲・/p></div>
+      <div class="feature-grid reveal">
+        <article class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16"/><path d="m7 9 3 3-3 3m5 0h5"/></svg></div><h3>繧ｿ繝悶→蛻・牡繝壹う繝ｳ</h3><p>VS Code縺ｫ霑代＞繧ｿ繝匁桃菴懊ょｷｦ蜿ｳ繝ｻ荳贋ｸ九・蜈･繧悟ｭ舌・蛻・牡縺ｧ縲∬､・焚繧ｻ繝・す繝ｧ繝ｳ繧貞酔譎ゅ↓隕区ｸ｡縺帙∪縺吶・/p><span class="tag">MULTI SESSION</span></article>
+        <article class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 5h6l2 2h8v12H4z"/><path d="M8 12h8m-4-3v6"/></svg></div><h3>SFTP繝輔ぃ繧､繝ｫ謫堺ｽ・/h3><p>繧｢繝・・繝ｭ繝ｼ繝峨∝・髢九∵紛蜷域ｧ讀懆ｨｼ縲√Μ繝｢繝ｼ繝育ｷｨ髮・∪縺ｧ縲らｫｯ譛ｫ繧帝屬繧後★縺ｫ繝輔ぃ繧､繝ｫ繧呈桶縺医∪縺吶・/p><span class="tag">SHA-256 VERIFY</span></article>
+        <article class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 12a7 7 0 1 1 2 5m-2 2v-6h6"/><path d="M12 8v4l3 2"/></svg></div><h3>邏譌ｩ縺・・謗･邯・/h3><p>DNS縲ゝCP縲ヾSH縲∬ｪ崎ｨｼ縺ｮ谿ｵ髫弱ｒ蛻・ｊ蛻・￠縺ｦ陦ｨ遉ｺ縲ょ・譁ｭ譎ゅ・蜀崎ｩｦ陦後ｂ縺昴・蝣ｴ縺ｧ陦後∴縺ｾ縺吶・/p><span class="tag">STAGE DIAGNOSTICS</span></article>
+        <article class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3 5 6v5c0 4.8 2.9 8.1 7 10 4.1-1.9 7-5.2 7-10V6z"/><path d="m9 12 2 2 4-5"/></svg></div><h3>繝帙せ繝磯嵯繧呈､懆ｨｼ</h3><p>蛻晏屓縺ｯSHA-256繝輔ぅ繝ｳ繧ｬ繝ｼ繝励Μ繝ｳ繝医ｒ遒ｺ隱阪ら匳骭ｲ貂医∩縺ｮ骰ｵ縺悟､峨ｏ繧後・謗･邯壹ｒ豁｢繧√∪縺吶・/p><span class="tag">TOFU PINNING</span></article>
+        <article class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 4v5m0 6v5"/></svg></div><h3>骭ｲ逕ｻ縺ｨ豁｣遒ｺ縺ｪ蜀咲函</h3><p>PTY繧ｵ繧､繧ｺ縺ｮ螟牙喧繧りｨ倬鹸縺励｜yobu繧дmux縺ｮ逕ｻ髱｢繧貞ｴｩ縺輔★蜀咲函縲る鹸逕ｻ繝輔ぃ繧､繝ｫ繧よ囓蜿ｷ蛹悶＠縺ｾ縺吶・/p><span class="tag">ENCRYPTED RECORDING</span></article>
+        <article class="feature-card"><div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M7 4v6m10-6v6M5 12h6v7H5zm8 0h6v7h-6z"/></svg></div><h3>繝ｯ繝ｼ繧ｯ繧ｹ繝壹・繧ｹ</h3><p>繧ｿ繝悶∝・蜑ｲ縲∵磁邯壼・縺ｮ驟咲ｽｮ繧剃ｿ晏ｭ倥よ･ｭ蜍吶＃縺ｨ縺ｮ菴懈･ｭ迺ｰ蠅・ｒ縺ｾ縺ｨ繧√※蠕ｩ蜈・〒縺阪∪縺吶・/p><span class="tag">LAYOUT RESTORE</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="workflow" id="workflow"><div class="wrap showcase"><div class="feature-copy reveal"><div class="kicker">Window-like snapping</div><h2>繧ｿ繝悶ｒ謖√▲縺ｦ縲・br>鄂ｮ縺阪◆縺・婿蜷代∈縲・/h2><p>繧ｿ繝悶ｒ遏ｭ縺城聞謚ｼ縺励☆繧九→縲∝ｷｦ繝ｻ蜿ｳ繝ｻ荳翫・荳九・驟咲ｽｮ蜈医′迴ｾ繧後∪縺吶よ婿蜷代ｒ繧ｯ繝ｪ繝・け縺吶ｋ縺九√◎縺ｮ縺ｾ縺ｾ繝峨Λ繝・げ縺励※髮｢縺吶□縺代ょｿ・ｦ∽ｻ･荳翫↓繝壹う繝ｳ繧貞｢励ｄ縺輔★縲∬ｦ九ｄ縺吶＞2逕ｻ髱｢縺ｸ謨ｴ縺医∪縺吶・/p><ul class="check-list"><li>髟ｷ謚ｼ縺礼ｴ・.35遘偵〒縺吶＄縺ｫ陦ｨ遉ｺ</li><li>謗･邯壻ｸｭ縺ｮ繧ｻ繝・す繝ｧ繝ｳ繧剃ｿ昴▲縺溘∪縺ｾ遘ｻ蜍・/li><li>繧ｯ繝ｪ繝・け謫堺ｽ懊→繝峨Λ繝・げ謫堺ｽ懊・荳｡譁ｹ縺ｫ蟇ｾ蠢・/li></ul></div><figure class="snap-demo actual reveal">
+  <a href="assets/tab-snap.png" target="_blank" rel="noopener"><img src="assets/tab-snap.png" loading="lazy" decoding="async" alt="SSH Nexus縺ｧ繧ｿ繝悶ｒ蜿ｳ蜊雁・縺ｸ繧ｹ繝翫ャ繝励＠縺ｦ縺・ｋ螳滄圀縺ｮ逕ｻ髱｢" width="1917" height="1023"></a>
+  <figcaption class="shot-note"><span>繧ｿ繝夜聞謚ｼ縺嶺ｸｭ縺ｮ繧ｹ繝翫ャ繝励・繝ｬ繝薙Η繝ｼ</span><span>繧ｯ繝ｪ繝・け縺ｧ諡｡螟ｧ</span></figcaption>
+</figure></div></section>
+
+  <section class="screens" id="screens"><div class="wrap">
+    <div class="section-head reveal"><div><div class="kicker">Actual interface</div><h2>螳滄圀縺ｮ逕ｻ髱｢縺ｧ隕九ｋ縲・br>SSH Nexus縲・/h2></div><p>隕九◆逶ｮ縺縺代・繝｢繝・け繧｢繝・・縺ｧ縺ｯ縺ｪ縺上仝indows縺ｧ蜍穂ｽ懊＠縺ｦ縺・ｋ螳溽判髱｢縺ｧ縺吶ゅヵ繧｡繧､繝ｫ霆｢騾√√そ繝・す繝ｧ繝ｳ蜀咲函縲仝indows Hello縲∫ｴｰ縺九↑險ｭ螳壹∪縺ｧ縲∝酔縺倥い繝励Μ縺ｮ荳ｭ縺ｧ螳檎ｵ舌＠縺ｾ縺吶・/p></div>
+    <div class="screen-grid">
+      <article class="screen-card replay reveal"><div class="screen-media"><a href="assets/session-replay.png" target="_blank" rel="noopener"><img src="assets/session-replay.png" loading="lazy" decoding="async" alt="SSH Nexus縺ｮ繧ｻ繝・す繝ｧ繝ｳ骭ｲ逕ｻ蜀咲函逕ｻ髱｢" width="1917" height="1018"></a></div><div class="screen-copy"><span>SESSION REPLAY</span><h3>遶ｯ譛ｫ縺ｮ蜍輔″繧偵√◎縺ｮ縺ｾ縺ｾ謖ｯ繧願ｿ斐ｋ</h3><p>蜈･蜉帙ち繧､繝溘Φ繧ｰ縺ｨPTY繧ｵ繧､繧ｺ繧剃ｿ昴▲縺溘∪縺ｾ蜀咲函縲Ｃyobu繧дmux縺ｮ陦ｨ遉ｺ繧ょｴｩ縺励∪縺帙ｓ縲・/p></div></article>
+      <article class="screen-card sftp reveal"><div class="screen-media"><a href="assets/sftp-browser.png" target="_blank" rel="noopener"><img src="assets/sftp-browser.png" loading="lazy" decoding="async" alt="SSH Nexus縺ｮSFTP繝輔ぃ繧､繝ｫ繝悶Λ繧ｦ繧ｶ繝ｼ" width="913" height="1018"></a></div><div class="screen-copy"><span>SFTP BROWSER</span><h3>霆｢騾√ｂ邱ｨ髮・ｂ蜷後§逕ｻ髱｢縺ｧ</h3><p>繝輔か繝ｫ繝繝ｼ遘ｻ蜍輔√い繝・・繝ｭ繝ｼ繝峨∽ｸｭ譁ｭ縲∝・髢九ヾHA-256讀懆ｨｼ縺ｫ蟇ｾ蠢懊＠縺ｾ縺吶・/p></div></article>
+      <article class="screen-card hello reveal"><div class="screen-media"><a href="assets/windows-hello.png" target="_blank" rel="noopener"><img src="assets/windows-hello.png" loading="lazy" decoding="async" alt="SSH Nexus縺ｮ蜑埼擇縺ｫ陦ｨ遉ｺ縺輔ｌ縺欷indows Hello隱崎ｨｼ逕ｻ髱｢" width="1911" height="1013"></a></div><div class="screen-copy"><span>WINDOWS HELLO</span><h3>襍ｷ蜍輔＠縺溘ｉ縲仝indows Hello縺ｧ隗｣髯､</h3><p>PIN繝ｻ鬘斐・謖・ｴ九・蜃ｦ逅・・Windows縺ｫ莉ｻ縺帙√い繝励Μ縺ｯ隱崎ｨｼ邨先棡縺縺代ｒ蜿励￠蜿悶ｊ縺ｾ縺吶・/p></div></article>
+      <article class="screen-card settings reveal"><div class="screen-media"><div class="shot-switch"><button class="on" type="button" data-shot="basic">蝓ｺ譛ｬ險ｭ螳・/button><button type="button" data-shot="secure">證怜捷蛹・/button></div><a class="settings-shot" data-panel="basic" href="assets/app-settings.png" target="_blank" rel="noopener"><img src="assets/app-settings.png" loading="lazy" decoding="async" alt="SSH Nexus縺ｮ蝓ｺ譛ｬ險ｭ螳夂判髱｢" width="595" height="846"></a><a class="settings-shot" data-panel="secure" href="assets/security-settings.png" target="_blank" rel="noopener" hidden><img src="assets/security-settings.png" loading="lazy" decoding="async" alt="SSH Nexus縺ｮ證怜捷蛹悶そ繧ｭ繝･繝ｪ繝・ぅ險ｭ螳夂判髱｢" width="638" height="890"></a></div><div class="screen-copy"><span>SETTINGS</span><h3>蠢・ｦ√↑險ｭ螳壹ｒ縲∬ｿｷ繧上↑縺・ｴ謇縺ｫ</h3><p>陦ｨ遉ｺ縲∵桃菴懊・鹸逕ｻ縲√ヰ繝・け繧｢繝・・縲∝屓蠕ｩ繝代せ繝輔Ξ繝ｼ繧ｺ繧偵∪縺ｨ繧√※邂｡逅・〒縺阪∪縺吶・/p></div></article>
+    </div>
+  </div></section>
+
+  <section class="security" id="security"><div class="wrap security-grid"><div class="security-diagram reveal"><div class="security-row"><div class="security-num">01</div><div><b>Windows Hello縺ｧ譛ｬ莠ｺ遒ｺ隱・/b><span>PIN繝ｻ鬘斐・謖・ｴ九・Windows縺悟・逅・＠縺ｾ縺・/span></div></div><div class="security-row"><div class="security-num">02</div><div><b>繝ｩ繝ｳ繝繝縺ｪ256-bit繝槭せ繧ｿ繝ｼ繧ｭ繝ｼ</b><span>謗･邯壽ュ蝣ｱ縺九ｉ險ｭ螳壹∪縺ｧ菫晉ｮ｡蠎ｫ蜈ｨ菴薙ｒ證怜捷蛹・/span></div></div><div class="security-row"><div class="security-num">03</div><div><b>蠑ｷ縺・屓蠕ｩ繝代せ繝輔Ξ繝ｼ繧ｺ</b><span>scrypt N=131072 / 16譁・ｭ嶺ｻ･荳・/span></div></div><div class="security-row"><div class="security-num">04</div><div><b>繝ｭ繝・け譎ゅ↓繧ｻ繝・す繝ｧ繝ｳ繧貞・譁ｭ</b><span>Windows繝ｭ繝・け繝ｻ繧ｹ繝ｪ繝ｼ繝励ｂ讀懷・</span></div></div></div><div class="security-copy reveal"><div class="kicker">Security by default</div><h2>繝代せ繝ｯ繝ｼ繝峨□縺代ｒ<br>髫縺呵ｨｭ險医〒縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲・/h2><p>繝帙せ繝亥錐縲√Θ繝ｼ繧ｶ繝ｼ蜷阪√Γ繝｢縲〔nown hosts縲√Ρ繝ｼ繧ｯ繧ｹ繝壹・繧ｹ縲・鹸逕ｻ縲∫屮譟ｻ繝ｭ繧ｰ縺ｾ縺ｧ證怜捷蛹悶る壼ｸｸ縺ｯWindows Hello縺ｧ邏譌ｩ縺剰ｧ｣髯､縺励∫ｷ頑･譎ゅ□縺大屓蠕ｩ繝代せ繝輔Ξ繝ｼ繧ｺ繧剃ｽｿ逕ｨ縺励∪縺吶・/p><ul class="check-list"><li>AES-256-GCM縺ｫ繧医ｋ隱崎ｨｼ莉倥″證怜捷</li><li>Windows Hello縺ｨDPAPI縺ｫ繧医ｋ繧ｭ繝ｼ菫晁ｭｷ</li><li>譌ｧ蠖｢蠑上°繧峨・蠑ｷ蛻ｶ遘ｻ陦後→證怜捷蛹悶ヰ繝・け繧｢繝・・</li></ul><p class="fineprint">逶｣譟ｻ繝ｭ繧ｰ繧ОpenSSH config縺ｪ縺ｩ縲∝茜逕ｨ閠・′譏守､ｺ逧・↓譖ｸ縺榊・縺吶ヵ繧｡繧､繝ｫ縺ｯ逶ｸ莠帝°逕ｨ縺ｮ縺溘ａ蟷ｳ譁・↓縺ｪ繧翫∪縺吶・/p></div></div></section>
+
+  <div class="languages"><div class="wrap language-line"><h3>菴ｿ縺・・繧後◆險隱槭〒縲√◎縺ｮ縺ｾ縺ｾ蟋九ａ繧峨ｌ縺ｾ縺吶・/h3><div class="language-list"><span>譌･譛ｬ隱・/span><span>English</span><span>邂菴謎ｸｭ譁・/span><span>﨑懋ｵｭ・ｴ</span><span>Espaﾃｱol</span><span>Franﾃｧais</span><span>Deutsch</span><span>Portuguﾃｪs</span></div></div></div>
+
+  <section class="faq" id="faq"><div class="wrap faq-grid"><div><div class="kicker">FAQ</div><h2>蟆主・蜑阪・<br>繧医￥縺ゅｋ雉ｪ蝠・/h2></div><div class="faq-list"><details><summary>Tera Term縺九ｉ謗･邯壼・繧堤ｧｻ縺帙∪縺吶°・・/summary><p>Tera Term縺ｮINI螻･豁ｴ縺ｨTTL繝槭け繝ｭ縺ｫ蜉縺医￣uTTY菫晏ｭ倥そ繝・す繝ｧ繝ｳ縲＾penSSH config縺ｮ蜿悶ｊ霎ｼ縺ｿ縺ｫ蟇ｾ蠢懊＠縺ｦ縺・∪縺吶りｪ崎ｨｼ繝代せ繝ｯ繝ｼ繝峨・譏守､ｺ逧・↑謫堺ｽ懊↑縺励↓蟷ｳ譁・ｧｻ陦後＠縺ｾ縺帙ｓ縲・/p></details><details><summary>繝代せ繝ｯ繝ｼ繝芽ｪ崎ｨｼ縺ｧ繧り・蜍輔Ο繧ｰ繧､繝ｳ縺ｧ縺阪∪縺吶°・・/summary><p>縺ｧ縺阪∪縺吶ゆｿ晏ｭ倥＠縺溯ｪ崎ｨｼ諠・ｱ縺ｯ證怜捷蛹紋ｿ晉ｮ｡蠎ｫ縺ｫ蜈･繧翫∵磁邯壼・繧帝∈縺ｶ縺ｨ閾ｪ蜍慕噪縺ｫ隱崎ｨｼ縺励∪縺吶らｧ伜ｯ・嵯縲ヾSH Agent縲〔eyboard-interactive・週OTP縺ｫ繧ょｯｾ蠢懊＠縺ｦ縺・∪縺吶・/p></details><details><summary>Windows Hello繧剃ｽｿ縺医↑縺・ｴ蜷医・・・/summary><p>蛻晏屓縺ｫ險ｭ螳壹☆繧・6譁・ｭ嶺ｻ･荳翫・蝗槫ｾｩ繝代せ繝輔Ξ繝ｼ繧ｺ縺ｧ隗｣髯､縺ｧ縺阪∪縺吶ら洒縺・焚蟄猶IN繧貞屓蠕ｩ謇区ｮｵ縺ｨ縺励※菴ｿ縺・ｨｭ險医〒縺ｯ縺ゅｊ縺ｾ縺帙ｓ縲・/p></details><details><summary>繧､繝ｳ繧ｹ繝医・繝ｫ縺ｫ邂｡逅・・ｨｩ髯舌・蠢・ｦ√〒縺吶°・・/summary><p>繝ｦ繝ｼ繧ｶ繝ｼ蜊倅ｽ阪〒繧､繝ｳ繧ｹ繝医・繝ｫ縺吶ｋ縺溘ａ縲・壼ｸｸ縺ｯ邂｡逅・・ｨｩ髯舌ｒ蠢・ｦ√→縺励∪縺帙ｓ縲ら樟蝨ｨ縺ｮ驟榊ｸ・ヵ繧｡繧､繝ｫ縺ｯ繧ｳ繝ｼ繝臥ｽｲ蜷崎ｨｼ譏取嶌縺ｫ繧医ｋ鄂ｲ蜷阪′縺ゅｊ縺ｾ縺帙ｓ縲・/p></details><details><summary>蟇ｾ蠢懊＠縺ｦ縺・ｋWindows縺ｯ・・/summary><p>迴ｾ蝨ｨ縺ｮ驟榊ｸ・沿縺ｯWindows 11 x64蜷代￠縺ｧ縺吶８indows Hello繧貞性繧蜍穂ｽ懊・Windows 11縺ｧ縺ｮ蛻ｩ逕ｨ繧貞燕謠舌→縺励※縺・∪縺吶・/p></details></div></div></section>
+
+  <section class="cta"><div class="wrap"><div class="cta-box reveal"><div><h2>谺｡縺ｮ謗･邯壹°繧峨ヾSH Nexus縺ｧ縲・/h2><p>繧､繝ｳ繧ｹ繝医・繝ｫ蠕後∫匳骭ｲ貂医∩縺ｮ謗･邯壼・繧偵・縺ｨ縺､縺ｮ逕ｻ髱｢縺九ｉ邂｡逅・〒縺阪∪縺吶・/p></div><div class="actions"><a class="button primary" href="https://github.com/pkki/ssh-nexus/releases/latest/download/SSH-Nexus-Setup-2.27.0.exe" download>Windows迚医ｒ繝繧ｦ繝ｳ繝ｭ繝ｼ繝・竊・/a></div></div></div></section>
+</main>
+<footer><div class="wrap footer-row"><div class="footer-brand"><img src="assets/app-icon.png" alt="">SSH Nexus <span>ﾂｩ 2026</span></div><div class="footer-links"><a href="#security">繧ｻ繧ｭ繝･繝ｪ繝・ぅ</a><a href="#faq">FAQ</a><span>Version 2.27.0</span></div></div></footer>
+<script>
+  const toggle=document.querySelector('.mobile-toggle'),nav=document.querySelector('.nav');
+  document.querySelector('.language-select')?.addEventListener('change',event=>{location.href=event.target.value});
+  toggle.addEventListener('click',()=>nav.classList.toggle('open'));
+  nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+  document.querySelectorAll('.shot-switch button').forEach(button=>button.addEventListener('click',()=>{
+    const card=button.closest('.settings'),name=button.dataset.shot;
+    card.querySelectorAll('.shot-switch button').forEach(b=>b.classList.toggle('on',b===button));
+    card.querySelectorAll('.settings-shot').forEach(panel=>panel.hidden=panel.dataset.panel!==name);
+  }));
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');observer.unobserve(entry.target)}}),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
+

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-src 'none'; form-action 'none'">
+<title>SSH Nexus</title>
+<link rel="stylesheet" href="../node_modules/@xterm/xterm/css/xterm.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; height:100%; background:#1e1e1e; color:#d4d4d4; font-family: 'Segoe UI', system-ui, sans-serif; overflow:hidden; }
+  #app { display:flex; height:100vh; }
+  /* Sidebar */
+  #sidebar { width:260px; flex:0 0 auto; background:#252526; display:flex; flex-direction:column; }
+  #sidebarResize { width:4px; flex:0 0 4px; cursor:col-resize; background:#333; z-index:20; }
+  #sidebarResize:hover { background:#007acc; }
+  #sidebar h2 { font-size:13px; text-transform:uppercase; color:#888; margin:12px 12px 6px; letter-spacing:1px; }
+  #connSearch { margin:4px 8px 8px; width:calc(100% - 16px); padding:7px 9px; border:1px solid #444; border-radius:4px; background:#1e1e1e; color:#ddd; }
+  #connList { flex:1; overflow:auto; padding:4px; }
+  .conn-item { padding:8px 8px; border-radius:4px; cursor:pointer; margin-bottom:3px; display:flex; align-items:center; gap:6px; border:1px solid transparent; }
+  .conn-item:hover { background:#2a2d2e; border-color:#3d3d3d; }
+  .conn-item.active { background:#094771; }
+  .conn-status { width:8px; height:8px; border-radius:50%; background:#666; flex:0 0 8px; }
+  .conn-status.connected { background:#4ec9b0; box-shadow:0 0 6px #4ec9b0; }
+  .conn-status.connecting { background:#dcdcaa; }
+  .conn-info { min-width:0; flex:1; }
+  .conn-name { font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .conn-meta { font-size:11px; color:#999; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .conn-item.active .conn-meta { color:#c8e6ff; }
+  .conn-quick { display:none; gap:2px; }
+  .conn-item:hover .conn-quick, .conn-item.active .conn-quick { display:flex; }
+  .conn-quick button { padding:3px 5px; min-width:24px; }
+  #sidebarFooter { padding:8px; border-top:1px solid #333; display:flex; gap:6px; flex-wrap:wrap; }
+  .empty-list { color:#888; padding:18px 10px; font-size:12px; text-align:center; }
+  button { background:#0e639c; color:#fff; border:none; padding:6px 10px; border-radius:4px; cursor:pointer; font-size:12px; }
+  button:hover { background:#1177bb; }
+  button.secondary { background:#3c3c3c; }
+  button.danger { background:#a1260d; }
+  /* Main */
+  #main { flex:1; display:flex; flex-direction:column; min-width:0; min-height:0; }
+  #toolbar { height:72px; flex:0 0 72px; background:#2d2d30; display:flex; flex-direction:column; align-items:stretch; padding:0; gap:0; border-bottom:1px solid #333; overflow:hidden; }
+  #tabs { order:2; display:flex; flex:0 0 34px; min-width:0; width:100%; overflow-x:auto; overflow-y:hidden; gap:2px; padding:0 8px; align-items:flex-end; border-top:1px solid #3a3a3a; scrollbar-width:thin; }
+  .toolbar-actions { order:1; display:flex; flex:0 0 38px; width:100%; min-width:0; max-width:none; gap:4px; align-items:center; overflow-x:auto; overflow-y:hidden; padding:4px 8px; scrollbar-width:thin; }
+  .toolbar-actions button { padding:5px 7px; white-space:nowrap; flex:0 0 auto; }
+  #quickCommand { width:115px; background:#1e1e1e; color:#ddd; border:1px solid #555; padding:5px; border-radius:4px; }
+  #terminalSearch { width:110px; background:#1e1e1e; color:#ddd; border:1px solid #555; padding:5px; border-radius:4px; }
+  .toolbar-sep { width:1px; height:20px; background:#555; margin:0 2px; }
+  .tab { flex:0 0 auto; max-width:240px; padding:6px 12px; background:#2d2d30; border-radius:4px 4px 0 0; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tab.active { background:#1e1e1e; }
+  .tab span:first-child { overflow:hidden; text-overflow:ellipsis; }
+  .tab .close { opacity:.6; flex:0 0 auto; }
+  .tab .close:hover { opacity:1; color:#f44; }
+  .tab.tab-hold-ready { outline:2px solid #4ec9b0; background:#164e63; }
+  #tabSplitOverlay { position:absolute; inset:0; z-index:40; pointer-events:none; background:rgba(0,0,0,.12); }
+  #tabSplitOverlay.chooser { pointer-events:auto; background:rgba(0,0,0,.36); }
+  .tab-split-preview { position:absolute; display:none; background:rgba(0,122,204,.38); border:2px solid #59bdf5; box-shadow:inset 0 0 24px rgba(0,122,204,.25); }
+  #tabSplitOverlay.preview-left .tab-split-preview { display:block; inset:6px 50% 6px 6px; }
+  #tabSplitOverlay.preview-right .tab-split-preview { display:block; inset:6px 6px 6px 50%; }
+  #tabSplitOverlay.preview-top .tab-split-preview { display:block; inset:6px 6px 50% 6px; }
+  #tabSplitOverlay.preview-bottom .tab-split-preview { display:block; inset:50% 6px 6px 6px; }
+  .tab-split-hint { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); padding:8px 12px; border-radius:6px; background:rgba(20,20,20,.94); color:#fff; font-size:12px; white-space:nowrap; z-index:2; }
+  .tab-split-zone { display:none; position:absolute; width:168px; height:58px; align-items:center; justify-content:center; color:#dff8ff; background:#16384b; border:1px solid #59bdf5; border-radius:7px; font-size:13px; font-weight:600; box-shadow:0 5px 18px rgba(0,0,0,.45); }
+  #tabSplitOverlay.chooser .tab-split-zone { display:flex; pointer-events:auto; cursor:pointer; }
+  #tabSplitOverlay.chooser .tab-split-zone:hover { background:#075f91; transform:scale(1.03); }
+  .tab-split-zone.left { left:7%; top:50%; transform:translateY(-50%); }
+  .tab-split-zone.right { right:7%; top:50%; transform:translateY(-50%); }
+  .tab-split-zone.top { top:7%; left:50%; transform:translateX(-50%); }
+  .tab-split-zone.bottom { bottom:7%; left:50%; transform:translateX(-50%); }
+  /* Terminal area */
+  #termArea { flex:1 1 0; min-height:0; position:relative; display:flex; background:#000; overflow:hidden; }
+  #termArea > .pane { width:100%; height:100%; }
+  #termArea > .pane-container { flex:1 1 0; }
+  .pane-container { display:flex; width:100%; height:100%; min-width:0; min-height:0; }
+  .pane-container.h { flex-direction:row; }
+  .pane-container.v { flex-direction:column; }
+  .pane { flex:1 1 0; position:relative; min-width:0; min-height:0; overflow:hidden; border:1px solid #333; }
+  .terminal-host { position:absolute; inset:0; min-width:0; min-height:0; overflow:hidden; }
+  .pane .xterm { height:100%; width:100%; }
+  /* xterm/fit-addon owns the screen and canvas pixel width. Overriding it to
+     100% desynchronizes character-cell geometry from SSH PTY dimensions. */
+  .pane.focused { border-color:#007acc; }
+  .splitter { background:#333; }
+  .pane-container.h > .splitter { width:4px; cursor:col-resize; }
+  .pane-container.v > .splitter { height:4px; cursor:row-resize; }
+  .pane-toolbar { position:absolute; top:4px; right:4px; z-index:5; display:flex; gap:4px; opacity:.4; }
+  .pane:hover .pane-toolbar { opacity:1; }
+  .pane-toolbar button { padding:2px 6px; font-size:10px; background:rgba(0,0,0,.6); }
+  .placeholder { display:flex; align-items:center; justify-content:center; height:100%; color:#888; flex-direction:column; gap:8px; }
+  /* Modal */
+  .modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.6); display:flex; align-items:center; justify-content:center; z-index:100; }
+  .modal { background:#252526; padding:20px; border-radius:8px; width:480px; max-width:92vw; max-height:90vh; overflow:auto; box-shadow:0 12px 40px #000; }
+  .modal h3 { margin:0 0 12px; }
+  .test-result { margin-top:10px; padding:10px; border-radius:5px; background:#181818; font-size:12px; white-space:pre-wrap; line-height:1.6; }
+  .test-result.ok { border-left:3px solid #4ec9b0; }
+  .test-result.fail { border-left:3px solid #f14c4c; }
+  .field-row { display:grid; grid-template-columns:1fr 110px; gap:8px; }
+  .hint { color:#999; font-size:11px; margin-top:3px; }
+  #toast { position:fixed; right:18px; bottom:34px; z-index:300; background:#333; color:#fff; padding:10px 14px; border-radius:5px; box-shadow:0 4px 18px #000; display:none; max-width:520px; font-size:12px; }
+  #sftpPanel { position:fixed; top:0; right:0; bottom:22px; width:440px; max-width:85vw; background:#252526; z-index:150; box-shadow:-8px 0 24px rgba(0,0,0,.55); display:none; flex-direction:column; border-left:1px solid #444; }
+  #sftpPanel.open { display:flex; }
+  .sftp-head { padding:10px; background:#2d2d30; display:flex; align-items:center; gap:6px; border-bottom:1px solid #444; }
+  .sftp-head strong { flex:1; }
+  .sftp-path { display:flex; padding:8px; gap:5px; border-bottom:1px solid #3c3c3c; }
+  .sftp-path input { flex:1; min-width:0; background:#181818; color:#ddd; border:1px solid #555; padding:6px; border-radius:4px; }
+  .sftp-actions { padding:6px 8px; display:flex; flex-wrap:wrap; gap:5px; border-bottom:1px solid #3c3c3c; }
+  #sftpList { flex:1; overflow:auto; }
+  .sftp-row { display:grid; grid-template-columns:24px minmax(0,1fr) 70px 70px 32px; align-items:center; gap:5px; padding:6px 9px; border-bottom:1px solid #303030; cursor:default; font-size:12px; }
+  .sftp-row:hover { background:#2a2d2e; }
+  .sftp-name { overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .sftp-size,.sftp-date { color:#999; text-align:right; font-size:10px; }
+  .sftp-empty { color:#888; text-align:center; padding:30px 10px; }
+  .badge { display:inline-block; padding:2px 5px; border-radius:8px; font-size:10px; background:#444; color:#ddd; }
+  .broadcast-on,.recording-on { background:#b52a2a !important; box-shadow:0 0 7px #f44; }
+  .modal.replay-modal { width:min(96vw,1500px); max-width:96vw; }
+  .replay-controls { display:flex; gap:7px; align-items:center; margin-bottom:7px; flex-wrap:wrap; }
+  .replay-timeline { display:grid; grid-template-columns:minmax(160px,1fr) auto; gap:12px; align-items:center; margin:0 0 9px; padding:8px 10px; background:#181818; border:1px solid #3b3b3b; }
+  .replay-timeline input[type="range"] { width:100%; accent-color:#159ad6; cursor:pointer; }
+  .replay-time { min-width:105px; text-align:right; color:#c8d6df; font:12px Consolas,monospace; }
+  .replay-host { height:68vh; background:#000; border:1px solid #555; padding:4px; overflow:auto; }
+  .replay-terminal-mount { position:relative; flex:none; }
+  .replay-terminal-mount .xterm { height:100%; width:100%; }
+  .monitor-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:8px 0; }
+  .monitor-card { background:#181818; border:1px solid #3b3b3b; border-radius:6px; padding:10px; min-width:0; }
+  .monitor-card h4 { margin:0 0 7px; color:#9cdcfe; font-size:12px; }
+  .monitor-value { font-size:18px; font-weight:600; }
+  .monitor-bar { height:7px; background:#333; border-radius:5px; overflow:hidden; margin-top:6px; }
+  .monitor-bar span { display:block; height:100%; background:#4ec9b0; }
+  .monitor-pre { background:#111; color:#ccc; padding:8px; white-space:pre; overflow:auto; max-height:170px; font:11px Consolas,monospace; }
+  .exec-result { margin-top:8px; border:1px solid #444; border-radius:5px; overflow:hidden; }
+  .exec-result header { padding:5px 8px; background:#333; font-weight:600; }
+  .exec-result pre { margin:0; padding:8px; background:#111; max-height:220px; overflow:auto; white-space:pre-wrap; font:11px Consolas,monospace; }
+  #commandPalette { position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.45); display:none; align-items:flex-start; justify-content:center; padding-top:70px; }
+  #commandPalette.open { display:flex; }
+  .palette-box { width:620px; max-width:90vw; background:#252526; border:1px solid #555; box-shadow:0 12px 45px #000; border-radius:7px; overflow:hidden; }
+  #paletteInput { width:100%; padding:13px 15px; border:0; border-bottom:1px solid #444; background:#181818; color:#fff; font-size:15px; outline:none; }
+  #paletteResults { max-height:55vh; overflow:auto; }
+  .palette-item { display:flex; gap:10px; padding:9px 13px; cursor:pointer; align-items:center; }
+  .palette-item:hover,.palette-item.selected { background:#094771; }
+  .palette-item span:first-child { width:24px; text-align:center; }
+  .palette-sub { color:#999; font-size:11px; margin-left:auto; }
+  #authChallenge { position:fixed; inset:0; z-index:700; background:rgba(0,0,0,.72); display:none; align-items:center; justify-content:center; }
+  #authChallenge.open { display:flex; }
+  #authChallenge .modal { border:1px solid #007acc; box-shadow:0 0 35px rgba(0,122,204,.45); }
+  .field { margin-bottom:10px; }
+  .field label { display:block; font-size:12px; color:#aaa; margin-bottom:4px; }
+  .field input, .field select, .field textarea { width:100%; padding:6px 8px; background:#1e1e1e; border:1px solid #444; color:#d4d4d4; border-radius:4px; }
+  .modal-actions { display:flex; gap:6px; justify-content:flex-end; margin-top:12px; }
+  /* Unlock screen */
+  #unlockScreen { position:fixed; inset:0; background:#1e1e1e; display:flex; align-items:center; justify-content:center; z-index:200; flex-direction:column; gap:16px; }
+  #unlockScreen h1 { font-size:28px; margin:0; }
+  #unlockScreen .box { background:#252526; padding:24px; border-radius:8px; width:360px; }
+  .error { color:#f44; font-size:12px; margin-top:6px; }
+  /* status bar */
+  #statusbar { height:22px; flex:0 0 22px; background:#007acc; color:#fff; font-size:11px; display:flex; align-items:center; padding:0 8px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="sidebar">
+    <h2>SSH 接続先</h2>
+    <input id="connSearch" type="search" placeholder="接続先を検索…">
+    <div id="connList"></div>
+    <div id="sidebarFooter">
+      <button id="btnAdd">＋ 追加</button>
+      <button id="btnImport" class="secondary">取込</button>
+      <button id="btnKeygen" class="secondary" title="SSH鍵ペアを生成">🔑 鍵生成</button>
+      <button id="btnSettings" class="secondary" title="設定">⚙</button>
+      <button id="btnLock" class="secondary">🔒 ロック</button>
+    </div>
+  </div>
+  <div id="sidebarResize" title="ドラッグしてサイドバー幅を変更"></div>
+  <div id="main">
+    <div id="toolbar">
+      <div id="tabs"></div>
+      <div class="toolbar-actions">
+        <button id="btnNewTab" class="secondary" title="新しいタブ (Ctrl+T)">＋ タブ</button>
+        <button id="btnWorkspace" class="secondary" title="ワークスペース保存・復元">WS</button>
+        <button id="btnSplitH" class="secondary" title="左右に分割">▥</button>
+        <button id="btnSplitV" class="secondary" title="上下に分割">▤</button>
+        <button id="btnSinglePane" class="secondary" title="選択中ペインだけ表示">1画面</button>
+        <span class="toolbar-sep"></span>
+        <button id="btnZoomOut" class="secondary" title="文字を小さく">A−</button>
+        <button id="btnZoomIn" class="secondary" title="文字を大きく">A＋</button>
+        <button id="btnCopy" class="secondary" title="選択文字をコピー">コピー</button>
+        <button id="btnPaste" class="secondary" title="貼り付け">貼付</button>
+        <button id="btnClear" class="secondary" title="ターミナルをクリア">消去</button>
+        <button id="btnSaveLog" class="secondary" title="表示内容をログ保存">ログ</button>
+        <button id="btnRecord" class="secondary" title="サーバー出力を時間付きで録画">● 録画</button>
+        <button id="btnReplay" class="secondary" title="保存した録画を再生">▶ 再生</button>
+        <select id="quickCommand" title="定型コマンド">
+          <option value="">コマンド…</option>
+          <option value="uptime">稼働時間</option><option value="df -h">ディスク使用量</option>
+          <option value="free -h">メモリ使用量</option><option value="ps aux --sort=-%cpu | head -15">CPU上位</option>
+          <option value="sudo journalctl -p 3 -n 50 --no-pager">最近のエラー</option>
+          <option value="docker ps --format 'table {{.Names}}\t{{.Status}}\t{{.Ports}}'">Docker一覧</option>
+        </select>
+        <button id="btnBroadcast" class="secondary" title="全接続ペインへ同じ入力を送信">一斉入力</button>
+        <button id="btnMultiExec" class="secondary" title="複数サーバーでコマンド実行">一括実行</button>
+        <input id="terminalSearch" type="search" placeholder="検索 Ctrl+F"><button id="btnFindPrev" class="secondary" title="前を検索">↑</button><button id="btnFindNext" class="secondary" title="次を検索">↓</button>
+      </div>
+    </div>
+    <div id="termArea"></div>
+    <div id="statusbar">SSH Nexus — ready</div>
+  </div>
+</div>
+<div id="toast"></div>
+<div id="commandPalette"><div class="palette-box"><input id="paletteInput" placeholder="接続先またはコマンドを検索…"><div id="paletteResults"></div></div></div>
+<div id="authChallenge"><div class="modal"><h3 id="authChallengeTitle">SSH追加認証</h3><div id="authChallengeInstructions" class="hint"></div><div id="authChallengeFields"></div><div class="modal-actions"><button id="authChallengeCancel" class="secondary">キャンセル</button><button id="authChallengeSubmit">認証</button></div></div></div>
+<div id="sftpPanel">
+  <div class="sftp-head"><strong>⇅ SFTP ファイル</strong><span id="sftpSession" class="badge"></span><button id="sftpClose" class="secondary">✕</button></div>
+  <div class="sftp-path"><button id="sftpUp" class="secondary">↑</button><input id="sftpPath" value="/"><button id="sftpGo">移動</button></div>
+  <div class="sftp-actions"><button id="sftpRefresh" class="secondary">↻</button><button id="sftpUpload">↑ ファイル</button><button id="sftpUploadDir">↑ フォルダ</button><button id="sftpDownloadDir" class="secondary">↓ 現在フォルダ</button><button id="sftpMkdir" class="secondary">＋ 作成</button><button id="sftpCancel" class="danger" disabled>■ 転送中止</button></div>
+  <div id="sftpList"></div>
+</div>
+
+<div id="unlockScreen">
+  <h1>SSH Nexus</h1>
+  <div class="box" id="unlockBox">
+    <h3>起動しています…</h3>
+    <div style="font-size:12px;color:#999">画面の初期化を待っています。</div>
+  </div>
+</div>
+
+<script src="boot.js"></script>
+<script src="../node_modules/@xterm/xterm/lib/xterm.js"></script>
+<script src="../node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>
+<script src="../node_modules/@xterm/addon-search/lib/addon-search.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

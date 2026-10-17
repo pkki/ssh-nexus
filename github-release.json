@@ -1,0 +1,5 @@
+﻿{
+    "owner":  "pkki",
+    "repo":  "ssh-nexus",
+    "checkOnStartup":  true
+}
