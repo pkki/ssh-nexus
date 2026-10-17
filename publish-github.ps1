@@ -8,6 +8,20 @@ function Find-CommandPath([string]$Name, [string[]]$Fallbacks) {
   return $null
 }
 
+function Test-NativeCommand([string]$Executable, [string[]]$Arguments) {
+  # Windows PowerShell converts native stderr into ErrorRecord objects. With
+  # ErrorActionPreference=Stop, expected probe failures (for example, a repo
+  # that does not exist yet) otherwise abort the whole publishing script.
+  $previousPreference = $ErrorActionPreference
+  try {
+    $ErrorActionPreference = 'SilentlyContinue'
+    & $Executable @Arguments *> $null
+    return ($LASTEXITCODE -eq 0)
+  } finally {
+    $ErrorActionPreference = $previousPreference
+  }
+}
+
 Write-Host "`n=== SSH Nexus GitHub 公開ツール ===" -ForegroundColor Cyan
 $gh = Find-CommandPath 'gh' @("$env:ProgramFiles\GitHub CLI\gh.exe", "$env:LOCALAPPDATA\Programs\GitHub CLI\gh.exe")
 if (-not $gh) {
@@ -19,8 +33,8 @@ if (-not $gh) {
   if (-not $gh) { throw 'GitHub CLIのインストール後にこのファイルをもう一度実行してください。' }
 }
 
-& $gh auth status *> $null
-if ($LASTEXITCODE -ne 0) {
+$authenticated = Test-NativeCommand $gh @('auth','status')
+if (-not $authenticated) {
   Write-Host 'ブラウザーでGitHubへログインしてください。' -ForegroundColor Yellow
   & $gh auth login --web --git-protocol https
   if ($LASTEXITCODE -ne 0) { throw 'GitHubへのログインに失敗しました。' }
@@ -98,23 +112,21 @@ if (Test-Path 'node_modules\cpu-features') { Remove-Item 'node_modules\cpu-featu
 if ($LASTEXITCODE -ne 0 -or -not (Test-Path $setup)) { throw 'Windowsインストーラーの作成に失敗しました。' }
 
 if (-not (Test-Path '.git')) { git init -b main }
-git config user.name *> $null
-if ($LASTEXITCODE -ne 0) { git config user.name $owner }
-git config user.email *> $null
-if ($LASTEXITCODE -ne 0) { git config user.email "$owner@users.noreply.github.com" }
+if (-not (Test-NativeCommand $git @('config','user.name'))) { git config user.name $owner }
+if (-not (Test-NativeCommand $git @('config','user.email'))) { git config user.email "$owner@users.noreply.github.com" }
 
 git add .
 git diff --cached --quiet
 if ($LASTEXITCODE -ne 0) { git commit -m "Release SSH Nexus $version" }
 if ($LASTEXITCODE -ne 0) { throw 'Gitコミットに失敗しました。' }
 
-& $gh repo view "$owner/$repo" *> $null
-if ($LASTEXITCODE -ne 0) {
+$repositoryExists = Test-NativeCommand $gh @('repo','view',"$owner/$repo")
+if (-not $repositoryExists) {
   & $gh repo create "$owner/$repo" --public --source . --remote origin --push
   if ($LASTEXITCODE -ne 0) { throw 'GitHubリポジトリの作成に失敗しました。' }
 } else {
-  $remote = git remote get-url origin 2>$null
-  if (-not $remote) { git remote add origin "https://github.com/$owner/$repo.git" }
+  $hasOrigin = Test-NativeCommand $git @('remote','get-url','origin')
+  if (-not $hasOrigin) { git remote add origin "https://github.com/$owner/$repo.git" }
   git branch -M main
   git push -u origin main
   if ($LASTEXITCODE -ne 0) { throw 'GitHubへのpushに失敗しました。' }
@@ -128,8 +140,8 @@ $sourceDigest = (Get-FileHash $sourceZip -Algorithm SHA256).Hash.ToLower()
 Set-Content $setupHash "$setupDigest  SSH-Nexus-Setup-$version.exe" -Encoding ASCII
 Set-Content $sourceHash "$sourceDigest  SSH-Nexus-Source-$version.zip" -Encoding ASCII
 
-& $gh release view $tag --repo "$owner/$repo" *> $null
-if ($LASTEXITCODE -eq 0) {
+$releaseExists = Test-NativeCommand $gh @('release','view',$tag,'--repo',"$owner/$repo")
+if ($releaseExists) {
   & $gh release upload $tag $setup $setupHash $sourceZip $sourceHash --repo "$owner/$repo" --clobber
 } else {
   & $gh release create $tag $setup $setupHash $sourceZip $sourceHash --repo "$owner/$repo" --title "SSH Nexus $version" --notes "Windows向けSSHクライアント SSH Nexus $version。インストーラー、SHA-256チェックサム、ソースアーカイブを収録しています。"
