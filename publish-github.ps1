@@ -125,20 +125,37 @@ if (-not (Test-Path '.git')) { git init -b main }
 if (-not (Test-NativeCommand $git @('config','user.name'))) { git config user.name $owner }
 if (-not (Test-NativeCommand $git @('config','user.email'))) { git config user.email "$owner@users.noreply.github.com" }
 
+$repositoryExists = Test-NativeCommand $gh @('repo','view',"$owner/$repo")
+$targetBranch = 'main'
+if ($repositoryExists) {
+  $remoteDefault = (& $gh repo view "$owner/$repo" --json defaultBranchRef --jq '.defaultBranchRef.name').Trim()
+  if ($remoteDefault) { $targetBranch = $remoteDefault }
+  # A newly extracted publication kit has no .git history. Base its working
+  # tree on the current remote default branch before committing, so repeated
+  # publication never fails with unrelated-history/non-fast-forward errors.
+  $hasOrigin = Test-NativeCommand $git @('remote','get-url','origin')
+  if ($hasOrigin) { git remote set-url origin "https://github.com/$owner/$repo.git" }
+  else { git remote add origin "https://github.com/$owner/$repo.git" }
+  $hasRemoteBranch = Test-NativeCommand $git @('fetch','origin',$targetBranch)
+  if ($hasRemoteBranch) {
+    git reset --mixed "origin/$targetBranch"
+    if ($LASTEXITCODE -ne 0) { throw '既存リポジトリとの同期に失敗しました。' }
+  } else {
+    Write-Host '既存リポジトリは空です。最初のコミットを作成します。' -ForegroundColor Yellow
+  }
+}
+
 git add .
 git diff --cached --quiet
 if ($LASTEXITCODE -ne 0) { git commit -m "Release SSH Nexus $version" }
 if ($LASTEXITCODE -ne 0) { throw 'Gitコミットに失敗しました。' }
 
-$repositoryExists = Test-NativeCommand $gh @('repo','view',"$owner/$repo")
 if (-not $repositoryExists) {
   & $gh repo create "$owner/$repo" --public --source . --remote origin --push
   if ($LASTEXITCODE -ne 0) { throw 'GitHubリポジトリの作成に失敗しました。' }
 } else {
-  $hasOrigin = Test-NativeCommand $git @('remote','get-url','origin')
-  if (-not $hasOrigin) { git remote add origin "https://github.com/$owner/$repo.git" }
-  git branch -M main
-  git push -u origin main
+  git branch -M $targetBranch
+  git push -u origin $targetBranch
   if ($LASTEXITCODE -ne 0) { throw 'GitHubへのpushに失敗しました。' }
 }
 

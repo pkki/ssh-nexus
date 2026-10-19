@@ -1,0 +1,10 @@
+const fs=require('fs'),acorn=require('acorn'),walk=require('acorn-walk');
+const jp=/[\u3040-\u30ff\u3400-\u9fff]/;
+const i18n=fs.readFileSync('renderer/i18n.js','utf8'),ai=acorn.parse(i18n,{ecmaVersion:'latest'});let keys=new Set();
+walk.simple(ai,{VariableDeclarator(n){if(n.id.name==='rows')for(const r of n.init.elements)if(r?.type==='ArrayExpression'&&r.elements[0]?.type==='Literal')keys.add(r.elements[0].value)},CallExpression(n){if(n.callee?.type==='MemberExpression'&&n.callee.object?.name==='rows'&&n.callee.property?.name==='push')for(const r of n.arguments)if(r?.type==='ArrayExpression'&&r.elements[0]?.type==='Literal')keys.add(r.elements[0].value)}});
+const candidates=new Set();
+function add(value){if(typeof value!=='string'||!jp.test(value)||value==='日本語')return;let v=value.replace(/\x1b\[[0-9;]*m/g,'');if(/<[^>]+>/.test(v)){for(const x of v.replace(/<[^>]+>/g,'\n').split(/\n+/).map(x=>x.trim()).filter(Boolean))if(jp.test(x))candidates.add(x);return;}if(v!==value){for(const x of v.split(/\r?\n/).map(x=>x.trim()).filter(Boolean))if(jp.test(x))candidates.add(x);return;}candidates.add(v)}
+function scan(file){const s=fs.readFileSync(file,'utf8'),a=acorn.parse(s,{ecmaVersion:'latest'}),insideMenu=ancestors=>ancestors.some(node=>node.type==='VariableDeclarator'&&node.id?.name==='menuRows');walk.ancestor(a,{Literal(n,ancestors){if(typeof n.value==='string'&&!insideMenu(ancestors))add(n.value)},TemplateLiteral(n,ancestors){if(!insideMenu(ancestors))add(n.quasis.map((q,i)=>q.value.cooked+(i<n.expressions.length?`{${i}}`:'')).join(''))}})}
+for(const f of ['renderer/app.js','renderer/boot.js','main.js','sshManager.js','vault.js','jumpChain.js','openSshConfig.js'])if(fs.existsSync(f))scan(f);
+const html=fs.readFileSync('renderer/index.html','utf8');for(const m of html.matchAll(/>([^<>]+)<|(?:title|placeholder|aria-label)="([^"]+)"/g))add((m[1]||m[2]||'').trim());
+const out=[...candidates].filter(x=>!keys.has(x)).sort((a,b)=>a.localeCompare(b,'ja'));fs.writeFileSync(process.argv[2]||'/tmp/i18n-candidates.json',JSON.stringify(out,null,2));console.log(`Extracted ${out.length} untranslated Japanese UI messages.`);

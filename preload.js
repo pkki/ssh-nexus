@@ -118,6 +118,7 @@ contextBridge.exposeInMainWorld('api', {
     downloadDirectory: (id, remoteDir) => ipcRenderer.invoke('sftp:downloadDirectory', id, remoteDir),
     readText: (id, remotePath) => ipcRenderer.invoke('sftp:readText', id, remotePath),
     writeText: (id, remotePath, content) => ipcRenderer.invoke('sftp:writeText', id, remotePath, content),
+    createTextFile: (id, remotePath, content) => ipcRenderer.invoke('sftp:createTextFile', id, remotePath, content),
     mkdir: (id, remotePath) => ipcRenderer.invoke('sftp:mkdir', id, remotePath),
     remove: (id, remotePath, isDirectory) => ipcRenderer.invoke('sftp:delete', id, remotePath, isDirectory),
     rename: (id, oldPath, newPath) => ipcRenderer.invoke('sftp:rename', id, oldPath, newPath),

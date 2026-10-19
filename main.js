@@ -32,6 +32,8 @@ function uiLocalePath(){return path.join(userData(),'ui-language.json');}
 function getUiLocalePreference(){try{const v=JSON.parse(fs.readFileSync(uiLocalePath(),'utf8')).locale;return v==='auto'||supportedLocales.includes(v)?v:'auto';}catch(e){return'auto';}}
 function getUiLocale(){const preference=getUiLocalePreference();return preference==='auto'?normalizeUiLocale(app.getLocale()):preference;}
 function setUiLocale(locale){const value=locale==='auto'?'auto':normalizeUiLocale(locale);const temp=uiLocalePath()+'.tmp';fs.writeFileSync(temp,JSON.stringify({locale:value},null,2),'utf8');fs.renameSync(temp,uiLocalePath());return{preference:value,locale:value==='auto'?normalizeUiLocale(app.getLocale()):value};}
+let mainTranslations={};try{mainTranslations=require('./renderer/i18n-data.json');}catch(e){}
+function mt(source,...values){const translated=mainTranslations[source]?.[getUiLocale()]||String(source);return translated.replace(/\{(\d+)\}/g,(all,index)=>values[Number(index)]??all);}
 const menuRows={
   file:['ファイル','File','文件','파일','Archivo','Fichier','Datei','Arquivo'],newTab:['新しいタブ','New tab','新建标签页','새 탭','Nueva pestaña','Nouvel onglet','Neuer Tab','Nova aba'],add:['接続先を追加','Add connection','添加连接','연결 추가','Añadir conexión','Ajouter une connexion','Verbindung hinzufügen','Adicionar conexão'],workspace:['ワークスペース','Workspace','工作区','워크스페이스','Espacio de trabajo','Espace de travail','Arbeitsbereich','Espaço de trabalho'],lock:['保管庫をロック','Lock vault','锁定保险库','보관소 잠금','Bloquear bóveda','Verrouiller le coffre','Tresor sperren','Bloquear cofre'],quit:['終了','Quit','退出','종료','Salir','Quitter','Beenden','Sair'],edit:['編集','Edit','编辑','편집','Editar','Édition','Bearbeiten','Editar'],copy:['コピー','Copy','复制','복사','Copiar','Copier','Kopieren','Copiar'],paste:['貼り付け','Paste','粘贴','붙여넣기','Pegar','Coller','Einfügen','Colar'],selectAll:['すべて選択','Select all','全选','모두 선택','Seleccionar todo','Tout sélectionner','Alles auswählen','Selecionar tudo'],view:['表示','View','视图','보기','Ver','Affichage','Ansicht','Exibir'],find:['ターミナル検索','Find in terminal','终端搜索','터미널 검색','Buscar en terminal','Rechercher dans le terminal','Im Terminal suchen','Pesquisar no terminal'],palette:['コマンドパレット','Command palette','命令面板','명령 팔레트','Paleta de comandos','Palette de commandes','Befehlspalette','Paleta de comandos'],fullscreen:['全画面表示','Full screen','全屏','전체 화면','Pantalla completa','Plein écran','Vollbild','Tela cheia'],reload:['再読み込み','Reload','重新加载','새로고침','Recargar','Recharger','Neu laden','Recarregar'],tools:['ツール','Tools','工具','도구','Herramientas','Outils','Werkzeuge','Ferramentas'],multi:['複数サーバーへ一括実行','Run on multiple servers','在多台服务器运行','여러 서버에서 실행','Ejecutar en varios servidores','Exécuter sur plusieurs serveurs','Auf mehreren Servern ausführen','Executar em vários servidores'],keygen:['SSH鍵生成','Generate SSH key','生成 SSH 密钥','SSH 키 생성','Generar clave SSH','Générer une clé SSH','SSH-Schlüssel erzeugen','Gerar chave SSH'],settings:['設定','Settings','设置','설정','Configuración','Paramètres','Einstellungen','Configurações'],help:['ヘルプ','Help','帮助','도움말','Ayuda','Aide','Hilfe','Ajuda'],about:['SSH Nexusについて','About SSH Nexus','关于 SSH Nexus','SSH Nexus 정보','Acerca de SSH Nexus','À propos de SSH Nexus','Über SSH Nexus','Sobre o SSH Nexus']
 };
@@ -130,18 +132,18 @@ function makeHostVerifier(conn) {
     if (known[identity]) {
       if (known[identity] === fingerprint) return done(true);
       dialog.showMessageBox(mainWindow, {
-        type: 'error', title: 'SSH host key changed',
-        message: `The host key for ${identity} has changed.`,
-        detail: `Expected: ${known[identity]}\nReceived: ${fingerprint}\n\nConnection blocked to prevent a possible man-in-the-middle attack.`,
-        buttons: ['Block connection']
+        type:'error',title:mt('SSHホスト鍵が変更されました'),
+        message:mt('{0} のホスト鍵が変更されています。',identity),
+        detail:mt('期待値: {0}\n受信値: {1}\n\n中間者攻撃の可能性があるため接続を遮断しました。',known[identity],fingerprint),
+        buttons:[mt('接続を遮断')]
       }).finally(() => done(false));
       return;
     }
     dialog.showMessageBox(mainWindow, {
-      type: 'warning', title: 'Trust new SSH host?',
-      message: `First connection to ${identity}`,
-      detail: `SHA-256 fingerprint:\n${fingerprint}\n\nVerify this fingerprint with the server administrator before trusting it.`,
-      buttons: ['Cancel', 'Trust and connect'], defaultId: 0, cancelId: 0, noLink: true
+      type:'warning',title:mt('新しいSSHホストを信頼しますか？'),
+      message:mt('{0} への初回接続です',identity),
+      detail:mt('SHA-256フィンガープリント:\n{0}\n\n信頼する前にサーバー管理者へフィンガープリントを確認してください。',fingerprint),
+      buttons:[mt('キャンセル'),mt('信頼して接続')],defaultId:0,cancelId:0,noLink:true
     }).then(({ response }) => {
       if (response !== 1) return done(false);
       try{vault.setKnownHost(identity,fingerprint);done(true);}catch(e){done(false);}
@@ -275,7 +277,8 @@ function auditLog(event, details = {}) {
 function readAuditLog(limit=500){try{const file=path.join(userData(),'audit.log.enc');if(!fs.existsSync(file))return[];const lines=fs.readFileSync(file,'utf8').trim().split(/\r?\n/).filter(Boolean);return lines.slice(-limit).map(line=>{try{return line.startsWith('ENC2:')?vault.unseal(line.slice(5),'audit'):null;}catch(e){return null;}}).filter(Boolean).reverse();}catch(e){return[];}}
 function migrateLegacyAuditLog(){try{const old=path.join(userData(),'audit.log');if(!fs.existsSync(old)||!vault.isUnlocked()||vault.getVersion()<2)return;for(const line of fs.readFileSync(old,'utf8').split(/\r?\n/)){if(!line.trim())continue;try{const entry=JSON.parse(line);auditLog(entry.event||'legacy-import',entry);}catch(e){}}const size=fs.statSync(old).size;fs.writeFileSync(old,crypto.randomBytes(Math.max(1,size)));fs.unlinkSync(old);}catch(e){}}
 function sendSftpProgress(id,value){if(mainWindow&&!mainWindow.isDestroyed())mainWindow.webContents.send('sftp:progress',id,value);}
-async function uploadLocalFileToSftp(id,localPath,remoteDir,verify=false){const remotePath=path.posix.join(remoteDir,path.basename(localPath)),localSize=fs.statSync(localPath).size;let resumeFrom=0;try{const existing=await ssh.sftpStat(id,remotePath);if(existing.size>0){const partial=existing.size<localSize;const choice=await dialog.showMessageBox(mainWindow,{type:'question',title:'アップロード先に同名ファイルがあります',message:partial?'途中のファイルからアップロードを再開しますか？':'同名ファイルを上書きしますか？',detail:`${path.basename(localPath)}\nリモート: ${existing.size} bytes / ローカル: ${localSize} bytes\n再開は両方が同じファイルの場合だけ使用してください。`,buttons:partial?['再開','上書き','スキップ']:['上書き','スキップ'],defaultId:partial?0:1,cancelId:partial?2:1});if((partial&&choice.response===2)||(!partial&&choice.response===1))return{skipped:true,localPath,remotePath};if(partial&&choice.response===0)resumeFrom=existing.size;}}catch(err){if(!/no such|not exist/i.test(err.message||''))throw err;}const progress=value=>sendSftpProgress(id,value),result=await ssh.sftpUpload(id,localPath,remotePath,progress,resumeFrom);let verification=null;if(verify||resumeFrom>0){verification=await ssh.verifySftpFile(id,remotePath,localPath,progress);if(!verification.ok){auditLog('sftp-verify-failed',{remotePath,direction:'upload'});throw new Error('SHA-256検証に失敗しました。リモートファイルとローカルファイルが一致しません。');}}auditLog('sftp-upload',{remotePath,bytes:localSize,resumedFrom:resumeFrom,verified:!!verification,source:'file-or-drop'});return{localPath,remotePath,...result,verified:verification&&verification.ok,sha256:verification&&verification.localHash};}
+function validateSftpCreatePath(remotePath){if(typeof remotePath!=='string'||remotePath.includes('\0')||!remotePath.startsWith('/'))throw new Error('作成先のパスが不正です。');const normalized=path.posix.normalize(remotePath),name=path.posix.basename(normalized);if(normalized==='/'||!name||name==='.'||name==='..')throw new Error('ファイルまたはフォルダ名が不正です。');return normalized;}
+async function uploadLocalFileToSftp(id,localPath,remoteDir,verify=false){const remotePath=path.posix.join(remoteDir,path.basename(localPath)),localSize=fs.statSync(localPath).size;let resumeFrom=0;try{const existing=await ssh.sftpStat(id,remotePath);if(existing.size>0){const partial=existing.size<localSize;const choice=await dialog.showMessageBox(mainWindow,{type:'question',title:mt('アップロード先に同名ファイルがあります'),message:mt(partial?'途中のファイルからアップロードを再開しますか？':'同名ファイルを上書きしますか？'),detail:mt('{0}\nリモート: {1} bytes / ローカル: {2} bytes\n再開は両方が同じファイルの場合だけ使用してください。',path.basename(localPath),existing.size,localSize),buttons:partial?[mt('再開'),mt('上書き'),mt('スキップ')]:[mt('上書き'),mt('スキップ')],defaultId:partial?0:1,cancelId:partial?2:1});if((partial&&choice.response===2)||(!partial&&choice.response===1))return{skipped:true,localPath,remotePath};if(partial&&choice.response===0)resumeFrom=existing.size;}}catch(err){if(!/no such|not exist/i.test(err.message||''))throw err;}const progress=value=>sendSftpProgress(id,value),result=await ssh.sftpUpload(id,localPath,remotePath,progress,resumeFrom);let verification=null;if(verify||resumeFrom>0){verification=await ssh.verifySftpFile(id,remotePath,localPath,progress);if(!verification.ok){auditLog('sftp-verify-failed',{remotePath,direction:'upload'});throw new Error('SHA-256検証に失敗しました。リモートファイルとローカルファイルが一致しません。');}}auditLog('sftp-upload',{remotePath,bytes:localSize,resumedFrom:resumeFrom,verified:!!verification,source:'file-or-drop'});return{localPath,remotePath,...result,verified:verification&&verification.ok,sha256:verification&&verification.localHash};}
 
 function sendMenuAction(action) { if (mainWindow && !mainWindow.isDestroyed()) mainWindow.webContents.send('menu:action', action); }
 function installAppMenu() {
@@ -563,7 +566,7 @@ app.whenReady().then(() => {
     const r = await dialog.showSaveDialog(mainWindow, { defaultPath: path.posix.basename(remotePath) });
     if (r.canceled || !r.filePath) return null;
     const remote=await ssh.sftpStat(id,remotePath);let resumeFrom=0;
-    if(fs.existsSync(r.filePath)){const localSize=fs.statSync(r.filePath).size;if(localSize>0){const partial=localSize<remote.size;const choice=await dialog.showMessageBox(mainWindow,{type:'question',title:'保存先に同名ファイルがあります',message:partial?'途中のファイルからダウンロードを再開しますか？':'既存ファイルを上書きしますか？',detail:`ローカル: ${localSize} bytes / リモート: ${remote.size} bytes\n再開は両方が同じファイルの場合だけ使用してください。`,buttons:partial?['再開','上書き','キャンセル']:['上書き','キャンセル'],defaultId:partial?0:1,cancelId:partial?2:1});if((partial&&choice.response===2)||(!partial&&choice.response===1))return null;if(partial&&choice.response===0)resumeFrom=localSize;}}
+    if(fs.existsSync(r.filePath)){const localSize=fs.statSync(r.filePath).size;if(localSize>0){const partial=localSize<remote.size;const choice=await dialog.showMessageBox(mainWindow,{type:'question',title:mt('保存先に同名ファイルがあります'),message:mt(partial?'途中のファイルからダウンロードを再開しますか？':'既存ファイルを上書きしますか？'),detail:mt('ローカル: {0} bytes / リモート: {1} bytes\n再開は両方が同じファイルの場合だけ使用してください。',localSize,remote.size),buttons:partial?[mt('再開'),mt('上書き'),mt('キャンセル')]:[mt('上書き'),mt('キャンセル')],defaultId:partial?0:1,cancelId:partial?2:1});if((partial&&choice.response===2)||(!partial&&choice.response===1))return null;if(partial&&choice.response===0)resumeFrom=localSize;}}
     const progress=value=>{if(mainWindow)mainWindow.webContents.send('sftp:progress',id,value);};
     const result=await ssh.sftpDownload(id,remotePath,r.filePath,progress,resumeFrom);
     let verification=null;if(verify||resumeFrom>0){verification=await ssh.verifySftpFile(id,remotePath,r.filePath,progress);if(!verification.ok){auditLog('sftp-verify-failed',{remotePath,direction:'download'});throw new Error('SHA-256検証に失敗しました。ダウンロードファイルとリモートファイルが一致しません。');}}
@@ -582,7 +585,8 @@ app.whenReady().then(() => {
   });
   ipcMain.handle('sftp:readText', (e, id, remotePath) => ssh.sftpReadText(id, remotePath));
   ipcMain.handle('sftp:writeText', async (e, id, remotePath, content) => {const result=await ssh.sftpWriteText(id,remotePath,content);auditLog('sftp-atomic-save',{remotePath,bytes:result.bytes});return result;});
-  ipcMain.handle('sftp:mkdir', (e, id, remotePath) => ssh.sftpMkdir(id, remotePath));
+  ipcMain.handle('sftp:createTextFile',async(e,id,remotePath,content='')=>{const safePath=validateSftpCreatePath(remotePath);if(typeof content!=='string')throw new Error('テキスト内容が不正です。');const result=await ssh.sftpCreateTextFile(id,safePath,content);auditLog('sftp-create-file',{remotePath:safePath,bytes:result.bytes});return result;});
+  ipcMain.handle('sftp:mkdir',async(e,id,remotePath)=>{const safePath=validateSftpCreatePath(remotePath);const result=await ssh.sftpMkdir(id,safePath);auditLog('sftp-create-directory',{remotePath:safePath});return result;});
   ipcMain.handle('sftp:delete', (e, id, remotePath, isDirectory) => ssh.sftpDelete(id, remotePath, isDirectory));
   ipcMain.handle('sftp:rename', (e, id, oldPath, newPath) => ssh.sftpRename(id, oldPath, newPath));
   ipcMain.handle('sftp:chmod', (e, id, remotePath, mode) => ssh.sftpChmod(id, remotePath, mode));

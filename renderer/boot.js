@@ -2,13 +2,14 @@
 // Independent bootstrap: reports resource-load and runtime failures before the
 // main renderer bundle reaches the unlock UI.
 (function () {
+  function tr(value) { return window.I18n && window.I18n.t ? window.I18n.t(value) : value; }
   function report(kind, detail) {
-    var text = kind + ': ' + detail;
+    var text = kind + ': ' + tr(detail);
     try { if (window.api && window.api.diagnostics) window.api.diagnostics.log(text); } catch (_) {}
     var box = document.getElementById('unlockBox');
     if (box) {
       box.textContent = '';
-      var heading = document.createElement('h3'); heading.textContent = '起動エラー';
+      var heading = document.createElement('h3'); heading.textContent = tr('起動エラー');
       var error = document.createElement('div'); error.className = 'error'; error.style.whiteSpace = 'pre-wrap'; error.textContent = text;
       box.append(heading, error);
     }

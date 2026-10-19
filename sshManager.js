@@ -444,9 +444,16 @@ class SshManager {
     }
   }
 
+  async sftpCreateTextFile(id, remotePath, content = '') {
+    const channel = await this.getSftp(id);
+    if (Buffer.byteLength(content, 'utf8') > 1024 * 1024) throw new Error('新規テキストファイルは1MB以下にしてください。');
+    await new Promise((resolve, reject) => channel.writeFile(remotePath, content, { encoding:'utf8', mode:0o644, flag:'wx' }, err => err ? reject(err) : resolve()));
+    return { created:true, bytes:Buffer.byteLength(content,'utf8') };
+  }
+
   async sftpMkdir(id, remotePath) {
     const channel = await this.getSftp(id);
-    return await new Promise((resolve, reject) => channel.mkdir(remotePath, err => err ? reject(err) : resolve(true)));
+    return await new Promise((resolve, reject) => channel.mkdir(remotePath, { mode:0o755 }, err => err ? reject(err) : resolve(true)));
   }
 
   async sftpDelete(id, remotePath, isDirectory) {

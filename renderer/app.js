@@ -3,8 +3,8 @@
 const i18n=window.I18n||{t:x=>x,locale:'ja',preference:'auto',locales:['ja'],names:{ja:'日本語'},setLocale:()=>{},localizeDocument:()=>{},observe:()=>{}};
 const t=value=>i18n.t(value);
 i18n.localizeDocument();i18n.observe();
-const nativeConfirm=window.confirm.bind(window),nativeAlert=window.alert.bind(window);
-window.confirm=message=>nativeConfirm(t(message));window.alert=message=>nativeAlert(t(message));
+const nativeConfirm=window.confirm.bind(window),nativeAlert=window.alert.bind(window),nativePrompt=window.prompt.bind(window);
+window.confirm=message=>nativeConfirm(t(message));window.alert=message=>nativeAlert(t(message));window.prompt=(message,defaultValue='')=>nativePrompt(t(message),defaultValue);
 
 const apiAvailable = !!window.api;
 // Keep the renderer alive long enough to show a useful diagnostic if the
@@ -285,7 +285,7 @@ async function connectPane(paneId, connId, isRetry = false) {
   try {
     const sid = await bridgeApi.ssh.connect(connId);
     attachSessionToPane(sid,paneId);
-    const current=state.panes[paneId];if(current&&current.terminal&&current.connecting){current.terminal.write(`\x1b[36m[接続中]\x1b[0m ${target?target.name:'SSH'} へ接続しています…\r\n`);current.terminal.focus();}
+    const current=state.panes[paneId];if(current&&current.terminal&&current.connecting){current.terminal.write(t(`\x1b[36m[接続中]\x1b[0m ${target?target.name:'SSH'} へ接続しています…\r\n`));current.terminal.focus();}
     renderConnections();
   } catch (e) {
     pane.connecting=false;setPaneTabTitle(paneId,`${target?target.name:'SSH'} • 失敗`);renderActiveTab();
@@ -318,7 +318,7 @@ async function connectAdhocPane(paneId, opts) {
   try {
     const sid = await bridgeApi.ssh.connectAdhoc(opts);
     attachSessionToPane(sid,paneId);
-    if(pane.terminal&&pane.connecting){pane.terminal.write(`\x1b[36m[接続中]\x1b[0m ${opts.host} へ接続しています…\r\n`);pane.terminal.focus();}
+    if(pane.terminal&&pane.connecting){pane.terminal.write(t(`\x1b[36m[接続中]\x1b[0m ${opts.host} へ接続しています…\r\n`));pane.terminal.focus();}
     renderConnections();
   } catch (e) {
     pane.connecting=false;setPaneTabTitle(paneId,`${opts.host} • 失敗`);renderActiveTab();
@@ -923,7 +923,8 @@ document.getElementById('sftpCancel').onclick=async()=>{if(!state.sftpTransferAc
 document.getElementById('sftpUpload').onclick=async()=>{try{const r=await runSftpTransfer(()=>bridgeApi.sftp.upload(state.sftpSessionId,state.sftpPath,state.verifySftpTransfers));if(r){toast((r.resumed?'アップロードを再開して完了しました: ':'アップロードしました: ')+r.remotePath+(r.verified?'（SHA-256検証済み）':''));loadSftpPath(state.sftpPath);}}catch(e){toast('アップロード失敗: '+e.message,7000);}};
 document.getElementById('sftpUploadDir').onclick=async()=>{if(!confirm('選択したローカルフォルダを、現在のリモートフォルダへ再帰アップロードしますか？'))return;try{const r=await runSftpTransfer(()=>bridgeApi.sftp.uploadDirectory(state.sftpSessionId,state.sftpPath));if(r){toast(`${r.files}ファイルをアップロードしました`,7000);loadSftpPath(state.sftpPath);}}catch(e){toast('フォルダアップロード失敗: '+e.message,9000);}};
 document.getElementById('sftpDownloadDir').onclick=async()=>{if(!confirm(`リモートフォルダ ${state.sftpPath} を再帰ダウンロードしますか？`))return;try{const r=await runSftpTransfer(()=>bridgeApi.sftp.downloadDirectory(state.sftpSessionId,state.sftpPath));if(r)toast(`${r.files}ファイルを ${r.localRoot} へ保存しました`,9000);}catch(e){toast('フォルダダウンロード失敗: '+e.message,9000);}};
-document.getElementById('sftpMkdir').onclick=async()=>{const name=prompt('新しいフォルダ名');if(!name)return;try{await bridgeApi.sftp.mkdir(state.sftpSessionId,remoteJoin(state.sftpPath,name));loadSftpPath(state.sftpPath);}catch(e){toast('作成失敗: '+e.message,7000);}};
+function showCreateSftpItem(){showModal('SFTPに新規作成',body=>{const location=el('div','test-result',`作成先: ${state.sftpPath}`);location.style.marginBottom='10px';body.appendChild(location);const type=document.createElement('select');type.id='sftpCreateType';type.add(new Option(`📁 ${t('フォルダ')}`,'directory'));type.add(new Option(`📄 ${t('テキストファイル')}`,'file'));body.appendChild(fieldWrap('種類',type));const name=document.createElement('input');name.id='sftpCreateName';name.type='text';name.placeholder='例: logs または memo.txt';name.maxLength=255;name.autocomplete='off';body.appendChild(fieldWrap('名前',name));const contentWrap=el('div','field');contentWrap.id='sftpCreateContentWrap';contentWrap.hidden=true;contentWrap.appendChild(el('label',null,'初期内容（UTF-8、1MB以下）'));const content=document.createElement('textarea');content.id='sftpCreateContent';content.rows=9;content.placeholder='空のファイルとして作成する場合は未入力のままにします。';contentWrap.appendChild(content);body.appendChild(contentWrap);type.onchange=()=>{contentWrap.hidden=type.value!=='file';name.placeholder=type.value==='file'?'例: memo.txt':'例: logs';};setTimeout(()=>name.focus(),0);},async()=>{const type=document.getElementById('sftpCreateType').value,name=document.getElementById('sftpCreateName').value.trim(),content=document.getElementById('sftpCreateContent').value;if(!name||name==='.'||name==='..'||name.includes('/')||name.includes('\0')){toast('使用できる名前を入力してください。名前に / は使用できません。',7000);return;}if(new TextEncoder().encode(name).length>255){toast('名前が長すぎます（UTF-8で255バイト以下）。',7000);return;}if(type==='file'&&new TextEncoder().encode(content).length>1024*1024){toast('初期内容は1MB以下にしてください。',7000);return;}const remotePath=remoteJoin(state.sftpPath,name);try{if(type==='directory')await bridgeApi.sftp.mkdir(state.sftpSessionId,remotePath);else await bridgeApi.sftp.createTextFile(state.sftpSessionId,remotePath,content);hideModal();await loadSftpPath(state.sftpPath);toast(type==='directory'?`フォルダ「${name}」を作成しました`:`ファイル「${name}」を作成しました`);}catch(e){toast('作成失敗（同名の項目がないか確認してください）: '+(e?.message||e),9000);}},'作成');}
+document.getElementById('sftpMkdir').onclick=showCreateSftpItem;
 const transferStats=new Map();
 bridgeApi.sftp.onProgress((id,p)=>{const now=Date.now(),key=`${id}:${p.direction}:${p.remotePath||p.file||''}`;let stat=transferStats.get(key);if(!stat||p.transferred<stat.last)stat={last:p.transferred,time:now,speed:0};const elapsed=(now-stat.time)/1000;if(elapsed>=0.25){const instant=Math.max(0,p.transferred-stat.last)/elapsed;stat.speed=stat.speed?stat.speed*.65+instant*.35:instant;stat.last=p.transferred;stat.time=now;}transferStats.set(key,stat);const percent=p.total?Math.min(100,Math.round(p.transferred/p.total*100)):0;const name=p.file||(p.remotePath||p.localPath||'').split(/[\\/]/).pop();const eta=stat.speed&&p.total>p.transferred?`・残り約${formatDuration((p.total-p.transferred)/stat.speed)}`:'';const speed=stat.speed?`・${formatBytes(stat.speed)}/秒`:'';setStatus(`SFTP ${String(p.direction).startsWith('upload')?'アップロード':String(p.direction).startsWith('verify')?'SHA-256検証':'ダウンロード'} ${name}: ${percent}% (${formatBytes(p.transferred)} / ${formatBytes(p.total||0)}) ${speed}${eta}`);if(p.total&&p.transferred>=p.total)setTimeout(()=>transferStats.delete(key),2000);});
 function formatDuration(seconds){seconds=Math.max(0,Math.round(seconds));if(seconds<60)return seconds+'秒';if(seconds<3600)return Math.ceil(seconds/60)+'分';return Math.floor(seconds/3600)+'時間'+Math.ceil((seconds%3600)/60)+'分';}
@@ -1357,8 +1358,8 @@ function handleSshStatus(sid,stage,msg){
   if(stage==='ready'){
     const wasRetry=(pane.reconnectAttempts||0)>0;pane.connected=true;pane.connecting=false;pane.reconnectAttempts=0;
     const c=state.connections.find(x=>x.id===pane.connId);setPaneTabTitle(pid,c?c.name:(pane.adhocOpts?.host||'SSH'));
-    if(pane.terminal){pane.terminal.write(`\r\n\x1b[32m[SSH接続済み]\x1b[0m ${c?c.name:(pane.adhocOpts?.host||'SSH')}\r\n`);pane.terminal.focus();schedulePaneFit(pane,true);setTimeout(()=>{if(state.panes[pid]===pane&&pane.sessionId===sid)schedulePaneFit(pane,true);},180);}
-    if(wasRetry&&state.notifyOnDisconnect)bridgeApi.notification.show('SSH再接続成功',(c?c.name:'SSH')+' に再接続しました。');
+    if(pane.terminal){pane.terminal.write(t(`\r\n\x1b[32m[SSH接続済み]\x1b[0m ${c?c.name:(pane.adhocOpts?.host||'SSH')}\r\n`));pane.terminal.focus();schedulePaneFit(pane,true);setTimeout(()=>{if(state.panes[pid]===pane&&pane.sessionId===sid)schedulePaneFit(pane,true);},180);}
+    if(wasRetry&&state.notifyOnDisconnect)bridgeApi.notification.show(t('SSH再接続成功'),t(`${c?c.name:'SSH'} に再接続しました。`));
     if(c&&pane.autoTunnelsStartedFor!==sid){pane.autoTunnelsStartedFor=sid;startAutoTunnels(sid,c);}
     if(pane.connId){const now=Date.now();if(c)c.lastConnectedAt=now;bridgeApi.vault.update(pane.connId,{lastConnectedAt:now}).catch(()=>{});}
   }
@@ -1382,7 +1383,7 @@ function handleSshExit(sid,code){
   const pane = pid ? state.panes[pid] : null;
   if (pane) {
     if(pane.recording)finishPaneRecording(pane,'disconnect');
-    if(state.notifyOnDisconnect&&!pane.manualClose){const c=state.connections.find(x=>x.id===pane.connId);bridgeApi.notification.show('SSH切断',(c?c.name:'SSH')+' との接続が切断されました。');}
+    if(state.notifyOnDisconnect&&!pane.manualClose){const c=state.connections.find(x=>x.id===pane.connId);bridgeApi.notification.show(t('SSH切断'),t(`${c?c.name:'SSH'} との接続が切断されました。`));}
     pane.sessionId = null;
     pane.connected = false;pane.connecting=false;
     const c=state.connections.find(x=>x.id===pane.connId);setPaneTabTitle(pid,`${c?c.name:(pane.adhocOpts?.host||'SSH')} • 切断`);
@@ -1402,12 +1403,12 @@ function handleSshError(sid,msg){
   const pane = pid ? state.panes[pid] : null;
   if (pane) {
     if(pane.recording)finishPaneRecording(pane,'error');
-    if(state.notifyOnDisconnect&&!pane.manualClose){const c=state.connections.find(x=>x.id===pane.connId);bridgeApi.notification.show('SSH接続エラー',(c?c.name:'SSH')+': '+msg);}
+    if(state.notifyOnDisconnect&&!pane.manualClose){const c=state.connections.find(x=>x.id===pane.connId);bridgeApi.notification.show(t('SSH接続エラー'),`${c?c.name:'SSH'}: ${t(msg)}`);}
     pane.connected=false;pane.connecting=false;
     pane.sessionId=null;
     const c=state.connections.find(x=>x.id===pane.connId);setPaneTabTitle(pid,`${c?c.name:(pane.adhocOpts?.host||'SSH')} • エラー`);
     bridgeApi.ssh.disconnect(sid).catch(() => {});
-    if (pane.terminal) pane.terminal.write('\r\n\x1b[31m[接続エラー]\x1b[0m ' + msg + '\r\n\x1b[36m左上の ↻ 再接続、または接続先一覧の ✓ で診断できます。\x1b[0m\r\n');
+    if (pane.terminal) pane.terminal.write(t('\r\n\x1b[31m[接続エラー]\x1b[0m ')+t(msg)+t('\r\n\x1b[36m左上の ↻ 再接続、または接続先一覧の ✓ で診断できます。\x1b[0m\r\n'));
   }
   renderConnections();
   setStatus('接続エラー: ' + msg);
