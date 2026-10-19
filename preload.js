@@ -100,6 +100,7 @@ contextBridge.exposeInMainWorld('api', {
     generateKeyPair: (options) => ipcRenderer.invoke('ssh:keygen', options),
     exec: (id, command, timeoutMs) => ipcRenderer.invoke('ssh:exec', id, command, timeoutMs),
     monitor: (id) => ipcRenderer.invoke('ssh:monitor', id),
+    killProcess: (id, pid, force = false) => ipcRenderer.invoke('ssh:killProcess', id, pid, force),
     respondChallenge: (token, answers) => ipcRenderer.invoke('ssh:respondChallenge', token, answers),
     onData: (cb) => ipcRenderer.on('ssh:data', (e, id, data) => cb(id, data)),
     onExit: (cb) => ipcRenderer.on('ssh:exit', (e, id, code) => cb(id, code)),

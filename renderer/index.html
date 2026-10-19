@@ -134,13 +134,38 @@
   .replay-host { height:68vh; background:#000; border:1px solid #555; padding:4px; overflow:auto; }
   .replay-terminal-mount { position:relative; flex:none; }
   .replay-terminal-mount .xterm { height:100%; width:100%; }
+  .modal.monitor-modal { width:min(96vw,1280px); max-width:96vw; height:min(92vh,900px); padding:16px; }
+  .monitor-controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; position:sticky; top:-16px; z-index:3; padding:8px 0; background:#252526; }
+  .monitor-controls .field { width:auto; min-width:0; }
+  .monitor-controls select { width:auto; padding:5px 26px 5px 8px; }
+  .monitor-stamp { margin-left:auto; color:#999; font-size:11px; }
+  .monitor-host { padding:7px 10px; background:#1b1b1b; border-left:3px solid #4fc1ff; color:#bbb; font:11px Consolas,monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .monitor-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:8px 0; }
-  .monitor-card { background:#181818; border:1px solid #3b3b3b; border-radius:6px; padding:10px; min-width:0; }
+  .monitor-grid.task-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .monitor-card { background:#181818; border:1px solid #3b3b3b; border-radius:6px; padding:10px; min-width:0; border-top:2px solid #4fc1ff; }
+  .monitor-card.purple { border-top-color:#c586c0; }.monitor-card.green { border-top-color:#4ec9b0; }.monitor-card.orange { border-top-color:#ce9178; }
   .monitor-card h4 { margin:0 0 7px; color:#9cdcfe; font-size:12px; }
-  .monitor-value { font-size:18px; font-weight:600; }
-  .monitor-bar { height:7px; background:#333; border-radius:5px; overflow:hidden; margin-top:6px; }
+  .monitor-value { font-size:20px; font-weight:600; min-height:58px; }
+  .monitor-small { display:block; font-size:11px; line-height:1.45; font-weight:400; }
+  .monitor-bar { height:6px; background:#333; border-radius:5px; overflow:hidden; margin-top:7px; }
   .monitor-bar span { display:block; height:100%; background:#4ec9b0; }
+  .monitor-chart-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0; }
+  .monitor-chart { background:#181818;border:1px solid #3b3b3b;border-radius:5px;padding:7px; }
+  .monitor-chart label { color:#aaa;font-size:10px; }.monitor-chart svg { width:100%;height:62px;display:block;margin-top:4px; }
+  .monitor-section-head { display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px; }
+  .monitor-section-head h4 { margin:0; }.monitor-section-head input { width:min(320px,48%);padding:6px 8px; }
+  .monitor-table-wrap { overflow:auto;max-height:260px;border:1px solid #3a3a3a;background:#171717; }
+  .monitor-table { width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap; }
+  .monitor-table th { position:sticky;top:0;z-index:1;background:#2d2d30;color:#bbb;text-align:left;padding:6px 8px;border-bottom:1px solid #555; }
+  .monitor-table th.sortable { cursor:pointer; }.monitor-table th.sortable:hover { color:#4fc1ff; }
+  .monitor-table td { padding:5px 8px;border-bottom:1px solid #2b2b2b;max-width:280px;overflow:hidden;text-overflow:ellipsis; }
+  .monitor-table tr:hover td { background:#242424; }.monitor-end { padding:2px 7px;font-size:10px; }
+  .monitor-empty { padding:16px;color:#888;text-align:center; }
+  .monitor-lower-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:12px; }
+  .monitor-section h4 { margin:4px 0 6px; }.monitor-section .monitor-table-wrap { max-height:190px; }
   .monitor-pre { background:#111; color:#ccc; padding:8px; white-space:pre; overflow:auto; max-height:170px; font:11px Consolas,monospace; }
+  @media(max-width:850px){.monitor-grid.task-grid,.monitor-chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.monitor-lower-grid{grid-template-columns:1fr}.monitor-stamp{width:100%;margin-left:0}.modal.monitor-modal{height:94vh}.monitor-table td{max-width:180px}}
+  @media(max-width:560px){.monitor-grid.task-grid,.monitor-chart-grid{grid-template-columns:1fr}}
   .exec-result { margin-top:8px; border:1px solid #444; border-radius:5px; overflow:hidden; }
   .exec-result header { padding:5px 8px; background:#333; font-weight:600; }
   .exec-result pre { margin:0; padding:8px; background:#111; max-height:220px; overflow:auto; white-space:pre-wrap; font:11px Consolas,monospace; }

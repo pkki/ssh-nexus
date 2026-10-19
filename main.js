@@ -550,6 +550,7 @@ app.whenReady().then(() => {
   ipcMain.handle('ssh:keygen', (e, options) => ssh.generateKeyPair(options));
   ipcMain.handle('ssh:exec', (e, id, command, timeoutMs) => ssh.exec(id, command, timeoutMs));
   ipcMain.handle('ssh:monitor', (e, id) => ssh.monitorSnapshot(id));
+  ipcMain.handle('ssh:killProcess',async(e,id,pid,force=false)=>{const result=await ssh.killProcess(id,pid,force);auditLog('process-terminated',{sessionId:id,pid:result.pid,signal:result.signal});return result;});
 
   // SFTP file operations use native dialogs; arbitrary renderer filesystem
   // access is never exposed.

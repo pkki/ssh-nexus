@@ -630,6 +630,50 @@
     ["新しいSSHホストを信頼しますか？","Do you want to trust the new SSH host?","您想信任新的 SSH 主机吗？","새 SSH 호스트를 신뢰하시겠습니까?","¿Quieres confiar en el nuevo host SSH?","Voulez-vous faire confiance au nouvel hôte SSH ?","Möchten Sie dem neuen SSH-Host vertrauen?","Você quer confiar no novo host SSH?"],
     ["接続を遮断","cut off connection","切断连接","연결 차단","cortar la conexión","couper la connexion","Verbindung abbrechen","cortar conexão"],
   );
+
+  // Task-manager monitoring translations.
+  rows.push(
+    ["{0} / {1}・空き {2}","{0} / {1}・Vacant {2}","{0} / {1}・空 {2}","{0} / {1} · 빈 {2}","{0} / {1}・Vacante {2}","{0} / {1}・Vacant {2}","{0} / {1}・Frei {2}","{0} / {1}・Vago {2}"],
+    ["↑ {0}/s・累計 ↓{1} ↑{2}","↑ {0}/s・Cumulative total ↓{1} ↑{2}","↑ {0}/s・累计 ↓{1} ↑{2}","↑ {0}/s·누계 ↓{1} ↑{2}","↑ {0}/s・Total acumulado ↓{1} ↑{2}","↑ {0}/s・Total cumulé ↓{1} ↑{2}","↑ {0}/s・Kumulative Gesamtsumme ↓{1} ↑{2}","↑ {0}/s・Total acumulado ↓{1} ↑{2}"],
+    ["10秒","10 seconds","10秒","10초","10 segundos","10 secondes","10 Sekunden","10 segundos"],
+    ["1分 {0}・5分 {1}・15分 {2}","1 minute {0}・5 minutes {1}・15 minutes {2}","1分钟 {0}・5分钟 {1}・15分钟 {2}","1분 {0}·5분 {1}·15분 {2}","1 minuto {0}・5 minutos {1}・15 minutos {2}","1 minute {0}・5 minutes {1}・15 minutes {2}","1 Minute {0}・5 Minuten {1}・15 Minuten {2}","1 minuto {0}・5 minutos {1}・15 minutos {2}"],
+    ["2秒","2 seconds","2秒","2초","2 segundos","2 secondes","2 Sekunden","2 segundos"],
+    ["30秒","30 seconds","30秒","30초","30 segundos","30 secondes","30 Sekunden","30 segundos"],
+    ["5秒","5 seconds","5秒","5초","5 segundos","5 secondes","5 Sekunden","5 segundos"],
+    ["CPU履歴","CPU history","CPU历史记录","CPU 이력","historial de CPU","Historique du processeur","CPU-Verlauf","Histórico da CPU"],
+    ["PID {0}（{1}）を終了しますか？\n未保存データが失われる可能性があります。","Do you want to terminate PID {0} ({1})?\nUnsaved data may be lost.","您想终止 PID {0} ({1}) 吗？\n未保存的数据可能会丢失。","PID {0}({1})를 종료하시겠습니까?\n저장되지 않은 데이터가 손실될 수 있습니다.","¿Quiere terminar el PID {0} ({1})?\nEs posible que se pierdan los datos no guardados.","Voulez-vous mettre fin au PID {0} ({1}) ?\nLes données non enregistrées peuvent être perdues.","Möchten Sie PID {0} ({1}) beenden?\nNicht gespeicherte Daten können verloren gehen.","Deseja encerrar o PID {0} ({1})?\nOs dados não salvos podem ser perdidos."],
+    ["PID {0}へ終了要求を送信しました","Termination request sent to PID {0}","终止请求发送至 PID {0}","PID {0}에 종료 요청을 보냈습니다.","Solicitud de terminación enviada al PID {0}","Demande de résiliation envoyée au PID {0}","Kündigungsanforderung an PID {0} gesendet","Solicitação de encerramento enviada para PID {0}"],
+    ["PID {0}を強制終了しました","Forced termination of PID {0}","强制终止PID {0}","PID {0} 강제 종료","Terminación forzada de PID {0}","Arrêt forcé du PID {0}","Erzwungene Beendigung der PID {0}","Encerramento forçado do PID {0}"],
+    ["PIDが不正です。","PID is invalid.","PID 无效。","PID가 잘못되었습니다.","El PID no es válido.","Le PID n'est pas valide.","PID ist ungültig.","PID é inválido."],
+    ["システム負荷","system load","系统负载","시스템 부하","carga del sistema","charge du système","Systemlast","carga do sistema"],
+    ["ストレージ","storage","存储","스토리지","almacenamiento","stockage","Lagerung","armazenamento"],
+    ["ストレージ情報なし","No storage information","无存储信息","스토리지 정보 없음","Sin información de almacenamiento","Aucune information de stockage","Keine Speicherinformationen","Nenhuma informação de armazenamento"],
+    ["ネットワーク","network","网络","네트워크","red","réseau","Netzwerk","rede"],
+    ["ネットワークインターフェース","network interface","网络接口","네트워크 인터페이스","interfaz de red","interface réseau","Netzwerkschnittstelle","interface de rede"],
+    ["ネットワーク情報なし","No network information","无网络信息","네트워크 정보 없음","Sin información de red","Aucune information sur le réseau","Keine Netzwerkinformationen","Nenhuma informação de rede"],
+    ["ネットワーク履歴","Network history","网络历史","네트워크 이력","Historial de la red","Historique du réseau","Netzwerkgeschichte","Histórico da rede"],
+    ["プロセス","process","过程","프로세스","proceso","processus","Prozess","processo"],
+    ["プロセスを終了","terminate the process","终止进程","프로세스 종료","terminar el proceso","terminer le processus","den Vorgang beenden","encerrar o processo"],
+    ["プロセスを終了できませんでした。","Could not terminate process.","无法终止进程。","프로세스를 종료할 수 없습니다.","No se pudo finalizar el proceso.","Impossible de terminer le processus.","Prozess konnte nicht beendet werden.","Não foi possível encerrar o processo."],
+    ["マウント","mount","安装","마운트","montar","monter","montieren","montar"],
+    ["メモリ履歴","memory history","记忆历史","메모리 이력","historia de la memoria","histoire de la mémoire","Erinnerungsgeschichte","história da memória"],
+    ["ユーザー","user","用户","사용자","usuario","utilisateur","Benutzer","usuário"],
+    ["一致するプロセスはありません","No matching processes","没有匹配的进程","일치하는 프로세스가 없습니다.","No hay procesos coincidentes","Aucun processus de correspondance","Keine passenden Prozesse","Nenhum processo correspondente"],
+    ["温度 {0}°C","Temperature {0}°C","温度{0}°C","온도 {0}°C","Temperatura {0}°C","Température {0}°C","Temperatur {0}°C","Temperatura {0}°C"],
+    ["強制終了失敗: ","Forced termination failure:","强制终止失败：","강제 종료 실패:","Fallo de terminación forzada:","Échec de la terminaison forcée :","Fehler bei erzwungener Beendigung:","Falha na rescisão forçada:"],
+    ["最終更新 {0}","Last updated {0}","最后更新 {0}","최종 업데이트 {0}","Última actualización {0}","Dernière mise à jour {0}","Zuletzt aktualisiert {0}","Última atualização {0}"],
+    ["使用率","usage rate","使用率","사용률","tasa de uso","taux d'utilisation","Nutzungsrate","taxa de uso"],
+    ["使用量","Usage amount","使用量","사용량","Cantidad de uso","Montant d'utilisation","Nutzungsmenge","Quantidade de uso"],
+    ["自動更新","automatic update","自动更新","자동 업데이트","actualización automática","mise à jour automatique","automatisches Update","atualização automática"],
+    ["実行時間","execution time","执行时间","런타임","tiempo de ejecución","temps d'exécution","Ausführungszeit","tempo de execução"],
+    ["受信","reception","接待处","수신","recepción","réception","Empfang","recepção"],
+    ["状態","condition","条件","상태","condición","état","Zustand","condição"],
+    ["接続先情報を取得中…","Obtaining connection information...","正在获取连接信息...","접속처 정보 취득중…","Obteniendo información de conexión...","Obtention des informations de connexion...","Verbindungsinformationen werden abgerufen...","Obtendo informações de conexão..."],
+    ["操作","operation","操作","조작","operación","opération","Betrieb","operação"],
+    ["送信","send","发送","전송","enviar","envoyer","senden","enviar"],
+    ["通常終了に失敗しました: {0}\n強制終了（SIGKILL）しますか？","Normal termination failed: {0}\nDo you want to force quit (SIGKILL)?","正常终止失败：{0}\n您想强制退出（SIGKILL）吗？","정상 종료에 실패했습니다: {0}\n강제 종료(SIGKILL)하시겠습니까?","Error en la terminación normal: {0}\n¿Quieres forzar la salida (SIGKILL)?","Échec de la terminaison normale : {0}\nVoulez-vous forcer l'arrêt (SIGKILL) ?","Normale Beendigung fehlgeschlagen: {0}\nMöchten Sie das Beenden erzwingen (SIGKILL)?","Falha na finalização normal: {0}\nDeseja forçar o encerramento (SIGKILL)?"],
+    ["名前、ユーザー、PIDで検索","Search by name, user, PID","按名称、用户、PID 搜索","이름, 사용자, PID로 검색","Buscar por nombre, usuario, PID","Recherche par nom, utilisateur, PID","Suche nach Name, Benutzer, PID","Pesquise por nome, usuário, PID"],
+  );
   const table={};for(const row of rows){table[row[0]]={ja:row[0]};locales.slice(1).forEach((l,i)=>table[row[0]][l]=row[i+1]);const trimmed=row[0].trim();if(trimmed&&trimmed!==row[0]&&!table[trimmed]){table[trimmed]={ja:trimmed};locales.slice(1).forEach((l,i)=>table[trimmed][l]=String(row[i+1]).trim());}}
   const escapeRegex=value=>String(value).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
   const patternRows=Object.keys(table).filter(source=>/\{\d+\}/.test(source)).map(source=>{const indexes=[];let cursor=0,regex='^',match;const token=/\{(\d+)\}/g;while((match=token.exec(source))){regex+=escapeRegex(source.slice(cursor,match.index))+'([\\s\\S]*?)';indexes.push(Number(match[1]));cursor=match.index+match[0].length;}regex+=escapeRegex(source.slice(cursor))+'$';return{source,indexes,regex:new RegExp(regex)};}).sort((a,b)=>b.source.length-a.source.length);
@@ -642,12 +686,13 @@
   function translateNode(root){
     if(!root||root.nodeType!==1)return;
     if(root.closest?.('.xterm'))return;
-    for(const a of ['title','placeholder','aria-label']){if(root.hasAttribute?.(a)){const old=root.getAttribute(a),next=t(old);if(next!==old)root.setAttribute(a,next);}}
+    const elements=[root,...root.querySelectorAll('*')];
+    for(const element of elements){if(element.closest?.('.xterm'))continue;for(const a of ['title','placeholder','aria-label']){if(element.hasAttribute?.(a)){const old=element.getAttribute(a),next=t(old);if(next!==old)element.setAttribute(a,next);}}}
     const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
     while((n=walker.nextNode())){if(n.parentElement?.closest('.xterm,textarea,pre,code'))continue;const raw=n.nodeValue,trim=raw.trim(),next=t(trim);if(trim&&next!==trim)n.nodeValue=raw.replace(trim,next);}
   }
   function localizeDocument(){document.documentElement.lang=locale;translateNode(document.body);}
-  function observe(){const mo=new MutationObserver(records=>{for(const r of records)for(const n of r.addedNodes){if(n.nodeType===1)translateNode(n);else if(n.nodeType===3&&n.parentElement&&!n.parentElement.closest('.xterm,textarea,pre,code')){const v=n.nodeValue.trim(),next=t(v);if(v&&next!==v)n.nodeValue=n.nodeValue.replace(v,next);}}});mo.observe(document.body,{subtree:true,childList:true});return mo;}
+  function observe(){const mo=new MutationObserver(records=>{for(const r of records){if(r.type==='attributes'){const element=r.target;if(element.closest?.('.xterm'))continue;const old=element.getAttribute(r.attributeName),next=t(old);if(old&&next!==old)element.setAttribute(r.attributeName,next);continue;}if(r.type==='characterData'){const n=r.target;if(n.parentElement&&!n.parentElement.closest('.xterm,textarea,pre,code')){const v=n.nodeValue.trim(),next=t(v);if(v&&next!==v)n.nodeValue=n.nodeValue.replace(v,next);}continue;}for(const n of r.addedNodes){if(n.nodeType===1)translateNode(n);else if(n.nodeType===3&&n.parentElement&&!n.parentElement.closest('.xterm,textarea,pre,code')){const v=n.nodeValue.trim(),next=t(v);if(v&&next!==v)n.nodeValue=n.nodeValue.replace(v,next);}}}});mo.observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['title','placeholder','aria-label']});return mo;}
   function setLocale(value){if(value==='auto')localStorage.setItem('sshNexusLocale','auto');else localStorage.setItem('sshNexusLocale',normalizeLocale(value));}
-  window.I18n={t,locales,names,locale,preference,setLocale,localizeDocument,observe,normalizeLocale};
+  window.I18n={t,locales,names,locale,preference,setLocale,localizeDocument,observe,normalizeLocale,translateNode};
 })();

@@ -44,6 +44,11 @@ const state = {
   sftpSortKey: 'name',
   sftpSortDirection: 1,
   monitorTimer: null,
+  monitorHistory: [],
+  monitorPreviousNetwork: null,
+  monitorBusy: false,
+  monitorSort: { key:'cpu', direction:-1 },
+  monitorLastData: null,
   paletteItems: [],
   paletteIndex: 0,
   authChallengeToken: null,
@@ -285,7 +290,7 @@ async function connectPane(paneId, connId, isRetry = false) {
   try {
     const sid = await bridgeApi.ssh.connect(connId);
     attachSessionToPane(sid,paneId);
-    const current=state.panes[paneId];if(current&&current.terminal&&current.connecting){current.terminal.write(t(`\x1b[36m[接続中]\x1b[0m ${target?target.name:'SSH'} へ接続しています…\r\n`));current.terminal.focus();}
+    const current=state.panes[paneId];if(current&&current.terminal&&current.connecting){current.terminal.write(`\x1b[36m${t(`[接続中] ${target?target.name:'SSH'} へ接続しています…`)}\x1b[0m\r\n`);current.terminal.focus();}
     renderConnections();
   } catch (e) {
     pane.connecting=false;setPaneTabTitle(paneId,`${target?target.name:'SSH'} • 失敗`);renderActiveTab();
@@ -318,7 +323,7 @@ async function connectAdhocPane(paneId, opts) {
   try {
     const sid = await bridgeApi.ssh.connectAdhoc(opts);
     attachSessionToPane(sid,paneId);
-    if(pane.terminal&&pane.connecting){pane.terminal.write(t(`\x1b[36m[接続中]\x1b[0m ${opts.host} へ接続しています…\r\n`));pane.terminal.focus();}
+    if(pane.terminal&&pane.connecting){pane.terminal.write(`\x1b[36m${t(`[接続中] ${opts.host} へ接続しています…`)}\x1b[0m\r\n`);pane.terminal.focus();}
     renderConnections();
   } catch (e) {
     pane.connecting=false;setPaneTabTitle(paneId,`${opts.host} • 失敗`);renderActiveTab();
@@ -953,30 +958,41 @@ async function refreshTunnelList(sessionId){
 }
 
 // ---------- Monitoring ----------
+const monitorOut=value=>(value&&value.stdout||'').trim();
+function parseCpu(text){const lines=text.split(/\r?\n/).filter(x=>/^cpu\s/.test(x)).map(x=>x.trim().split(/\s+/).slice(1).map(Number));if(lines.length<2)return null;const total=x=>x.reduce((a,b)=>a+b,0),idle=x=>(x[3]||0)+(x[4]||0),delta=total(lines[1])-total(lines[0]);return delta>0?Math.max(0,Math.min(100,(1-(idle(lines[1])-idle(lines[0]))/delta)*100)):null;}
 function parseMonitor(snapshot){
-  const memory=(snapshot.memory&&snapshot.memory.stdout||'').trim().split(/\r?\n/).find(x=>/^Mem:/i.test(x));let mem=null;if(memory){const p=memory.trim().split(/\s+/);mem={total:+p[1],used:+p[2]};}
-  const diskLines=(snapshot.disk&&snapshot.disk.stdout||'').trim().split(/\r?\n/);let disk=null;if(diskLines[1]){const p=diskLines[1].trim().split(/\s+/);disk={total:+p[1],used:+p[2],percent:p[4]};}
-  return {mem,disk,system:(snapshot.system&&snapshot.system.stdout||'').trim(),uptime:(snapshot.uptime&&snapshot.uptime.stdout||'').trim(),processes:(snapshot.processes&&snapshot.processes.stdout||'').trim(),docker:(snapshot.docker&&snapshot.docker.stdout||'').trim()};
+  const memory=monitorOut(snapshot.memory).split(/\r?\n/).find(x=>/^Mem:/i.test(x));let mem=null;if(memory){const p=memory.trim().split(/\s+/);mem={total:+p[1],used:+p[2],available:+p[6]||Math.max(0,+p[1]-+p[2])};}
+  const diskLines=monitorOut(snapshot.disk).split(/\r?\n/);let disk=null;if(diskLines[1]){const p=diskLines[1].trim().split(/\s+/);disk={total:+p[1],used:+p[2],available:+p[3],percent:parseFloat(p[4])};}
+  const loadRaw=monitorOut(snapshot.load).split('|'),loadParts=(loadRaw[1]||'').trim().split(/\s+/);const load={cores:+loadRaw[0]||1,one:+loadParts[0]||0,five:+loadParts[1]||0,fifteen:+loadParts[2]||0};
+  const systemRaw=monitorOut(snapshot.system).split('|');const system={hostname:systemRaw[0]||'',kernel:systemRaw[1]||'',os:systemRaw.slice(2).join('|')||''};
+  const interfaces=[];for(const line of monitorOut(snapshot.network).split(/\r?\n/)){const m=line.match(/^\s*([^:]+):\s*(\d+)(?:\s+\d+){7}\s+(\d+)/);if(m&&m[1].trim()!=='lo')interfaces.push({name:m[1].trim(),rx:+m[2],tx:+m[3]});}const network={interfaces,rx:interfaces.reduce((s,x)=>s+x.rx,0),tx:interfaces.reduce((s,x)=>s+x.tx,0),rxRate:0,txRate:0};const now=snapshot.capturedAt||Date.now(),previous=state.monitorPreviousNetwork;if(previous&&now>previous.time){const seconds=(now-previous.time)/1000;network.rxRate=Math.max(0,(network.rx-previous.rx)/seconds);network.txRate=Math.max(0,(network.tx-previous.tx)/seconds);}state.monitorPreviousNetwork={time:now,rx:network.rx,tx:network.tx};
+  const processes=[];for(const line of monitorOut(snapshot.processes).split(/\r?\n/)){const m=line.match(/^\s*(\d+)\s+(\S+)\s+(\S+)\s+([\d.]+)\s+([\d.]+)\s+(\d+)\s+(\d+)\s+(\S+)\s*(.*)$/);if(m)processes.push({pid:+m[1],user:m[2],state:m[3],cpu:+m[4],mem:+m[5],rss:+m[6]*1024,seconds:+m[7],name:m[8],command:m[9]||m[8]});}
+  const filesystems=[];for(const line of monitorOut(snapshot.filesystems).split(/\r?\n/).slice(1)){const p=line.trim().split(/\s+/);if(p.length>=6)filesystems.push({name:p[0],total:+p[1],used:+p[2],available:+p[3],percent:parseFloat(p[4]),mount:p.slice(5).join(' ')});}
+  const containers=monitorOut(snapshot.docker).split(/\r?\n/).filter(Boolean).map(line=>{const p=line.split('|');return{name:p[0]||'',cpu:p[1]||'—',memory:p[2]||'—',network:p[3]||'—',block:p[4]||'—'};});const temperatures=monitorOut(snapshot.temperature).split(/\s+/).map(Number).filter(Number.isFinite).map(v=>v>1000?v/1000:v).filter(v=>v>-20&&v<150);
+  return{capturedAt:now,cpu:parseCpu(monitorOut(snapshot.cpu)),mem,disk,load,system,network,processes,filesystems,containers,temperature:temperatures.length?temperatures.reduce((a,b)=>a+b,0)/temperatures.length:null,uptime:monitorOut(snapshot.uptime)};
 }
-function monitorCard(title,id){const c=el('div','monitor-card');c.appendChild(el('h4',null,title));const v=el('div','monitor-value','—');v.id=id;c.appendChild(v);return c;}
+function monitorCard(title,id,accent='blue'){const c=el('div','monitor-card '+accent);c.appendChild(el('h4',null,title));const v=el('div','monitor-value','—');v.id=id;c.appendChild(v);return c;}
+function metricHtml(value,percent,detail){const safe=Math.max(0,Math.min(100,Number(percent)||0));return`${escapeHtml(String(value))}<div class="monitor-bar"><span style="width:${safe}%"></span></div><div class="hint">${escapeHtml(detail||'')}</div>`;}
+function monitorSparkline(id,values,color){const svg=document.getElementById(id);if(!svg)return;const clean=values.map(v=>Number.isFinite(v)?v:0),max=Math.max(100,...clean,1),points=clean.map((v,i)=>`${clean.length<2?0:i/(clean.length-1)*100},${30-(v/max*28)}`).join(' ');svg.innerHTML=`<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.7" vector-effect="non-scaling-stroke"/><line x1="0" y1="29.5" x2="100" y2="29.5" stroke="#444" stroke-width=".5"/>`;}
+function monitorTable(headers,rows,empty='取得不可'){const wrap=el('div','monitor-table-wrap');if(!rows.length){wrap.appendChild(el('div','monitor-empty',empty));return wrap;}const table=el('table','monitor-table'),head=document.createElement('thead'),hr=document.createElement('tr');headers.forEach(h=>{const th=el('th',null,h.label);if(h.key){th.dataset.sort=h.key;th.classList.add('sortable');}hr.appendChild(th);});head.appendChild(hr);table.appendChild(head);const body=document.createElement('tbody');rows.forEach(cells=>{const tr=document.createElement('tr');cells.forEach(cell=>{const td=document.createElement('td');if(cell instanceof Node)td.appendChild(cell);else td.textContent=cell;tr.appendChild(td);});body.appendChild(tr);});table.appendChild(body);wrap.appendChild(table);return wrap;}
 function showMonitor(sessionId,connId){
-  const conn=state.connections.find(c=>c.id===connId);clearInterval(state.monitorTimer);
+  const conn=state.connections.find(c=>c.id===connId);clearInterval(state.monitorTimer);state.monitorHistory=[];state.monitorPreviousNetwork=null;state.monitorLastData=null;
   showModal('▦ サーバー監視 — '+(conn?conn.name:sessionId.slice(-6)),body=>{
-    const controls=el('div');controls.style.cssText='display:flex;gap:6px;align-items:center';const refresh=el('button',null,'↻ 更新');refresh.onclick=()=>refreshMonitor(sessionId);const auto=checkboxField('5秒ごとに自動更新','monitorAuto',true);auto.style.margin='0';controls.append(refresh,auto);body.appendChild(controls);
-    const grid=el('div','monitor-grid');grid.append(monitorCard('稼働状況','monUptime'),monitorCard('メモリ','monMemory'),monitorCard('ルートディスク','monDisk'),monitorCard('システム','monSystem'));body.appendChild(grid);
-    body.appendChild(el('h4',null,'CPU使用率 上位プロセス'));const proc=el('pre','monitor-pre','読み込み中…');proc.id='monProcesses';body.appendChild(proc);
-    body.appendChild(el('h4',null,'Dockerコンテナ'));const docker=el('pre','monitor-pre','読み込み中…');docker.id='monDocker';body.appendChild(docker);
-  },hideModal,'閉じる');
-  setTimeout(()=>refreshMonitor(sessionId),0);state.monitorTimer=setInterval(()=>{const a=document.getElementById('monitorAuto');if(a&&a.checked)refreshMonitor(sessionId);},5000);
+    const controls=el('div','monitor-controls'),refresh=el('button',null,'↻ 更新');refresh.id='monitorRefresh';refresh.onclick=()=>refreshMonitor(sessionId);const auto=checkboxField('自動更新','monitorAuto',true);auto.style.margin='0';const interval=document.createElement('select');interval.id='monitorInterval';[['2000','2秒'],['5000','5秒'],['10000','10秒'],['30000','30秒']].forEach(([v,label])=>interval.add(new Option(label,v,v==='5000',v==='5000')));interval.onchange=()=>startMonitorTimer(sessionId);const stamp=el('span','monitor-stamp','待機中');stamp.id='monitorStamp';controls.append(refresh,auto,interval,stamp);body.appendChild(controls);
+    const host=el('div','monitor-host','接続先情報を取得中…');host.id='monitorHost';body.appendChild(host);
+    const grid=el('div','monitor-grid task-grid');grid.append(monitorCard('CPU','monCpu','blue'),monitorCard('メモリ','monMemory','purple'),monitorCard('ルートディスク','monDisk','green'),monitorCard('ネットワーク','monNetwork','orange'),monitorCard('システム負荷','monLoad','blue'),monitorCard('稼働時間','monUptime','green'));body.appendChild(grid);
+    const charts=el('div','monitor-chart-grid');[['CPU履歴','monCpuChart'],['メモリ履歴','monMemoryChart'],['ネットワーク履歴','monNetworkChart']].forEach(([label,id])=>{const box=el('div','monitor-chart');box.appendChild(el('label',null,label));const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.id=id;svg.setAttribute('viewBox','0 0 100 30');svg.setAttribute('preserveAspectRatio','none');box.appendChild(svg);charts.appendChild(box);});body.appendChild(charts);
+    const processHead=el('div','monitor-section-head');processHead.appendChild(el('h4',null,'プロセス'));const search=document.createElement('input');search.id='monitorProcessFilter';search.placeholder='名前、ユーザー、PIDで検索';search.oninput=()=>renderMonitorProcesses(sessionId);processHead.appendChild(search);body.appendChild(processHead);const processBox=el('div');processBox.id='monitorProcesses';body.appendChild(processBox);
+    const lower=el('div','monitor-lower-grid');for(const [title,id] of [['ストレージ','monitorFilesystems'],['ネットワークインターフェース','monitorInterfaces'],['Dockerコンテナ','monitorDocker']]){const section=el('section','monitor-section');section.appendChild(el('h4',null,title));const content=el('div');content.id=id;section.appendChild(content);lower.appendChild(section);}body.appendChild(lower);
+  },hideModal,'閉じる');const monitorModal=document.querySelector('#modalBackdrop .modal');monitorModal?.classList.add('monitor-modal');monitorModal?.querySelector('.modal-actions .secondary')?.remove();setTimeout(()=>refreshMonitor(sessionId),0);startMonitorTimer(sessionId);
 }
-async function refreshMonitor(sessionId){
-  const proc=document.getElementById('monProcesses');if(!proc)return;
-  try{const raw=await bridgeApi.ssh.monitor(sessionId);const m=parseMonitor(raw);const up=document.getElementById('monUptime');if(!up)return;up.textContent=m.uptime||'取得不可';up.style.fontSize='12px';
-    const mem=document.getElementById('monMemory');if(m.mem&&m.mem.total){const pct=Math.round(m.mem.used/m.mem.total*100);mem.innerHTML=`${pct}%<div class="monitor-bar"><span style="width:${pct}%"></span></div><div class="hint">${formatBytes(m.mem.used)} / ${formatBytes(m.mem.total)}</div>`;}else mem.textContent='取得不可';
-    const disk=document.getElementById('monDisk');if(m.disk&&m.disk.total){const pct=parseInt(m.disk.percent)||Math.round(m.disk.used/m.disk.total*100);disk.innerHTML=`${pct}%<div class="monitor-bar"><span style="width:${pct}%"></span></div><div class="hint">${formatBytes(m.disk.used)} / ${formatBytes(m.disk.total)}</div>`;}else disk.textContent='取得不可';
-    const sys=document.getElementById('monSystem');sys.textContent=m.system||'取得不可';sys.style.fontSize='11px';document.getElementById('monProcesses').textContent=m.processes||'取得不可';document.getElementById('monDocker').textContent=m.docker||'Docker未使用または権限なし';
-  }catch(e){proc.textContent='監視情報取得エラー: '+e.message;}
-}
+function startMonitorTimer(sessionId){clearInterval(state.monitorTimer);const interval=Math.max(2000,Number(document.getElementById('monitorInterval')?.value)||5000);state.monitorTimer=setInterval(()=>{const a=document.getElementById('monitorAuto');if(a?.checked)refreshMonitor(sessionId);},interval);}
+function renderMonitorProcesses(sessionId){const box=document.getElementById('monitorProcesses'),m=state.monitorLastData;if(!box||!m)return;const query=(document.getElementById('monitorProcessFilter')?.value||'').toLowerCase(),{key,direction}=state.monitorSort;const rows=m.processes.filter(p=>!query||`${p.pid} ${p.user} ${p.name} ${p.command}`.toLowerCase().includes(query)).sort((a,b)=>{const av=a[key],bv=b[key];return(typeof av==='string'?av.localeCompare(bv):(av-bv))*direction;}).slice(0,50).map(p=>{const end=el('button','danger monitor-end','終了');end.title='プロセスを終了';end.onclick=async()=>{if(!confirm(`PID ${p.pid}（${p.name}）を終了しますか？\n未保存データが失われる可能性があります。`))return;try{await bridgeApi.ssh.killProcess(sessionId,p.pid,false);toast(`PID ${p.pid}へ終了要求を送信しました`);setTimeout(()=>refreshMonitor(sessionId),500);}catch(e){if(confirm(`通常終了に失敗しました: ${e.message}\n強制終了（SIGKILL）しますか？`)){try{await bridgeApi.ssh.killProcess(sessionId,p.pid,true);toast(`PID ${p.pid}を強制終了しました`);setTimeout(()=>refreshMonitor(sessionId),500);}catch(killError){toast('強制終了失敗: '+killError.message,8000);}}}};return[String(p.pid),p.user,p.state,p.cpu.toFixed(1)+'%',p.mem.toFixed(1)+'%',formatBytes(p.rss),formatDuration(p.seconds),p.name,end];});box.innerHTML='';const headers=[['PID','pid'],['ユーザー','user'],['状態','state'],['CPU','cpu'],['メモリ','mem'],['RSS','rss'],['実行時間','seconds'],['名前','name'],['操作',null]].map(([label,k])=>({label,key:k}));const table=monitorTable(headers,rows,'一致するプロセスはありません');box.appendChild(table);box.querySelectorAll('th.sortable').forEach(th=>th.onclick=()=>{const key=th.dataset.sort;if(state.monitorSort.key===key)state.monitorSort.direction*=-1;else state.monitorSort={key,direction:key==='name'||key==='user'||key==='state'?1:-1};renderMonitorProcesses(sessionId);});}
+async function refreshMonitor(sessionId){if(state.monitorBusy||!document.getElementById('monitorProcesses'))return;state.monitorBusy=true;const button=document.getElementById('monitorRefresh');if(button)button.disabled=true;try{const raw=await bridgeApi.ssh.monitor(sessionId),m=parseMonitor(raw);state.monitorLastData=m;const memPct=m.mem?.total?m.mem.used/m.mem.total*100:0,diskPct=m.disk?.percent||0,loadPct=m.load.cores?m.load.one/m.load.cores*100:0;state.monitorHistory.push({cpu:m.cpu||0,mem:memPct,net:m.network.rxRate+m.network.txRate});if(state.monitorHistory.length>60)state.monitorHistory.shift();
+    const set=(id,html)=>{const node=document.getElementById(id);if(node)node.innerHTML=html;};set('monCpu',metricHtml(m.cpu==null?'—':m.cpu.toFixed(1)+'%',m.cpu||0,`${m.load.cores} logical CPU`));set('monMemory',m.mem?metricHtml(Math.round(memPct)+'%',memPct,`${formatBytes(m.mem.used)} / ${formatBytes(m.mem.total)}・空き ${formatBytes(m.mem.available)}`):'取得不可');set('monDisk',m.disk?metricHtml(Math.round(diskPct)+'%',diskPct,`${formatBytes(m.disk.used)} / ${formatBytes(m.disk.total)}・空き ${formatBytes(m.disk.available)}`):'取得不可');set('monNetwork',metricHtml(`↓ ${formatBytes(m.network.rxRate)}/s`,Math.min(100,(m.network.rxRate+m.network.txRate)/1250000),`↑ ${formatBytes(m.network.txRate)}/s・累計 ↓${formatBytes(m.network.rx)} ↑${formatBytes(m.network.tx)}`));set('monLoad',metricHtml(m.load.one.toFixed(2),loadPct,`1分 ${m.load.one.toFixed(2)}・5分 ${m.load.five.toFixed(2)}・15分 ${m.load.fifteen.toFixed(2)}`));set('monUptime',`<span class="monitor-small">${escapeHtml(m.uptime||'取得不可')}</span>${m.temperature!=null?`<div class="hint">温度 ${m.temperature.toFixed(1)}°C</div>`:''}`);
+    const host=document.getElementById('monitorHost');if(host)host.textContent=`${m.system.hostname||'—'}　${m.system.os||''}　${m.system.kernel||''}`;const stamp=document.getElementById('monitorStamp');if(stamp)stamp.textContent=`最終更新 ${new Date(m.capturedAt).toLocaleTimeString()}`;monitorSparkline('monCpuChart',state.monitorHistory.map(x=>x.cpu),'#4fc1ff');monitorSparkline('monMemoryChart',state.monitorHistory.map(x=>x.mem),'#c586c0');const netMax=Math.max(...state.monitorHistory.map(x=>x.net),1);monitorSparkline('monNetworkChart',state.monitorHistory.map(x=>x.net/netMax*100),'#ce9178');renderMonitorProcesses(sessionId);
+    const files=document.getElementById('monitorFilesystems');if(files){files.innerHTML='';files.appendChild(monitorTable([{label:'マウント'},{label:'使用率'},{label:'使用量'}],m.filesystems.map(f=>[f.mount,f.percent+'%',`${formatBytes(f.used)} / ${formatBytes(f.total)}`]),'ストレージ情報なし'));}const interfaces=document.getElementById('monitorInterfaces');if(interfaces){interfaces.innerHTML='';interfaces.appendChild(monitorTable([{label:'名前'},{label:'受信'},{label:'送信'}],m.network.interfaces.map(n=>[n.name,formatBytes(n.rx),formatBytes(n.tx)]),'ネットワーク情報なし'));}const docker=document.getElementById('monitorDocker');if(docker){docker.innerHTML='';docker.appendChild(monitorTable([{label:'名前'},{label:'CPU'},{label:'メモリ'},{label:'ネットワーク'}],m.containers.map(c=>[c.name,c.cpu,c.memory,c.network]),'Docker未使用または権限なし'));}
+  }catch(e){const stamp=document.getElementById('monitorStamp');if(stamp)stamp.textContent='監視情報取得エラー: '+e.message;}finally{state.monitorBusy=false;if(button)button.disabled=false;}}
 
 // ---------- Multi-host command execution ----------
 function showMultiExec(){
@@ -1358,7 +1374,7 @@ function handleSshStatus(sid,stage,msg){
   if(stage==='ready'){
     const wasRetry=(pane.reconnectAttempts||0)>0;pane.connected=true;pane.connecting=false;pane.reconnectAttempts=0;
     const c=state.connections.find(x=>x.id===pane.connId);setPaneTabTitle(pid,c?c.name:(pane.adhocOpts?.host||'SSH'));
-    if(pane.terminal){pane.terminal.write(t(`\r\n\x1b[32m[SSH接続済み]\x1b[0m ${c?c.name:(pane.adhocOpts?.host||'SSH')}\r\n`));pane.terminal.focus();schedulePaneFit(pane,true);setTimeout(()=>{if(state.panes[pid]===pane&&pane.sessionId===sid)schedulePaneFit(pane,true);},180);}
+    if(pane.terminal){pane.terminal.write(`\r\n\x1b[32m${t(`[SSH接続済み] ${c?c.name:(pane.adhocOpts?.host||'SSH')}`)}\x1b[0m\r\n`);pane.terminal.focus();schedulePaneFit(pane,true);setTimeout(()=>{if(state.panes[pid]===pane&&pane.sessionId===sid)schedulePaneFit(pane,true);},180);}
     if(wasRetry&&state.notifyOnDisconnect)bridgeApi.notification.show(t('SSH再接続成功'),t(`${c?c.name:'SSH'} に再接続しました。`));
     if(c&&pane.autoTunnelsStartedFor!==sid){pane.autoTunnelsStartedFor=sid;startAutoTunnels(sid,c);}
     if(pane.connId){const now=Date.now();if(c)c.lastConnectedAt=now;bridgeApi.vault.update(pane.connId,{lastConnectedAt:now}).catch(()=>{});}
@@ -1408,7 +1424,7 @@ function handleSshError(sid,msg){
     pane.sessionId=null;
     const c=state.connections.find(x=>x.id===pane.connId);setPaneTabTitle(pid,`${c?c.name:(pane.adhocOpts?.host||'SSH')} • エラー`);
     bridgeApi.ssh.disconnect(sid).catch(() => {});
-    if (pane.terminal) pane.terminal.write(t('\r\n\x1b[31m[接続エラー]\x1b[0m ')+t(msg)+t('\r\n\x1b[36m左上の ↻ 再接続、または接続先一覧の ✓ で診断できます。\x1b[0m\r\n'));
+    if (pane.terminal) pane.terminal.write(`\r\n\x1b[31m${t('[接続エラー]')}\x1b[0m ${t(msg)}\r\n\x1b[36m${t('左上の ↻ 再接続、または接続先一覧の ✓ で診断できます。')}\x1b[0m\r\n`);
   }
   renderConnections();
   setStatus('接続エラー: ' + msg);

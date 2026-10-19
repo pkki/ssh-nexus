@@ -222,18 +222,30 @@ class SshManager {
 
   async monitorSnapshot(id) {
     const commands = {
-      system: 'uname -a 2>/dev/null || ver',
-      uptime: 'uptime 2>/dev/null || true',
+      system: "printf '%s|' \"$(hostname 2>/dev/null)\"; uname -srm 2>/dev/null; printf '|'; (grep '^PRETTY_NAME=' /etc/os-release 2>/dev/null | head -1 | cut -d= -f2- | tr -d '\"') || true",
+      uptime: 'LC_ALL=C uptime 2>/dev/null || true',
+      load: "printf '%s|' \"$(getconf _NPROCESSORS_ONLN 2>/dev/null || nproc 2>/dev/null || echo 1)\"; cat /proc/loadavg 2>/dev/null || true",
+      cpu: "LC_ALL=C sh -c \"grep '^cpu ' /proc/stat 2>/dev/null; sleep 0.20; grep '^cpu ' /proc/stat 2>/dev/null\" || true",
       memory: 'LC_ALL=C free -b 2>/dev/null || true',
       disk: 'LC_ALL=C df -B1 -P / 2>/dev/null || true',
-      processes: "ps -eo pid,comm,%cpu,%mem --sort=-%cpu 2>/dev/null | head -9 || true",
-      docker: "docker ps --format '{{.Names}}|{{.Status}}|{{.Image}}' 2>/dev/null | head -20 || true"
+      filesystems: "LC_ALL=C df -B1 -P -x tmpfs -x devtmpfs 2>/dev/null | head -25 || true",
+      network: "LC_ALL=C cat /proc/net/dev 2>/dev/null || true",
+      processes: "LC_ALL=C ps -eo pid=,user=,stat=,pcpu=,pmem=,rss=,etimes=,comm=,args= --sort=-pcpu 2>/dev/null | head -60 || true",
+      docker: "docker stats --no-stream --format '{{.Name}}|{{.CPUPerc}}|{{.MemUsage}}|{{.NetIO}}|{{.BlockIO}}' 2>/dev/null | head -30 || docker ps --format '{{.Names}}|—|{{.Status}}|—|{{.Image}}' 2>/dev/null | head -30 || true",
+      temperature: "for z in /sys/class/thermal/thermal_zone*/temp; do [ -r \"$z\" ] && cat \"$z\"; done 2>/dev/null | head -8 || true"
     };
     const entries = await Promise.all(Object.entries(commands).map(async ([key, command]) => {
       try { return [key, await this.exec(id, command, 12000)]; }
       catch (e) { return [key, { code:-1, stdout:'', stderr:e.message }]; }
     }));
-    return Object.fromEntries(entries);
+    return { capturedAt:Date.now(), ...Object.fromEntries(entries) };
+  }
+
+  async killProcess(id, pid, force = false) {
+    const value=Number(pid);if(!Number.isInteger(value)||value<2||value>2147483647)throw new Error('PIDが不正です。');
+    const result=await this.exec(id,`kill -${force?'KILL':'TERM'} -- ${value}`,10000);
+    if(result.code!==0)throw new Error((result.stderr||result.stdout||'プロセスを終了できませんでした。').trim());
+    return { pid:value, signal:force?'KILL':'TERM' };
   }
 
   generateKeyPair(options = {}) {
