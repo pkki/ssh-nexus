@@ -126,6 +126,42 @@
   .sftp-empty { color:#888; text-align:center; padding:30px 10px; }
   .badge { display:inline-block; padding:2px 5px; border-radius:8px; font-size:10px; background:#444; color:#ddd; }
   .broadcast-on,.recording-on { background:#b52a2a !important; box-shadow:0 0 7px #f44; }
+  .ai-toolbar { color:#d8b4fe; border-color:#705095; }
+  #aiPanel { position:fixed; top:0; right:0; bottom:22px; width:500px; max-width:92vw; background:#202124; z-index:155; box-shadow:-10px 0 30px rgba(0,0,0,.6); border-left:1px solid #4a4058; display:none; flex-direction:column; }
+  #aiPanel.open { display:flex; }
+  .ai-head { display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-bottom:1px solid #49434f;background:#29252f; }
+  .ai-head>div { display:flex;align-items:center;gap:6px; }.ai-head button { padding:3px 8px; }
+  .ai-target { display:flex;align-items:center;gap:7px;padding:6px 10px;background:#332c3c;border-bottom:1px solid #4c4058;font-size:10px; }.ai-target span{color:#aaa}.ai-target strong{color:#e4c7ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ai-chat-list { display:flex;gap:5px;padding:6px 8px;overflow-x:auto;border-bottom:1px solid #3d3942;background:#27252b; }
+  .ai-chat-item { display:flex;align-items:center;gap:5px;flex:0 0 auto;max-width:190px;padding:4px 7px;border:1px solid #47424d;border-radius:12px;background:#303036;color:#bbb;font-size:9px;cursor:pointer; }
+  .ai-chat-item.active { border-color:#a879d0;background:#443653;color:#fff; }.ai-chat-item span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ai-chat-count{background:#555;padding:0 4px;border-radius:7px}
+  .ai-privacy { display:flex;flex-direction:column;gap:2px;padding:8px 10px;background:#173128;border-bottom:1px solid #285545;color:#b9f6d4;font-size:10px; }
+  .ai-privacy span { color:#91bda5; }
+  .ai-messages { flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px; }
+  .ai-empty { margin:auto;max-width:330px;text-align:center;color:#aaa;display:flex;flex-direction:column;gap:8px;line-height:1.5; }
+  .ai-message { max-width:92%;padding:9px 11px;border-radius:9px;line-height:1.5;font-size:12px;overflow-wrap:anywhere; }
+  .ai-message.user { align-self:flex-end;background:#164d70;color:#e8f6ff; }.ai-message.assistant { align-self:flex-start;background:#303036;border:1px solid #484850; }
+  .ai-message.context { align-self:flex-end;background:#2c3f35;border:1px solid #416552;color:#d2f2de; }
+  .ai-message .meta { font-size:9px;color:#999;margin-bottom:5px; }.ai-message.user .meta { color:#b5d9ed; }
+  .ai-message p { margin:0 0 7px;white-space:pre-wrap; }.ai-message p:last-child { margin-bottom:0; }
+  .ai-message h1,.ai-message h2,.ai-message h3 { margin:9px 0 5px;line-height:1.25 }.ai-message h1{font-size:17px}.ai-message h2{font-size:15px}.ai-message h3{font-size:13px}
+  .ai-message ul,.ai-message ol { margin:5px 0;padding-left:21px }.ai-message li{margin:3px 0}.ai-message blockquote{margin:6px 0;padding:4px 8px;border-left:3px solid #7f6a99;color:#bbb;background:#27252b}.ai-message code{font:11px Consolas,monospace;background:#17171a;padding:1px 4px;border-radius:3px}.ai-message a{color:#6fc7ff}.ai-message hr{border:0;border-top:1px solid #505058;margin:9px 0}.ai-md-table{border-collapse:collapse;width:100%;margin:7px 0;font-size:10px}.ai-md-table th,.ai-md-table td{border:1px solid #505058;padding:4px 6px;text-align:left}.ai-md-table th{background:#29292f}
+  .ai-code { margin:8px 0;background:#111;border:1px solid #484848;border-radius:5px;overflow:hidden; }
+  .ai-code header { display:flex;justify-content:space-between;align-items:center;padding:5px 7px;background:#27272a;color:#aaa;font-size:10px; }
+  .ai-code pre { margin:0;padding:9px;white-space:pre-wrap;overflow:auto;color:#d4d4d4;font:11px Consolas,monospace; }
+  .ai-run { background:#237a45;padding:3px 8px;font-size:10px; }.ai-run.risky { background:#a83b32; }
+  .ai-request { border:1px solid #8b6f2f;background:#3a301c;padding:8px;border-radius:5px;color:#f5d98c;margin-top:7px; }
+  .ai-context-bar { padding:7px 9px;border-top:1px solid #3e3e43;display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
+  .ai-context-bar span { color:#888;font-size:9px; }.ai-context-bar button { font-size:10px; }
+  .ai-compose { display:flex;gap:7px;padding:8px;border-top:1px solid #444;background:#25252a; }
+  .ai-compose textarea { flex:1;resize:vertical;min-height:58px;max-height:180px; }.ai-compose button { align-self:flex-end; }
+  .ai-status-row { display:flex;align-items:center;gap:8px;padding:0 8px 7px;background:#25252a; }.ai-status-row .ai-status { flex:1;padding:0; }.ai-status-row button { flex:none;font-size:11px;padding:4px 8px; }
+  .ai-status { min-height:18px;padding:2px 9px 5px;color:#999;font-size:10px;background:#25252a; }
+  .secret-findings { display:flex;flex-direction:column;gap:5px;margin:8px 0; }.secret-finding { padding:5px 7px;border-left:3px solid #f0ad4e;background:#332b1e;font-size:11px; }
+  .secret-safe { padding:7px;border-left:3px solid #4ec9b0;background:#173128;color:#b9f6d4;font-size:11px; }
+  .ai-review { width:100%;min-height:220px;font:11px Consolas,monospace; }
+  .modal.ai-settings-modal { width:min(92vw,620px); }
+  @media(max-width:620px){#aiPanel{width:100%;max-width:100%}.ai-message{max-width:96%}}
   .modal.replay-modal { width:min(96vw,1500px); max-width:96vw; }
   .replay-controls { display:flex; gap:7px; align-items:center; margin-bottom:7px; flex-wrap:wrap; }
   .replay-timeline { display:grid; grid-template-columns:minmax(160px,1fr) auto; gap:12px; align-items:center; margin:0 0 9px; padding:8px 10px; background:#181818; border:1px solid #3b3b3b; }
@@ -227,6 +263,7 @@
         <button id="btnSaveLog" class="secondary" title="表示内容をログ保存">ログ</button>
         <button id="btnRecord" class="secondary" title="サーバー出力を時間付きで録画">● 録画</button>
         <button id="btnReplay" class="secondary" title="保存した録画を再生">▶ 再生</button>
+        <button id="btnAi" class="secondary ai-toolbar" title="AI支援チャットを開く">✦ AI</button>
         <select id="quickCommand" title="定型コマンド">
           <option value="">コマンド…</option>
           <option value="uptime">稼働時間</option><option value="df -h">ディスク使用量</option>
@@ -257,6 +294,17 @@
   <div id="sftpDropOverlay" class="sftp-drop-overlay"><strong>このフォルダへアップロード</strong><span id="sftpDropTarget">ファイル・フォルダをドロップ</span></div>
 </div>
 
+<aside id="aiPanel" aria-label="AI支援">
+  <header class="ai-head"><div><strong>✦ AI支援</strong><span id="aiModelBadge" class="badge">未設定</span></div><div><button id="aiUseActive" class="secondary" title="現在のSSHチャットを開く">現在のSSH</button><button id="aiNewChat" class="secondary" title="チャットを消去">＋</button><button id="aiSettings" class="secondary" title="AI設定">⚙</button><button id="aiClose" class="secondary" title="閉じる">✕</button></div></header>
+  <div class="ai-target"><span>対象SSH</span><strong id="aiContextBadge">一般</strong></div>
+  <div id="aiChatList" class="ai-chat-list" aria-label="SSH別AIチャット一覧"></div>
+  <div class="ai-privacy"><strong>選択した内容だけを送信</strong><span>端末全体をAIが自動で読むことはありません。秘密情報は送信前に検査・マスクします。</span></div>
+  <div id="aiMessages" class="ai-messages"><div class="ai-empty"><strong>SSH Nexus AI</strong><span>質問を入力してください。AIが端末内容を必要とした場合は、文字を選択して確認後に送信できます。</span></div></div>
+  <div id="aiContextBar" class="ai-context-bar"><button id="aiAttachSelection" class="secondary">選択した端末文字を確認して送信</button><span id="aiSelectionStatus">端末の選択範囲だけが対象です</span></div>
+  <div class="ai-compose"><textarea id="aiInput" rows="3" placeholder="サーバー操作やエラーについて質問…"></textarea><button id="aiSend">送信</button></div>
+  <div class="ai-status-row"><div id="aiStatus" class="ai-status"></div><button id="aiCaptureStop" class="secondary" hidden>結果待機を終了</button></div>
+</aside>
+
 <div id="unlockScreen">
   <h1>SSH Nexus</h1>
   <div class="box" id="unlockBox">
@@ -266,6 +314,7 @@
 </div>
 
 <script src="i18n.js"></script>
+<script src="aiSecurity.js"></script>
 <script src="boot.js"></script>
 <script src="../node_modules/@xterm/xterm/lib/xterm.js"></script>
 <script src="../node_modules/@xterm/addon-fit/lib/addon-fit.js"></script>

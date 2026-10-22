@@ -6548,5 +6548,1505 @@
     "fr": "Recherche par nom, utilisateur, PID",
     "de": "Suche nach Name, Benutzer, PID",
     "pt-BR": "Pesquise por nome, usuário, PID"
+  },
+  "\n\n危険性: {0}": {
+    "ja": "\n\n危険性: {0}",
+    "en": "Danger: {0}",
+    "zh-CN": "危险：{0}",
+    "ko": "위험: {0}",
+    "es": "Peligro: {0}",
+    "fr": "Danger : {0}",
+    "de": "Gefahr: {0}",
+    "pt-BR": "Perigo: {0}"
+  },
+  "[REDACTED:高エントロピー文字列]": {
+    "ja": "[REDACTED:高エントロピー文字列]",
+    "en": "[REDACTED:High entropy string]",
+    "zh-CN": "[已编辑：高熵字符串]",
+    "ko": "[REDACTED:높은 엔트로피 문자열]",
+    "es": "[ELIMINADO: cadena de alta entropía]",
+    "fr": "[SUPPRIMÉ : Chaîne à haute entropie]",
+    "de": "[ANONYMISIERT: Zeichenfolge mit hoher Entropie]",
+    "pt-BR": "[REDIGIDO: sequência de alta entropia]"
+  },
+  "▶ 実行": {
+    "ja": "▶ 実行",
+    "en": "▶ Execute",
+    "zh-CN": "▶ 执行",
+    "ko": "▶ 실행",
+    "es": "▶ Ejecutar",
+    "fr": "▶ Exécuter",
+    "de": "▶ Ausführen",
+    "pt-BR": "▶ Executar"
+  },
+  "⚠ {0}: {1}件をマスク": {
+    "ja": "⚠ {0}: {1}件をマスク",
+    "en": "⚠ {0}: Mask {1} items",
+    "zh-CN": "⚠ {0}：面膜{1}项目",
+    "ko": "⚠ {0}: {1}건을 마스크",
+    "es": "⚠ {0}: Máscara de elementos {1}",
+    "fr": "⚠ {0} : Masque articles {1}",
+    "de": "⚠ {0}: Maskieren Sie {1}-Elemente",
+    "pt-BR": "⚠ {0}: Máscara de itens {1}"
+  },
+  "⚠ 実行": {
+    "ja": "⚠ 実行",
+    "en": "⚠ Execute",
+    "zh-CN": "⚠ 执行",
+    "ko": "⚠ 실행",
+    "es": "⚠ Ejecutar",
+    "fr": "⚠ Exécuter",
+    "de": "⚠ Ausführen",
+    "pt-BR": "⚠ Executar"
+  },
+  "✓ 既知のパスワード、トークン、秘密鍵パターンは検出されませんでした": {
+    "ja": "✓ 既知のパスワード、トークン、秘密鍵パターンは検出されませんでした",
+    "en": "✓ No known passwords, tokens, or private key patterns detected",
+    "zh-CN": "✓ 未检测到已知密码、令牌或私钥模式",
+    "ko": "✓ 알려진 암호, 토큰 및 개인 키 패턴이 감지되지 않았습니다.",
+    "es": "✓ No se detectaron contraseñas, tokens o patrones de clave privada conocidos",
+    "fr": "✓ Aucun mot de passe, jeton ou modèle de clé privée connu détecté",
+    "de": "✓ Es wurden keine bekannten Passwörter, Token oder privaten Schlüsselmuster erkannt",
+    "pt-BR": "✓ Nenhuma senha, token ou padrão de chave privada conhecido foi detectado"
+  },
+  "✦ AI支援": {
+    "ja": "✦ AI支援",
+    "en": "✦ AI support",
+    "zh-CN": "✦ 人工智能支持",
+    "ko": "✦ AI 지원",
+    "es": "✦ Soporte de IA",
+    "fr": "✦ Prise en charge de l'IA",
+    "de": "✦ KI-Unterstützung",
+    "pt-BR": "✦ Suporte de IA"
+  },
+  "AIから空の応答を受信しました。": {
+    "ja": "AIから空の応答を受信しました。",
+    "en": "Received empty response from AI.",
+    "zh-CN": "收到 AI 的空响应。",
+    "ko": "AI로부터 빈 응답을 받았습니다.",
+    "es": "Recibí una respuesta vacía de AI.",
+    "fr": "Réponse vide reçue de l'IA.",
+    "de": "Leere Antwort von AI erhalten.",
+    "pt-BR": "Recebeu resposta vazia da IA."
+  },
+  "AIが応答を生成しています…": {
+    "ja": "AIが応答を生成しています…",
+    "en": "AI is generating the response…",
+    "zh-CN": "AI 正在生成响应……",
+    "ko": "AI가 응답을 생성하는 중…",
+    "es": "La IA está generando la respuesta...",
+    "fr": "L’IA génère la réponse…",
+    "de": "KI generiert die Antwort…",
+    "pt-BR": "A IA está gerando a resposta…"
+  },
+  "AIが端末内容を要求しています": {
+    "ja": "AIが端末内容を要求しています",
+    "en": "AI is requesting device contents",
+    "zh-CN": "AI 正在请求设备内容",
+    "ko": "AI가 단말기 내용을 요청합니다.",
+    "es": "La IA solicita contenidos del dispositivo",
+    "fr": "L'IA demande le contenu de l'appareil",
+    "de": "AI fordert Geräteinhalte an",
+    "pt-BR": "AI está solicitando conteúdo do dispositivo"
+  },
+  "AIサービスエラー: {0}": {
+    "ja": "AIサービスエラー: {0}",
+    "en": "AI service error: {0}",
+    "zh-CN": "AI服务错误：{0}",
+    "ko": "AI 서비스 오류: {0}",
+    "es": "Error de servicio de IA: {0}",
+    "fr": "Erreur du service IA : {0}",
+    "de": "AI-Dienstfehler: {0}",
+    "pt-BR": "Erro de serviço de IA: {0}"
+  },
+  "AIサービスから不正な応答を受信しました（HTTP {0}）。": {
+    "ja": "AIサービスから不正な応答を受信しました（HTTP {0}）。",
+    "en": "An invalid response was received from the AI service (HTTP {0}).",
+    "zh-CN": "从 AI 服务 (HTTP {0}) 收到无效响应。",
+    "ko": "AI 서비스에서 잘못된 응답을 받았습니다(HTTP {0}).",
+    "es": "Se recibió una respuesta no válida del servicio AI (HTTP {0}).",
+    "fr": "Une réponse non valide a été reçue du service AI (HTTP {0}).",
+    "de": "Vom AI-Dienst wurde eine ungültige Antwort empfangen (HTTP {0}).",
+    "pt-BR": "Uma resposta inválida foi recebida do serviço AI (HTTP {0})."
+  },
+  "AIプロバイダーが不正です。": {
+    "ja": "AIプロバイダーが不正です。",
+    "en": "AI provider is fraudulent.",
+    "zh-CN": "人工智能提供商存在欺诈行为。",
+    "ko": "AI 제공자가 잘못되었습니다.",
+    "es": "El proveedor de IA es fraudulento.",
+    "fr": "Le fournisseur d’IA est frauduleux.",
+    "de": "Der KI-Anbieter ist betrügerisch.",
+    "pt-BR": "O provedor de IA é fraudulento."
+  },
+  "AIへ送信するメッセージがありません。": {
+    "ja": "AIへ送信するメッセージがありません。",
+    "en": "There are no messages to send to AI.",
+    "zh-CN": "没有消息可发送给 AI。",
+    "ko": "AI로 보낼 메시지가 없습니다.",
+    "es": "No hay mensajes para enviar a AI.",
+    "fr": "Il n’y a aucun message à envoyer à l’IA.",
+    "de": "Es sind keine Nachrichten zum Senden an AI vorhanden.",
+    "pt-BR": "Não há mensagens para enviar à IA."
+  },
+  "AIへ送信する端末内容を確認": {
+    "ja": "AIへ送信する端末内容を確認",
+    "en": "Check the terminal content to be sent to AI",
+    "zh-CN": "查看终端发送给AI的内容",
+    "ko": "AI에 송신하는 단말 내용을 확인",
+    "es": "Verifique el contenido del terminal que se enviará a AI",
+    "fr": "Vérifier le contenu du terminal à envoyer à AI",
+    "de": "Überprüfen Sie den Terminalinhalt, der an AI gesendet werden soll",
+    "pt-BR": "Verifique o conteúdo do terminal a ser enviado para AI"
+  },
+  "AIモデル名が不正です。": {
+    "ja": "AIモデル名が不正です。",
+    "en": "AI model name is invalid.",
+    "zh-CN": "AI 模型名称无效。",
+    "ko": "AI 모델 이름이 잘못되었습니다.",
+    "es": "El nombre del modelo de IA no es válido.",
+    "fr": "Le nom du modèle IA n'est pas valide.",
+    "de": "Der Name des AI-Modells ist ungültig.",
+    "pt-BR": "O nome do modelo de IA é inválido."
+  },
+  "AI応答がタイムアウトしました。": {
+    "ja": "AI応答がタイムアウトしました。",
+    "en": "AI response timed out.",
+    "zh-CN": "AI 响应超时。",
+    "ko": "AI 응답이 시간 초과되었습니다.",
+    "es": "Se agotó el tiempo de respuesta de la IA.",
+    "fr": "La réponse de l'IA a expiré.",
+    "de": "Zeitüberschreitung bei der KI-Antwort.",
+    "pt-BR": "A resposta da IA expirou."
+  },
+  "AI応答が大きすぎます。": {
+    "ja": "AI応答が大きすぎます。",
+    "en": "AI response is too large.",
+    "zh-CN": "AI反应太大。",
+    "ko": "AI 응답이 너무 큽니다.",
+    "es": "La respuesta de la IA es demasiado grande.",
+    "fr": "La réponse de l'IA est trop importante.",
+    "de": "Die KI-Reaktion ist zu groß.",
+    "pt-BR": "A resposta da IA é muito grande."
+  },
+  "AI支援": {
+    "ja": "AI支援",
+    "en": "AI support",
+    "zh-CN": "人工智能支持",
+    "ko": "AI 지원",
+    "es": "Soporte de IA",
+    "fr": "Prise en charge de l'IA",
+    "de": "KI-Unterstützung",
+    "pt-BR": "Suporte de IA"
+  },
+  "AI支援チャットを開く": {
+    "ja": "AI支援チャットを開く",
+    "en": "Open AI-assisted chat",
+    "zh-CN": "打开AI辅助聊天",
+    "ko": "AI 지원 채팅 열기",
+    "es": "Abrir chat asistido por IA",
+    "fr": "Ouvrir le chat assisté par l'IA",
+    "de": "Öffnen Sie den KI-gestützten Chat",
+    "pt-BR": "Abra o bate-papo assistido por IA"
+  },
+  "AI接続にはHTTPSが必要です。": {
+    "ja": "AI接続にはHTTPSが必要です。",
+    "en": "AI connections require HTTPS.",
+    "zh-CN": "AI 连接需要 HTTPS。",
+    "ko": "AI 연결에는 HTTPS가 필요합니다.",
+    "es": "Las conexiones de IA requieren HTTPS.",
+    "fr": "Les connexions IA nécessitent HTTPS.",
+    "de": "KI-Verbindungen erfordern HTTPS.",
+    "pt-BR": "As conexões AI requerem HTTPS."
+  },
+  "AI接続設定": {
+    "ja": "AI接続設定",
+    "en": "AI connection settings",
+    "zh-CN": "AI连接设置",
+    "ko": "AI 연결 설정",
+    "es": "Configuración de conexión de IA",
+    "fr": "Paramètres de connexion IA",
+    "de": "AI-Verbindungseinstellungen",
+    "pt-BR": "Configurações de conexão de IA"
+  },
+  "AI設定": {
+    "ja": "AI設定",
+    "en": "AI settings",
+    "zh-CN": "人工智能设置",
+    "ko": "AI 설정",
+    "es": "Configuración de IA",
+    "fr": "Paramètres de l'IA",
+    "de": "KI-Einstellungen",
+    "pt-BR": "Configurações de IA"
+  },
+  "AI設定を暗号化して保存しました": {
+    "ja": "AI設定を暗号化して保存しました",
+    "en": "AI settings were encrypted and saved",
+    "zh-CN": "AI设置被加密并保存",
+    "ko": "AI 설정을 암호화하고 저장했습니다.",
+    "es": "La configuración de IA se cifró y guardó",
+    "fr": "Les paramètres de l'IA ont été cryptés et enregistrés",
+    "de": "KI-Einstellungen wurden verschlüsselt und gespeichert",
+    "pt-BR": "As configurações de IA foram criptografadas e salvas"
+  },
+  "AI通信失敗": {
+    "ja": "AI通信失敗",
+    "en": "AI communication failure",
+    "zh-CN": "AI通讯故障",
+    "ko": "AI 통신 실패",
+    "es": "Fallo de comunicación de la IA",
+    "fr": "Échec de la communication de l'IA",
+    "de": "KI-Kommunikationsfehler",
+    "pt-BR": "Falha na comunicação da IA"
+  },
+  "AI通信失敗: ": {
+    "ja": "AI通信失敗: ",
+    "en": "AI communication failure:",
+    "zh-CN": "AI通讯故障：",
+    "ko": "AI 통신 실패:",
+    "es": "Fallo de comunicación de la IA:",
+    "fr": "Échec de la communication IA :",
+    "de": "KI-Kommunikationsfehler:",
+    "pt-BR": "Falha de comunicação de IA:"
+  },
+  "AI提案コマンドを {0} で実行しますか？{1}\n\n{2}": {
+    "ja": "AI提案コマンドを {0} で実行しますか？{1}\n\n{2}",
+    "en": "Would you like to run the AI suggested command with {0}?{1}\n\n{2}",
+    "zh-CN": "您想使用 {0} 运行 AI 建议的命令吗？{1}\n\n{2}",
+    "ko": "AI 제안 명령을 {0}로 실행 하시겠습니까?{1}\n\n{2}",
+    "es": "¿Le gustaría ejecutar el comando sugerido por AI con {0}?{1}\n\n{2}",
+    "fr": "Souhaitez-vous exécuter la commande suggérée par AI avec {0} ?{1}\n\n{2}",
+    "de": "Möchten Sie den von der KI vorgeschlagenen Befehl mit {0} ausführen?{1}\n\n{2}",
+    "pt-BR": "Gostaria de executar o comando sugerido pela IA com {0}?{1}\n\n{2}"
+  },
+  "AI提案コマンドを送信しました": {
+    "ja": "AI提案コマンドを送信しました",
+    "en": "AI suggestion command sent",
+    "zh-CN": "AI建议命令已发送",
+    "ko": "AI 제안 명령을 보냈습니다.",
+    "es": "Comando de sugerencia de IA enviado",
+    "fr": "Commande de suggestion IA envoyée",
+    "de": "KI-Vorschlagsbefehl gesendet",
+    "pt-BR": "Comando de sugestão de IA enviado"
+  },
+  "APIキー": {
+    "ja": "APIキー",
+    "en": "API key",
+    "zh-CN": "API密钥",
+    "ko": "API 키",
+    "es": "clave API",
+    "fr": "Clé API",
+    "de": "API-Schlüssel",
+    "pt-BR": "Chave de API"
+  },
+  "APIキーは暗号化保管庫へ保存され、選択したAIプロバイダーへの通信だけに使用します。": {
+    "ja": "APIキーは暗号化保管庫へ保存され、選択したAIプロバイダーへの通信だけに使用します。",
+    "en": "Your API key will be stored in an encrypted vault and will only be used to communicate with your chosen AI provider.",
+    "zh-CN": "您的 API 密钥将存储在加密的保管库中，并且仅用于与您选择的 AI 提供商进行通信。",
+    "ko": "API 키는 암호화 저장소에 저장되며 선택한 AI 공급자와의 통신에만 사용됩니다.",
+    "es": "Su clave API se almacenará en una bóveda cifrada y solo se utilizará para comunicarse con el proveedor de IA elegido.",
+    "fr": "Votre clé API sera stockée dans un coffre-fort crypté et ne sera utilisée que pour communiquer avec le fournisseur d'IA de votre choix.",
+    "de": "Ihr API-Schlüssel wird in einem verschlüsselten Tresor gespeichert und nur für die Kommunikation mit dem von Ihnen gewählten KI-Anbieter verwendet.",
+    "pt-BR": "Sua chave API será armazenada em um cofre criptografado e será usada apenas para comunicação com o provedor de IA escolhido."
+  },
+  "APIキーを設定してください。": {
+    "ja": "APIキーを設定してください。",
+    "en": "Please set the API key.",
+    "zh-CN": "请设置API密钥。",
+    "ko": "API 키를 설정합니다.",
+    "es": "Configure la clave API.",
+    "fr": "Veuillez définir la clé API.",
+    "de": "Bitte legen Sie den API-Schlüssel fest.",
+    "pt-BR": "Por favor, defina a chave API."
+  },
+  "AWSアクセスキー": {
+    "ja": "AWSアクセスキー",
+    "en": "AWS access key",
+    "zh-CN": "AWS 访问密钥",
+    "ko": "AWS 액세스 키",
+    "es": "Clave de acceso de AWS",
+    "fr": "Clé d'accès AWS",
+    "de": "AWS-Zugriffsschlüssel",
+    "pt-BR": "Chave de acesso AWS"
+  },
+  "Bearerトークン": {
+    "ja": "Bearerトークン",
+    "en": "Bearer token",
+    "zh-CN": "不记名令牌",
+    "ko": "Bearer 토큰",
+    "es": "ficha al portador",
+    "fr": "Jeton du porteur",
+    "de": "Inhabertoken",
+    "pt-BR": "Token do portador"
+  },
+  "GitHubトークン": {
+    "ja": "GitHubトークン",
+    "en": "GitHub token",
+    "zh-CN": "GitHub 令牌",
+    "ko": "GitHub 토큰",
+    "es": "ficha de GitHub",
+    "fr": "Jeton GitHub",
+    "de": "GitHub-Token",
+    "pt-BR": "Token GitHub"
+  },
+  "Slackトークン": {
+    "ja": "Slackトークン",
+    "en": "Slack token",
+    "zh-CN": "松弛代币",
+    "ko": "Slack 토큰",
+    "es": "token flojo",
+    "fr": "Jeton Slack",
+    "de": "Slack-Token",
+    "pt-BR": "Token de folga"
+  },
+  "URL認証情報": {
+    "ja": "URL認証情報",
+    "en": "URL authentication information",
+    "zh-CN": "URL认证信息",
+    "ko": "URL 자격 증명",
+    "es": "Información de autenticación de URL",
+    "fr": "Informations d'authentification URL",
+    "de": "Informationen zur URL-Authentifizierung",
+    "pt-BR": "Informações de autenticação de URL"
+  },
+  "あなた": {
+    "ja": "あなた",
+    "en": "you",
+    "zh-CN": "你",
+    "ko": "너",
+    "es": "tu",
+    "fr": "tu",
+    "de": "Du",
+    "pt-BR": "você"
+  },
+  "コマンドが空か長すぎるため実行できません": {
+    "ja": "コマンドが空か長すぎるため実行できません",
+    "en": "Command is empty or too long to execute",
+    "zh-CN": "命令为空或太长而无法执行",
+    "ko": "명령이 비어 있거나 너무 길어서 실행할 수 없습니다.",
+    "es": "El comando está vacío o es demasiado largo para ejecutarlo",
+    "fr": "La commande est vide ou trop longue à exécuter",
+    "de": "Der Befehl ist leer oder zu lang für die Ausführung",
+    "pt-BR": "O comando está vazio ou é muito longo para ser executado"
+  },
+  "サーバー操作やエラーについて質問…": {
+    "ja": "サーバー操作やエラーについて質問…",
+    "en": "Questions about server operations and errors...",
+    "zh-CN": "有关服务器操作和错误的问题...",
+    "ko": "서버 조작 및 오류에 대한 질문…",
+    "es": "Preguntas sobre operaciones y errores del servidor...",
+    "fr": "Questions sur les opérations et les erreurs du serveur...",
+    "de": "Fragen zum Serverbetrieb und zu Fehlern...",
+    "pt-BR": "Perguntas sobre operações e erros do servidor..."
+  },
+  "データ削除": {
+    "ja": "データ削除",
+    "en": "Data deletion",
+    "zh-CN": "数据删除",
+    "ko": "데이터 삭제",
+    "es": "Eliminación de datos",
+    "fr": "Suppression des données",
+    "de": "Datenlöschung",
+    "pt-BR": "Exclusão de dados"
+  },
+  "パスワード／シークレット": {
+    "ja": "パスワード／シークレット",
+    "en": "Password/Secret",
+    "zh-CN": "密码/秘密",
+    "ko": "비밀번호/비밀",
+    "es": "Contraseña/Secreto",
+    "fr": "Mot de passe/Secret",
+    "de": "Passwort/Geheimnis",
+    "pt-BR": "Senha/Segredo"
+  },
+  "ファイアウォール変更": {
+    "ja": "ファイアウォール変更",
+    "en": "firewall changes",
+    "zh-CN": "防火墙更改",
+    "ko": "방화벽 변경",
+    "es": "cambios de firewall",
+    "fr": "modifications du pare-feu",
+    "de": "Firewall-Änderungen",
+    "pt-BR": "alterações de firewall"
+  },
+  "プロバイダー": {
+    "ja": "プロバイダー",
+    "en": "provider",
+    "zh-CN": "提供者",
+    "ko": "공급자",
+    "es": "proveedor",
+    "fr": "fournisseur",
+    "de": "Anbieter",
+    "pt-BR": "provedor"
+  },
+  "モデル": {
+    "ja": "モデル",
+    "en": "model",
+    "zh-CN": "型号",
+    "ko": "모델",
+    "es": "modelo",
+    "fr": "modèle",
+    "de": "Modell",
+    "pt-BR": "modelo"
+  },
+  "モデルとAPIキーを入力してください": {
+    "ja": "モデルとAPIキーを入力してください",
+    "en": "Please enter your model and API key",
+    "zh-CN": "请输入您的型号和API密钥",
+    "ko": "모델과 API 키를 입력하세요.",
+    "es": "Por favor ingrese su modelo y clave API",
+    "fr": "Veuillez saisir votre modèle et votre clé API",
+    "de": "Bitte geben Sie Ihr Modell und Ihren API-Schlüssel ein",
+    "pt-BR": "Insira seu modelo e chave de API"
+  },
+  "会話が長すぎます。新しいチャットを開始してください。": {
+    "ja": "会話が長すぎます。新しいチャットを開始してください。",
+    "en": "The conversation is too long.Please start a new chat.",
+    "zh-CN": "谈话时间太长。请开始新的聊天。",
+    "ko": "대화가 너무 깁니다.새 채팅을 시작합니다.",
+    "es": "La conversación es demasiado larga.Por favor inicia un nuevo chat.",
+    "fr": "La conversation est trop longue.Veuillez démarrer une nouvelle discussion.",
+    "de": "Das Gespräch ist zu lang.Bitte starten Sie einen neuen Chat.",
+    "pt-BR": "A conversa é muito longa.Por favor, inicie um novo bate-papo."
+  },
+  "外部コード実行": {
+    "ja": "外部コード実行",
+    "en": "External code execution",
+    "zh-CN": "外部代码执行",
+    "ko": "외부 코드 실행",
+    "es": "Ejecución de código externo",
+    "fr": "Exécution de code externe",
+    "de": "Externe Codeausführung",
+    "pt-BR": "Execução de código externo"
+  },
+  "確認して送信": {
+    "ja": "確認して送信",
+    "en": "Confirm and send",
+    "zh-CN": "确认并发送",
+    "ko": "확인 및 제출",
+    "es": "Confirmar y enviar",
+    "fr": "Confirmer et envoyer",
+    "de": "Bestätigen und senden",
+    "pt-BR": "Confirme e envie"
+  },
+  "確認済み端末選択": {
+    "ja": "確認済み端末選択",
+    "en": "Verified terminal selection",
+    "zh-CN": "验证终端选择",
+    "ko": "확인된 단말기 선택",
+    "es": "Selección de terminal verificada",
+    "fr": "Sélection de terminal vérifiée",
+    "de": "Verifizierte Terminalauswahl",
+    "pt-BR": "Seleção de terminal verificada"
+  },
+  "許可されていないAI要求です。": {
+    "ja": "許可されていないAI要求です。",
+    "en": "Unauthorized AI request.",
+    "zh-CN": "未经授权的人工智能请求。",
+    "ko": "허용되지 않는 AI 요청입니다.",
+    "es": "Solicitud de IA no autorizada.",
+    "fr": "Demande d'IA non autorisée.",
+    "de": "Unautorisierte KI-Anfrage.",
+    "pt-BR": "Solicitação de IA não autorizada."
+  },
+  "現在のAIチャットを消去しますか？": {
+    "ja": "現在のAIチャットを消去しますか？",
+    "en": "Do you want to clear the current AI chat?",
+    "zh-CN": "您想清除当前的AI聊天吗？",
+    "ko": "현재 AI 채팅을 삭제하시겠습니까?",
+    "es": "¿Quieres borrar el chat AI actual?",
+    "fr": "Voulez-vous effacer le chat AI actuel ?",
+    "de": "Möchten Sie den aktuellen AI-Chat löschen?",
+    "pt-BR": "Você deseja limpar o bate-papo atual da IA?"
+  },
+  "広範囲の権限変更": {
+    "ja": "広範囲の権限変更",
+    "en": "Wide range of permission changes",
+    "zh-CN": "大范围的权限更改",
+    "ko": "광범위한 권한 변경",
+    "es": "Amplia gama de cambios de permisos",
+    "fr": "Large gamme de modifications d'autorisation",
+    "de": "Große Auswahl an Berechtigungsänderungen",
+    "pt-BR": "Ampla gama de alterações de permissão"
+  },
+  "高エントロピー文字列": {
+    "ja": "高エントロピー文字列",
+    "en": "high entropy string",
+    "zh-CN": "高熵弦",
+    "ko": "높은 엔트로피 문자열",
+    "es": "cadena de alta entropía",
+    "fr": "chaîne à haute entropie",
+    "de": "String mit hoher Entropie",
+    "pt-BR": "string de alta entropia"
+  },
+  "自動検査は見落としを完全には防げません。ホスト名、ユーザー名、内部IPなども必要に応じて削除してください。": {
+    "ja": "自動検査は見落としを完全には防げません。ホスト名、ユーザー名、内部IPなども必要に応じて削除してください。",
+    "en": "Automated inspection cannot completely prevent oversights.Also remove hostnames, usernames, internal IPs, etc. as necessary.",
+    "zh-CN": "自动化检查并不能完全防止疏忽。还可以根据需要删除主机名、用户名、内部 IP 等。",
+    "ko": "자동 검사는 간과를 완전히 방지하지 않습니다.호스트 이름, 사용자 이름, 내부 IP 등도 필요에 따라 삭제하십시오.",
+    "es": "La inspección automatizada no puede evitar por completo los descuidos.También elimine nombres de host, nombres de usuario, IP internas, etc. según sea necesario.",
+    "fr": "L’inspection automatisée ne peut pas empêcher complètement les oublis.Supprimez également les noms d’hôte, les noms d’utilisateur, les adresses IP internes, etc. si nécessaire.",
+    "de": "Eine automatisierte Inspektion kann Versäumnisse nicht vollständig verhindern.Entfernen Sie bei Bedarf auch Hostnamen, Benutzernamen, interne IPs usw.",
+    "pt-BR": "A inspeção automatizada não pode evitar completamente os descuidos.Remova também nomes de host, nomes de usuário, IPs internos, etc., conforme necessário."
+  },
+  "質問を入力してください。AIが端末内容を必要とした場合は、文字を選択して確認後に送信できます。": {
+    "ja": "質問を入力してください。AIが端末内容を必要とした場合は、文字を選択して確認後に送信できます。",
+    "en": "Please enter your question.If the AI ​​needs the terminal contents, you can select the characters and send them after confirmation.",
+    "zh-CN": "请输入您的问题。如果AI需要终端内容，可以选择字符，确认后发送。",
+    "ko": "질문을 입력하세요.AI가 단말기 내용을 필요로 하는 경우 문자를 선택하고 확인 후 전송할 수 있습니다.",
+    "es": "Por favor ingrese su pregunta.Si la IA necesita el contenido del terminal, puede seleccionar los personajes y enviarlos después de la confirmación.",
+    "fr": "Veuillez saisir votre question.Si l'IA a besoin du contenu du terminal, vous pouvez sélectionner les caractères et les envoyer après confirmation.",
+    "de": "Bitte geben Sie Ihre Frage ein.Wenn die KI die Terminalinhalte benötigt, können Sie die Zeichen auswählen und nach Bestätigung senden.",
+    "pt-BR": "Por favor, insira sua pergunta.Se a IA precisar do conteúdo do terminal, você poderá selecionar os caracteres e enviá-los após a confirmação."
+  },
+  "実行する接続中ペインを選択してください": {
+    "ja": "実行する接続中ペインを選択してください",
+    "en": "Select the Connecting Pane to run",
+    "zh-CN": "选择要运行的连接窗格",
+    "ko": "실행할 연결 중 창을 선택합니다.",
+    "es": "Seleccione el panel de conexión para ejecutar",
+    "fr": "Sélectionnez le volet de connexion à exécuter",
+    "de": "Wählen Sie den auszuführenden Verbindungsbereich aus",
+    "pt-BR": "Selecione o painel de conexão para executar"
+  },
+  "新しいチャット": {
+    "ja": "新しいチャット",
+    "en": "new chat",
+    "zh-CN": "新聊天",
+    "ko": "새로운 채팅",
+    "es": "nueva charla",
+    "fr": "nouvelle discussion",
+    "de": "neuer Chat",
+    "pt-BR": "novo bate-papo"
+  },
+  "診断に必要な範囲を端末で選択してください。": {
+    "ja": "診断に必要な範囲を端末で選択してください。",
+    "en": "Please select the range required for diagnosis on your device.",
+    "zh-CN": "请在您的设备上选择诊断所需的范围。",
+    "ko": "진단에 필요한 범위를 단말기에서 선택합니다.",
+    "es": "Seleccione el rango requerido para el diagnóstico en su dispositivo.",
+    "fr": "Veuillez sélectionner la plage requise pour le diagnostic sur votre appareil.",
+    "de": "Bitte wählen Sie den für die Diagnose erforderlichen Bereich auf Ihrem Gerät aus.",
+    "pt-BR": "Selecione o intervalo necessário para o diagnóstico no seu dispositivo."
+  },
+  "選択した端末文字を確認して送信": {
+    "ja": "選択した端末文字を確認して送信",
+    "en": "Check the selected terminal characters and send",
+    "zh-CN": "检查所选终端字符并发送",
+    "ko": "선택한 터미널 문자를 확인하고 전송",
+    "es": "Verifique los caracteres del terminal seleccionado y envíe",
+    "fr": "Vérifiez les caractères du terminal sélectionnés et envoyez",
+    "de": "Überprüfen Sie die ausgewählten Terminalzeichen und senden Sie sie",
+    "pt-BR": "Verifique os caracteres do terminal selecionados e envie"
+  },
+  "選択した内容だけを送信": {
+    "ja": "選択した内容だけを送信",
+    "en": "Send only selected content",
+    "zh-CN": "仅发送选定的内容",
+    "ko": "선택한 내용만 보내기",
+    "es": "Enviar solo contenido seleccionado",
+    "fr": "Envoyer uniquement le contenu sélectionné",
+    "de": "Senden Sie nur ausgewählte Inhalte",
+    "pt-BR": "Envie apenas conteúdo selecionado"
+  },
+  "選択範囲 {0}文字。検出した秘密情報は自動的にマスクしました。送信内容を編集して確認してください。": {
+    "ja": "選択範囲 {0}文字。検出した秘密情報は自動的にマスクしました。送信内容を編集して確認してください。",
+    "en": "Selection range {0} characters.Detected secret information was automatically masked.Please edit and confirm your submission.",
+    "zh-CN": "选择范围{0}字符。检测到的秘密信息被自动屏蔽。请编辑并确认您的提交。",
+    "ko": "선택 범위 {0} 문자.감지한 비밀 정보가 자동으로 가려졌습니다.전송 내용을 편집하고 확인합니다.",
+    "es": "Rango de selección de caracteres {0}.La información secreta detectada se enmascaró automáticamente.Por favor edite y confirme su envío.",
+    "fr": "Plage de sélection Caractères {0}.Les informations secrètes détectées étaient automatiquement masquées.Veuillez modifier et confirmer votre soumission.",
+    "de": "Auswahlbereich {0} Zeichen.Erkannte geheime Informationen wurden automatisch maskiert.Bitte bearbeiten und bestätigen Sie Ihre Einreichung.",
+    "pt-BR": "Faixa de seleção de caracteres {0}.As informações secretas detectadas foram automaticamente mascaradas.Edite e confirme seu envio."
+  },
+  "選択範囲を確認": {
+    "ja": "選択範囲を確認",
+    "en": "Check selection",
+    "zh-CN": "检查选择",
+    "ko": "선택 범위 확인",
+    "es": "Verificar selección",
+    "fr": "Vérifier la sélection",
+    "de": "Auswahl prüfen",
+    "pt-BR": "Verifique a seleção"
+  },
+  "送信内容が空です": {
+    "ja": "送信内容が空です",
+    "en": "Sending content is empty",
+    "zh-CN": "发送内容为空",
+    "ko": "전송 내용이 비어 있습니다.",
+    "es": "El envío de contenido está vacío.",
+    "fr": "L'envoi du contenu est vide",
+    "de": "Der zu sendende Inhalt ist leer",
+    "pt-BR": "O envio de conteúdo está vazio"
+  },
+  "端末から確認して送信済み\n": {
+    "ja": "端末から確認して送信済み\n",
+    "en": "Confirmed from terminal and sent",
+    "zh-CN": "从终端确认并发送",
+    "ko": "기기에서 확인 및 전송됨",
+    "es": "Confirmado desde la terminal y enviado.",
+    "fr": "Confirmé depuis le terminal et envoyé",
+    "de": "Vom Terminal bestätigt und gesendet",
+    "pt-BR": "Confirmado no terminal e enviado"
+  },
+  "端末で送信したい文字をマウス選択してください": {
+    "ja": "端末で送信したい文字をマウス選択してください",
+    "en": "Use your mouse to select the characters you want to send on your device",
+    "zh-CN": "使用鼠标在设备上选择要发送的字符",
+    "ko": "기기에서 전송할 문자를 마우스로 선택하세요.",
+    "es": "Utilice su mouse para seleccionar los caracteres que desea enviar en su dispositivo",
+    "fr": "Utilisez votre souris pour sélectionner les caractères que vous souhaitez envoyer sur votre appareil",
+    "de": "Wählen Sie mit der Maus die Zeichen aus, die Sie auf Ihrem Gerät senden möchten",
+    "pt-BR": "Use o mouse para selecionar os caracteres que deseja enviar no seu dispositivo"
+  },
+  "端末の選択範囲だけが対象です": {
+    "ja": "端末の選択範囲だけが対象です",
+    "en": "Applies only to the selected range of devices",
+    "zh-CN": "仅适用于选定的设备范围",
+    "ko": "기기 선택 범위만 대상",
+    "es": "Se aplica solo a la gama seleccionada de dispositivos.",
+    "fr": "S'applique uniquement à la gamme d'appareils sélectionnée",
+    "de": "Gilt nur für die ausgewählte Gerätereihe",
+    "pt-BR": "Aplica-se apenas ao intervalo selecionado de dispositivos"
+  },
+  "端末全体をAIが自動で読むことはありません。秘密情報は送信前に検査・マスクします。": {
+    "ja": "端末全体をAIが自動で読むことはありません。秘密情報は送信前に検査・マスクします。",
+    "en": "AI does not automatically read the entire device.Confidential information is inspected and masked before transmission.",
+    "zh-CN": "AI 不会自动读取整个设备。机密信息在传输前经过检查和屏蔽。",
+    "ko": "단말 전체를 AI가 자동으로 읽지 않습니다.비밀 정보는 전송 전에 검사 및 마스크합니다.",
+    "es": "La IA no lee automáticamente todo el dispositivo.La información confidencial se inspecciona y enmascara antes de su transmisión.",
+    "fr": "L'IA ne lit pas automatiquement l'intégralité de l'appareil.Les informations confidentielles sont inspectées et masquées avant leur transmission.",
+    "de": "KI liest nicht automatisch das gesamte Gerät.Vertrauliche Informationen werden vor der Übermittlung überprüft und maskiert.",
+    "pt-BR": "AI não lê automaticamente todo o dispositivo.As informações confidenciais são inspecionadas e mascaradas antes da transmissão."
+  },
+  "端末内容は自動送信されません。チャット本文と、確認画面で承認した選択範囲だけが送信されます。": {
+    "ja": "端末内容は自動送信されません。チャット本文と、確認画面で承認した選択範囲だけが送信されます。",
+    "en": "Terminal contents are not automatically sent.Only the chat text and the selections you approved on the confirmation screen will be sent.",
+    "zh-CN": "终端内容不会自动发送。仅发送聊天文本和您在确认屏幕上批准的选择。",
+    "ko": "단말 내용은 자동 전송되지 않습니다.채팅 본문과 확인 화면에서 승인한 선택 항목만 전송됩니다.",
+    "es": "Los contenidos del terminal no se envían automáticamente.Solo se enviará el texto del chat y las selecciones que usted aprobó en la pantalla de confirmación.",
+    "fr": "Le contenu du terminal n'est pas automatiquement envoyé.Seuls le texte du chat et les sélections que vous avez approuvées sur l'écran de confirmation seront envoyés.",
+    "de": "Terminalinhalte werden nicht automatisch gesendet.Es werden nur der Chattext und die von Ihnen auf dem Bestätigungsbildschirm genehmigten Auswahlen gesendet.",
+    "pt-BR": "O conteúdo do terminal não é enviado automaticamente.Somente o texto do chat e as seleções que você aprovou na tela de confirmação serão enviados."
+  },
+  "追加の秘密情報を検出してマスクしました。もう一度確認してください。": {
+    "ja": "追加の秘密情報を検出してマスクしました。もう一度確認してください。",
+    "en": "Detected and masked additional secret information.Please check again.",
+    "zh-CN": "检测并掩盖额外的秘密信息。请再次检查。",
+    "ko": "추가 비밀 정보를 감지하고 마스크했습니다.다시 확인하십시오.",
+    "es": "Información secreta adicional detectada y enmascarada.Por favor verifique nuevamente.",
+    "fr": "Informations secrètes supplémentaires détectées et masquées.Veuillez vérifier à nouveau.",
+    "de": "Zusätzliche geheime Informationen entdeckt und maskiert.Bitte überprüfen Sie es noch einmal.",
+    "pt-BR": "Informações secretas adicionais detectadas e mascaradas.Verifique novamente."
+  },
+  "破壊的または停止操作": {
+    "ja": "破壊的または停止操作",
+    "en": "Destructive or Disruptive Operations",
+    "zh-CN": "破坏性或破坏性操作",
+    "ko": "파괴적 또는 정지 조작",
+    "es": "Operaciones destructivas o disruptivas",
+    "fr": "Opérations destructrices ou perturbatrices",
+    "de": "Zerstörerische oder störende Vorgänge",
+    "pt-BR": "Operações Destrutivas ou Disruptivas"
+  },
+  "未設定": {
+    "ja": "未設定",
+    "en": "Not set",
+    "zh-CN": "未设置",
+    "ko": "미설정",
+    "es": "No establecido",
+    "fr": "Non défini",
+    "de": "Nicht festgelegt",
+    "pt-BR": "Não definido"
+  },
+  "AI APIキー": {
+    "ja": "AI APIキー",
+    "en": "AI API key",
+    "zh-CN": "AI API 密钥",
+    "ko": "AI API 키",
+    "es": "Clave de API de IA",
+    "fr": "Clé API d’IA",
+    "de": "KI-API-Schlüssel",
+    "pt-BR": "Chave de API de IA"
+  },
+  "決済APIキー": {
+    "ja": "決済APIキー",
+    "en": "Payment API key",
+    "zh-CN": "支付 API 密钥",
+    "ko": "결제 API 키",
+    "es": "Clave de API de pago",
+    "fr": "Clé API de paiement",
+    "de": "Zahlungs-API-Schlüssel",
+    "pt-BR": "Chave de API de pagamento"
+  },
+  "選択範囲が大きすぎます。40,000文字以下に分けてください。": {
+    "ja": "選択範囲が大きすぎます。40,000文字以下に分けてください。",
+    "en": "Selection range is too large.Please break it down into 40,000 characters or less.",
+    "zh-CN": "选择范围太大。请将其分解为 40,000 个字符或更少。",
+    "ko": "선택 범위가 너무 큽니다.40,000자 이하로 나누십시오.",
+    "es": "El rango de selección es demasiado grande.Divídalo en 40.000 caracteres o menos.",
+    "fr": "La plage de sélection est trop grande.Veuillez le diviser en 40 000 caractères ou moins.",
+    "de": "Auswahlbereich ist zu groß.Bitte teilen Sie es in maximal 40.000 Zeichen auf.",
+    "pt-BR": "O intervalo de seleção é muito grande.Divida-o em 40.000 caracteres ou menos."
+  },
+  "（切断）": {
+    "ja": "（切断）",
+    "en": "(cutting)",
+    "zh-CN": "（切割）",
+    "ko": "(절단)",
+    "es": "(cortando)",
+    "fr": "(couper)",
+    "de": "(Schneiden)",
+    "pt-BR": "(corte)"
+  },
+  "{0} — AIへ送信する端末内容を確認": {
+    "ja": "{0} — AIへ送信する端末内容を確認",
+    "en": "{0} — Check the terminal content sent to AI",
+    "zh-CN": "{0} — 查看发送给AI的终端内容",
+    "ko": "{0} — AI로 전송할 단말기 내용 확인",
+    "es": "{0}: verifique el contenido del terminal enviado a AI",
+    "fr": "{0} — Vérifiez le contenu du terminal envoyé à AI",
+    "de": "{0} – Überprüfen Sie den an AI gesendeten Terminalinhalt",
+    "pt-BR": "{0} — Verifique o conteúdo do terminal enviado para AI"
+  },
+  "{0} で実行": {
+    "ja": "{0} で実行",
+    "en": "Run with {0}",
+    "zh-CN": "使用 {0} 运行",
+    "ko": "{0}에서 실행",
+    "es": "Ejecutar con {0}",
+    "fr": "Exécutez avec {0}",
+    "de": "Mit {0} ausführen",
+    "pt-BR": "Execute com {0}"
+  },
+  "{0} についてAIが応答を生成しています…": {
+    "ja": "{0} についてAIが応答を生成しています…",
+    "en": "AI is generating a response for {0}…",
+    "zh-CN": "AI 正在生成 {0} 的响应……",
+    "ko": "{0}에 대한 AI가 응답을 생성 중입니다 ...",
+    "es": "La IA está generando una respuesta para {0}…",
+    "fr": "L’IA génère une réponse pour {0}…",
+    "de": "KI generiert eine Antwort für {0}…",
+    "pt-BR": "AI está gerando uma resposta para {0}…"
+  },
+  "{0} のAIチャットを消去しますか？": {
+    "ja": "{0} のAIチャットを消去しますか？",
+    "en": "Do you want to delete {0}'s AI chat?",
+    "zh-CN": "您想删除{0}的AI聊天记录吗？",
+    "ko": "{0}의 AI 채팅을 지우시겠습니까?",
+    "es": "¿Quieres eliminar el chat AI de {0}?",
+    "fr": "Voulez-vous supprimer le chat AI de {0} ?",
+    "de": "Möchten Sie den KI-Chat von {0} löschen?",
+    "pt-BR": "Deseja excluir o bate-papo AI de {0}?"
+  },
+  "{0} の選択範囲だけが対象です": {
+    "ja": "{0} の選択範囲だけが対象です",
+    "en": "Only the selection range {0} is targeted.",
+    "zh-CN": "仅针对选择范围 {0}。",
+    "ko": "{0}의 선택 범위 만 대상입니다.",
+    "es": "Sólo se apunta al rango de selección {0}.",
+    "fr": "Seule la plage de sélection {0} est ciblée.",
+    "de": "Nur der Auswahlbereich {0} wird als Ziel ausgewählt.",
+    "pt-BR": "Somente o intervalo de seleção {0} é direcionado."
+  },
+  "{0} の端末で送信したい文字をマウス選択してください": {
+    "ja": "{0} の端末で送信したい文字をマウス選択してください",
+    "en": "Please select the characters you want to send with the mouse on the terminal {0}",
+    "zh-CN": "请在终端{0}上用鼠标选择您要发送的字符",
+    "ko": "{0} 터미널에서 전송할 문자를 마우스로 선택하십시오.",
+    "es": "Por favor seleccione los caracteres que desea enviar con el mouse en el terminal {0}",
+    "fr": "Veuillez sélectionner les caractères que vous souhaitez envoyer avec la souris sur le terminal {0}",
+    "de": "Bitte wählen Sie die Zeichen, die Sie senden möchten, mit der Maus am Terminal {0} aus",
+    "pt-BR": "Selecione os caracteres que deseja enviar com o mouse no terminal {0}"
+  },
+  "{0} は現在接続されていません": {
+    "ja": "{0} は現在接続されていません",
+    "en": "{0} is currently not connected",
+    "zh-CN": "{0} 当前未连接",
+    "ko": "{0}가 현재 연결되어 있지 않습니다.",
+    "es": "{0} actualmente no está conectado",
+    "fr": "{0} n'est actuellement pas connecté",
+    "de": "{0} ist derzeit nicht verbunden",
+    "pt-BR": "{0} não está conectado no momento"
+  },
+  "{0} へAI提案コマンドを送信しました": {
+    "ja": "{0} へAI提案コマンドを送信しました",
+    "en": "Sent AI suggestion command to {0}",
+    "zh-CN": "发送AI建议命令至{0}",
+    "ko": "{0}에 AI 제안 명령을 보냈습니다.",
+    "es": "Se envió el comando de sugerencia de IA a {0}",
+    "fr": "Commande de suggestion d'IA envoyée à {0}",
+    "de": "AI-Vorschlagsbefehl an {0} gesendet",
+    "pt-BR": "Enviou comando de sugestão de IA para {0}"
+  },
+  "{0} 専用チャットです。質問を入力してください。端末内容は選択・確認後にだけ送信されます。": {
+    "ja": "{0} 専用チャットです。質問を入力してください。端末内容は選択・確認後にだけ送信されます。",
+    "en": "This is a dedicated chat for {0}.Please enter your question.The terminal contents will be sent only after selection and confirmation.",
+    "zh-CN": "这是 {0} 的专用聊天。请输入您的问题。选择并确认后才会发送终端内容。",
+    "ko": "{0} 전용 채팅입니다.질문을 입력하세요.단말 내용은 선택·확인 후에만 송신됩니다.",
+    "es": "Este es un chat dedicado para {0}.Por favor ingrese su pregunta.El contenido del terminal se enviará sólo después de la selección y confirmación.",
+    "fr": "Il s'agit d'un chat dédié à {0}.Veuillez saisir votre question.Le contenu du terminal ne sera envoyé qu'après sélection et confirmation.",
+    "de": "Dies ist ein spezieller Chat für {0}.Bitte geben Sie Ihre Frage ein.Der Terminalinhalt wird erst nach Auswahl und Bestätigung versendet.",
+    "pt-BR": "Este é um chat dedicado para {0}.Por favor, insira sua pergunta.O conteúdo do terminal será enviado somente após seleção e confirmação."
+  },
+  "{0}モデル": {
+    "ja": "{0}モデル",
+    "en": "{0} model",
+    "zh-CN": "{0}型号",
+    "ko": "{0} 모델",
+    "es": "Modelo {0}",
+    "fr": "Modèle {0}",
+    "de": "Modell {0}",
+    "pt-BR": "Modelo {0}"
+  },
+  "{0}件のGeminiモデルを取得しました": {
+    "ja": "{0}件のGeminiモデルを取得しました",
+    "en": "Obtained {0} Gemini models",
+    "zh-CN": "获得{0} Gemini型号",
+    "ko": "{0}개의 Gemini 모델을 가져왔습니다.",
+    "es": "Obtenidos modelos {0} Gemini.",
+    "fr": "Modèles {0} Gemini obtenus",
+    "de": "Erhaltene {0} Gemini-Modelle",
+    "pt-BR": "Modelos {0} Gemini obtidos"
+  },
+  "AIが {0} の端末内容を要求しています": {
+    "ja": "AIが {0} の端末内容を要求しています",
+    "en": "AI is requesting terminal contents of {0}",
+    "zh-CN": "AI正在请求{0}的终端内容",
+    "ko": "AI가 {0}의 터미널 내용을 요청합니다.",
+    "es": "AI solicita el contenido del terminal {0}",
+    "fr": "L'IA demande le contenu du terminal de {0}",
+    "de": "AI fordert Terminalinhalte von {0} an",
+    "pt-BR": "AI está solicitando conteúdo do terminal de {0}"
+  },
+  "AIモデル一覧の取得がタイムアウトしました。": {
+    "ja": "AIモデル一覧の取得がタイムアウトしました。",
+    "en": "Retrieving the AI model list timed out.",
+    "zh-CN": "检索 AI 模型列表超时。",
+    "ko": "AI 모델 일람의 취득이 타임 아웃 했습니다.",
+    "es": "Se agotó el tiempo de recuperación de la lista de modelos de IA.",
+    "fr": "La récupération de la liste des modèles IA a expiré.",
+    "de": "Beim Abrufen der KI-Modellliste ist eine Zeitüberschreitung aufgetreten.",
+    "pt-BR": "A recuperação da lista de modelos de IA expirou."
+  },
+  "AI提案コマンドを {0}（{1}）で実行しますか？{2}\n\n{3}": {
+    "ja": "AI提案コマンドを {0}（{1}）で実行しますか？{2}\n\n{3}",
+    "en": "Do you want to run the AI suggested command with {0} ({1})?{2}\n\n{3}",
+    "zh-CN": "您想使用 {0} ({1}) 运行 AI 建议的命令吗？{2}\n\n{3}",
+    "ko": "AI 제안 명령을 {0}({1})로 실행하시겠습니까?{2}\n\n{3}",
+    "es": "¿Quiere ejecutar el comando sugerido por AI con {0} ({1})?{2}\n\n{3}",
+    "fr": "Voulez-vous exécuter la commande suggérée par AI avec {0} ({1}) ?{2}\n\n{3}",
+    "de": "Möchten Sie den von der KI vorgeschlagenen Befehl mit {0} ({1}) ausführen?{2}\n\n{3}",
+    "pt-BR": "Deseja executar o comando sugerido pela IA com {0} ({1})?{2}\n\n{3}"
+  },
+  "APIキーを入力して取得": {
+    "ja": "APIキーを入力して取得",
+    "en": "Enter and obtain API key",
+    "zh-CN": "输入并获取API密钥",
+    "ko": "API 키를 입력하여 검색",
+    "es": "Ingrese y obtenga la clave API",
+    "fr": "Saisir et obtenir la clé API",
+    "de": "Geben Sie den API-Schlüssel ein und erhalten Sie ihn",
+    "pt-BR": "Insira e obtenha a chave API"
+  },
+  "Gemini APIキーを入力してください": {
+    "ja": "Gemini APIキーを入力してください",
+    "en": "Please enter your Gemini API key",
+    "zh-CN": "请输入您的 Gemini API 密钥",
+    "ko": "Gemini API 키를 입력하세요.",
+    "es": "Por favor ingrese su clave API de Gemini",
+    "fr": "Veuillez saisir votre clé API Gemini",
+    "de": "Bitte geben Sie Ihren Gemini-API-Schlüssel ein",
+    "pt-BR": "Insira sua chave de API Gemini"
+  },
+  "Gemini APIキーを入力してください。": {
+    "ja": "Gemini APIキーを入力してください。",
+    "en": "Please enter your Gemini API key.",
+    "zh-CN": "请输入您的 Gemini API 密钥。",
+    "ko": "Gemini API 키를 입력합니다.",
+    "es": "Ingrese su clave API de Gemini.",
+    "fr": "Veuillez saisir votre clé API Gemini.",
+    "de": "Bitte geben Sie Ihren Gemini-API-Schlüssel ein.",
+    "pt-BR": "Insira sua chave de API Gemini."
+  },
+  "Geminiモデル一覧を取得": {
+    "ja": "Geminiモデル一覧を取得",
+    "en": "Get Gemini model list",
+    "zh-CN": "获取 Gemini 型号列表",
+    "ko": "Gemini 모델 목록 얻기",
+    "es": "Obtener lista de modelos Gemini",
+    "fr": "Obtenir la liste des modèles Gemini",
+    "de": "Holen Sie sich die Gemini-Modellliste",
+    "pt-BR": "Obtenha a lista de modelos Gemini"
+  },
+  "Geminiモデル一覧取得失敗: ": {
+    "ja": "Geminiモデル一覧取得失敗: ",
+    "en": "Failed to get Gemini model list:",
+    "zh-CN": "获取Gemini型号列表失败：",
+    "ko": "Gemini 모델 목록 획득 실패:",
+    "es": "No se pudo obtener la lista de modelos Gemini:",
+    "fr": "Échec de l'obtention de la liste des modèles Gemini :",
+    "de": "Gemini-Modellliste konnte nicht abgerufen werden:",
+    "pt-BR": "Falha ao obter a lista de modelos Gemini:"
+  },
+  "SSHチャットを選択してください": {
+    "ja": "SSHチャットを選択してください",
+    "en": "Select SSH chat",
+    "zh-CN": "选择 SSH 聊天",
+    "ko": "SSH 채팅을 선택하세요.",
+    "es": "Seleccione chat SSH",
+    "fr": "Sélectionnez le chat SSH",
+    "de": "Wählen Sie SSH-Chat",
+    "pt-BR": "Selecione bate-papo SSH"
+  },
+  "SSHを選択するとチャットが作成されます": {
+    "ja": "SSHを選択するとチャットが作成されます",
+    "en": "Select SSH to create a chat",
+    "zh-CN": "选择 SSH 创建聊天",
+    "ko": "SSH를 선택하면 채팅이 생성됩니다.",
+    "es": "Seleccione SSH para crear un chat",
+    "fr": "Sélectionnez SSH pour créer une discussion",
+    "de": "Wählen Sie SSH aus, um einen Chat zu erstellen",
+    "pt-BR": "Selecione SSH para criar um bate-papo"
+  },
+  "SSH別AIチャット一覧": {
+    "ja": "SSH別AIチャット一覧",
+    "en": "AI chat list by SSH",
+    "zh-CN": "通过 SSH 的 AI 聊天列表",
+    "ko": "SSH별 AI 채팅 목록",
+    "es": "Lista de chat AI por SSH",
+    "fr": "Liste de discussion IA par SSH",
+    "de": "KI-Chatliste von SSH",
+    "pt-BR": "Lista de bate-papo AI por SSH"
+  },
+  "SSH未指定": {
+    "ja": "SSH未指定",
+    "en": "SSH not specified",
+    "zh-CN": "未指定 SSH",
+    "ko": "SSH 미지정",
+    "es": "SSH no especificado",
+    "fr": "SSH non spécifié",
+    "de": "SSH nicht angegeben",
+    "pt-BR": "SSH não especificado"
+  },
+  "このSSH画面は閉じられています": {
+    "ja": "このSSH画面は閉じられています",
+    "en": "This SSH screen is closed",
+    "zh-CN": "此 SSH 屏幕已关闭",
+    "ko": "이 SSH 화면은 닫혀 있습니다",
+    "es": "Esta pantalla SSH está cerrada",
+    "fr": "Cet écran SSH est fermé",
+    "de": "Dieser SSH-Bildschirm ist geschlossen",
+    "pt-BR": "Esta tela SSH está fechada"
+  },
+  "チャットを消去": {
+    "ja": "チャットを消去",
+    "en": "clear chat",
+    "zh-CN": "清晰的聊天",
+    "ko": "채팅 삭제",
+    "es": "borrar chat",
+    "fr": "discussion claire",
+    "de": "klarer Chat",
+    "pt-BR": "limpar bate-papo"
+  },
+  "モデルを選択": {
+    "ja": "モデルを選択",
+    "en": "Select model",
+    "zh-CN": "选择型号",
+    "ko": "모델 선택",
+    "es": "Seleccionar modelo",
+    "fr": "Sélectionnez le modèle",
+    "de": "Modell auswählen",
+    "pt-BR": "Selecione o modelo"
+  },
+  "モデル一覧を取得中…": {
+    "ja": "モデル一覧を取得中…",
+    "en": "Obtaining model list...",
+    "zh-CN": "正在获取型号列表...",
+    "ko": "모델 목록을 얻는 중…",
+    "es": "Obteniendo lista de modelos...",
+    "fr": "Obtention de la liste des modèles...",
+    "de": "Modellliste abrufen...",
+    "pt-BR": "Obtendo lista de modelos..."
+  },
+  "リンクURLをコピーしました": {
+    "ja": "リンクURLをコピーしました",
+    "en": "Copied the link URL",
+    "zh-CN": "复制了链接网址",
+    "ko": "링크 URL을 복사했습니다.",
+    "es": "Copié la URL del enlace.",
+    "fr": "Copié l'URL du lien",
+    "de": "Link-URL kopiert",
+    "pt-BR": "Copiou o URL do link"
+  },
+  "一般": {
+    "ja": "一般",
+    "en": "General",
+    "zh-CN": "一般",
+    "ko": "일반",
+    "es": "generales",
+    "fr": "Général",
+    "de": "Allgemein",
+    "pt-BR": "Geral"
+  },
+  "一般チャット": {
+    "ja": "一般チャット",
+    "en": "General chat",
+    "zh-CN": "一般聊天",
+    "ko": "일반 채팅",
+    "es": "charla general",
+    "fr": "Discussion générale",
+    "de": "Allgemeiner Chat",
+    "pt-BR": "Bate-papo geral"
+  },
+  "現在のSSH": {
+    "ja": "現在のSSH",
+    "en": "Current SSH",
+    "zh-CN": "当前的 SSH",
+    "ko": "현재 SSH",
+    "es": "SSH actual",
+    "fr": "SSH actuel",
+    "de": "Aktuelles SSH",
+    "pt-BR": "SSH atual"
+  },
+  "現在のSSHチャットを開く": {
+    "ja": "現在のSSHチャットを開く",
+    "en": "Open current SSH chat",
+    "zh-CN": "打开当前 SSH 聊天",
+    "ko": "현재 SSH 채팅 열기",
+    "es": "Abrir el chat SSH actual",
+    "fr": "Ouvrir le chat SSH actuel",
+    "de": "Öffnen Sie den aktuellen SSH-Chat",
+    "pt-BR": "Abra o bate-papo SSH atual"
+  },
+  "自動切替なし": {
+    "ja": "自動切替なし",
+    "en": "No automatic switching",
+    "zh-CN": "没有自动切换",
+    "ko": "자동 전환 없음",
+    "es": "Sin cambio automático",
+    "fr": "Pas de commutation automatique",
+    "de": "Keine automatische Umschaltung",
+    "pt-BR": "Sem comutação automática"
+  },
+  "取得失敗": {
+    "ja": "取得失敗",
+    "en": "Acquisition failure",
+    "zh-CN": "采集失败",
+    "ko": "획득 실패",
+    "es": "Fallo de adquisición",
+    "fr": "Échec de l'acquisition",
+    "de": "Übernahmefehler",
+    "pt-BR": "Falha na aquisição"
+  },
+  "対象: {0}（{1}）・選択範囲 {2}文字。検出した秘密情報は自動的にマスクしました。": {
+    "ja": "対象: {0}（{1}）・選択範囲 {2}文字。検出した秘密情報は自動的にマスクしました。",
+    "en": "Target: {0} ({1}), selection range {2} characters.Detected secret information was automatically masked.",
+    "zh-CN": "目标：{0}（{1}），选择范围{2}字符。检测到的秘密信息被自动屏蔽。",
+    "ko": "대상 : {0} ({1}) · 선택 범위 {2} 문자.감지한 비밀 정보가 자동으로 가려졌습니다.",
+    "es": "Destino: {0} ({1}), rango de selección de caracteres {2}.La información secreta detectada se enmascaró automáticamente.",
+    "fr": "Cible : {0} ({1}), plage de sélection caractères {2}. Les informations secrètes détectées étaient automatiquement masquées.",
+    "de": "Ziel: {0} ({1}), Auswahlbereich {2} Zeichen. Erkannte geheime Informationen wurden automatisch maskiert.",
+    "pt-BR": "Alvo: {0} ({1}), intervalo de seleção de caracteres {2}. As informações secretas detectadas foram automaticamente mascaradas."
+  },
+  "対象SSH": {
+    "ja": "対象SSH",
+    "en": "Target SSH",
+    "zh-CN": "目标 SSH",
+    "ko": "대상 SSH",
+    "es": "SSH objetivo",
+    "fr": "Cibler SSH",
+    "de": "Ziel-SSH",
+    "pt-BR": "SSH de destino"
+  },
+  "第一モデル": {
+    "ja": "第一モデル",
+    "en": "first model",
+    "zh-CN": "第一个模型",
+    "ko": "첫 모델",
+    "es": "primer modelo",
+    "fr": "premier modèle",
+    "de": "erstes Modell",
+    "pt-BR": "primeiro modelo"
+  },
+  "第一モデルが利用不可、混雑、レート制限、または一時的なサーバー障害の場合、設定した第二モデルへ一度だけ自動切替します。端末内容は確認済み選択範囲だけ送信します。": {
+    "ja": "第一モデルが利用不可、混雑、レート制限、または一時的なサーバー障害の場合、設定した第二モデルへ一度だけ自動切替します。端末内容は確認済み選択範囲だけ送信します。",
+    "en": "If the first model is unavailable, congested, rate limited, or has a temporary server failure, it will automatically switch to the second model you set.Only the confirmed selected range of terminal contents will be sent.",
+    "zh-CN": "如果第一个模型不可用、拥塞、速率受限或服务器临时故障，它将自动切换到您设置的第二个模型。仅发送确认选择的终端内容范围。",
+    "ko": "첫 번째 모델이 사용 불가, 혼잡, 속도 제한 또는 일시적인 서버 장애인 경우 구성된 두 번째 모델로 한 번만 자동 전환합니다.단말 내용은 확인된 선택 범위만 전송합니다.",
+    "es": "Si el primer modelo no está disponible, está congestionado, tiene una velocidad limitada o tiene una falla temporal en el servidor, cambiará automáticamente al segundo modelo que configuró.Sólo se enviará el rango seleccionado confirmado de contenidos del terminal.",
+    "fr": "Si le premier modèle est indisponible, encombré, à débit limité ou présente une panne de serveur temporaire, il passera automatiquement au deuxième modèle que vous avez défini.Seule la plage sélectionnée confirmée du contenu du terminal sera envoyée.",
+    "de": "Wenn das erste Modell nicht verfügbar, überlastet oder in der Rate begrenzt ist oder ein vorübergehender Serverausfall vorliegt, wird automatisch auf das zweite von Ihnen festgelegte Modell umgeschaltet.Es wird nur der bestätigt ausgewählte Bereich an Terminalinhalten versendet.",
+    "pt-BR": "Se o primeiro modelo estiver indisponível, congestionado, com taxa limitada ou tiver uma falha temporária no servidor, ele mudará automaticamente para o segundo modelo definido.Somente o intervalo selecionado confirmado de conteúdos do terminal será enviado."
+  },
+  "第一モデルを利用できないため、第二モデル {0} に自動切替しました": {
+    "ja": "第一モデルを利用できないため、第二モデル {0} に自動切替しました",
+    "en": "Since the first model is not available, it has been automatically switched to the second model {0}",
+    "zh-CN": "由于第一个型号不可用，已自动切换到第二个型号{0}",
+    "ko": "첫 번째 모델을 사용할 수 없기 때문에 두 번째 모델 {0}로 자동 전환했습니다.",
+    "es": "Dado que el primer modelo no está disponible, se ha cambiado automáticamente al segundo modelo {0}",
+    "fr": "Le premier modèle n'étant pas disponible, il a été automatiquement basculé vers le deuxième modèle {0}",
+    "de": "Da das erste Modell nicht verfügbar ist, wurde automatisch auf das zweite Modell {0} umgestellt",
+    "pt-BR": "Como o primeiro modelo não está disponível, ele foi automaticamente alterado para o segundo modelo {0}"
+  },
+  "第二モデル（自動フォールバック）": {
+    "ja": "第二モデル（自動フォールバック）",
+    "en": "Second model (automatic fallback)",
+    "zh-CN": "第二种模型（自动回退）",
+    "ko": "제2 모델(자동 폴백)",
+    "es": "Segundo modelo (retroceso automático)",
+    "fr": "Deuxième modèle (repli automatique)",
+    "de": "Zweites Modell (automatischer Fallback)",
+    "pt-BR": "Segundo modelo (substituição automática)"
+  },
+  "第二モデルは第一モデルと別のものを選択してください": {
+    "ja": "第二モデルは第一モデルと別のものを選択してください",
+    "en": "Please select a second model different from the first model.",
+    "zh-CN": "请选择与第一个型号不同的第二个型号。",
+    "ko": "두 번째 모델은 첫 번째 모델과 다른 것을 선택하십시오.",
+    "es": "Seleccione un segundo modelo diferente del primer modelo.",
+    "fr": "Veuillez sélectionner un deuxième modèle différent du premier modèle.",
+    "de": "Bitte wählen Sie ein zweites Modell aus, das sich vom ersten Modell unterscheidet.",
+    "pt-BR": "Selecione um segundo modelo diferente do primeiro modelo."
+  },
+  "任意：第一モデルが利用不可の場合": {
+    "ja": "任意：第一モデルが利用不可の場合",
+    "en": "Optional: If the first model is unavailable",
+    "zh-CN": "可选：如果第一个模型不可用",
+    "ko": "선택사항: 첫 번째 모델을 사용할 수 없는 경우",
+    "es": "Opcional: si el primer modelo no está disponible",
+    "fr": "Facultatif : Si le premier modèle n'est pas disponible",
+    "de": "Optional: Wenn das erste Modell nicht verfügbar ist",
+    "pt-BR": "Opcional: Se o primeiro modelo não estiver disponível"
+  },
+  "\n\n… [SSH Nexus: 長い出力を省略] …\n\n": {
+    "ja": "\n\n… [SSH Nexus: 長い出力を省略] …\n\n",
+    "en": "… [SSH Nexus: Skip long output] …",
+    "zh-CN": "... [SSH Nexus：跳过长输出] ...",
+    "ko": "… [SSH Nexus: 긴 출력 생략] …",
+    "es": "… [SSH Nexus: omitir salida larga] …",
+    "fr": "… [SSH Nexus : ignorer les sorties longues] …",
+    "de": "… [SSH Nexus: Lange Ausgabe überspringen] …",
+    "pt-BR": "… [SSH Nexus: Pular saída longa]…"
+  },
+  "\n\nAIが実行結果を必要としています。完了後に自動取得し、送信前の確認画面を表示します。": {
+    "ja": "\n\nAIが実行結果を必要としています。完了後に自動取得し、送信前の確認画面を表示します。",
+    "en": "AI needs execution results.After completion, it will be automatically retrieved and a confirmation screen will be displayed before sending.",
+    "zh-CN": "AI需要执行结果。完成后，将自动检索并在发送前显示确认屏幕。",
+    "ko": "AI는 실행 결과가 필요합니다.완료 후 자동 취득하여 송신 전 확인 화면을 표시합니다.",
+    "es": "La IA necesita resultados de ejecución.Una vez completado, se recuperará automáticamente y se mostrará una pantalla de confirmación antes de enviarlo.",
+    "fr": "L'IA a besoin de résultats d'exécution.Une fois terminé, il sera automatiquement récupéré et un écran de confirmation s'affichera avant l'envoi.",
+    "de": "KI braucht Ausführungsergebnisse.Nach Abschluss wird es automatisch abgerufen und vor dem Absenden wird ein Bestätigungsbildschirm angezeigt.",
+    "pt-BR": "A IA precisa de resultados de execução.Após a conclusão, ele será recuperado automaticamente e uma tela de confirmação será exibida antes do envio."
+  },
+  "\n結果待機がタイムアウトしました": {
+    "ja": "\n結果待機がタイムアウトしました",
+    "en": "Waiting for result timed out",
+    "zh-CN": "等待结果超时",
+    "ko": "결과 대기 시간이 초과되었습니다.",
+    "es": "Esperando resultado agotado",
+    "fr": "L'attente du résultat a expiré",
+    "de": "Zeitüberschreitung beim Warten auf das Ergebnis",
+    "pt-BR": "A espera pelo resultado expirou"
+  },
+  "\n長い出力は先頭と末尾だけに省略しました": {
+    "ja": "\n長い出力は先頭と末尾だけに省略しました",
+    "en": "Long output is truncated to the beginning and end.",
+    "zh-CN": "长输出被截断到开头和结尾。",
+    "ko": "긴 출력은 처음과 끝에만 생략되었습니다.",
+    "es": "La salida larga se trunca al principio y al final.",
+    "fr": "La sortie longue est tronquée au début et à la fin.",
+    "de": "Lange Ausgaben werden auf den Anfang und das Ende gekürzt.",
+    "pt-BR": "A saída longa é truncada no início e no fim."
+  },
+  "{0} — コマンド結果をAIへ送信": {
+    "ja": "{0} — コマンド結果をAIへ送信",
+    "en": "{0} — Send command results to AI",
+    "zh-CN": "{0} — 将命令结果发送给 AI",
+    "ko": "{0} — 명령 결과를 AI로 전송",
+    "es": "{0}: envía los resultados del comando a la IA",
+    "fr": "{0} — Envoyer les résultats de la commande à l'IA",
+    "de": "{0} – Befehlsergebnisse an AI senden",
+    "pt-BR": "{0} — Envie resultados de comando para AI"
+  },
+  "{0} では別のAIコマンド結果を待機中です": {
+    "ja": "{0} では別のAIコマンド結果を待機中です",
+    "en": "{0} is waiting for another AI command result",
+    "zh-CN": "{0}正在等待另一个AI命令结果",
+    "ko": "{0}는 다른 AI 명령 결과를 기다리고 있습니다.",
+    "es": "{0} está esperando el resultado de otro comando de IA",
+    "fr": "{0} attend un autre résultat de commande AI",
+    "de": "{0} wartet auf ein weiteres AI-Befehlsergebnis",
+    "pt-BR": "{0} está aguardando outro resultado de comando AI"
+  },
+  "{0} で実行し、結果を待機しています": {
+    "ja": "{0} で実行し、結果を待機しています",
+    "en": "Running with {0} and waiting for results",
+    "zh-CN": "使用 {0} 运行并等待结果",
+    "ko": "{0}에서 실행하고 결과를 기다리고 있습니다.",
+    "es": "Ejecutando con {0} y esperando resultados",
+    "fr": "Courir avec {0} et attendre les résultats",
+    "de": "Laufen mit {0} und Warten auf Ergebnisse",
+    "pt-BR": "Executando com {0} e aguardando resultados"
+  },
+  "{0} で実行後、結果の送信確認を表示": {
+    "ja": "{0} で実行後、結果の送信確認を表示",
+    "en": "After execution with {0}, display confirmation of sending results",
+    "zh-CN": "执行{0}后，显示发送结果确认",
+    "ko": "{0}로 실행 후 결과 전송 확인 표시",
+    "es": "Después de la ejecución con {0}, muestra la confirmación del envío de resultados.",
+    "fr": "Après exécution avec {0}, afficher la confirmation de l'envoi des résultats",
+    "de": "Nach der Ausführung mit {0} wird eine Bestätigung für das Senden von Ergebnissen angezeigt",
+    "pt-BR": "Após a execução com {0}, exibe a confirmação do envio dos resultados"
+  },
+  "{0} のコマンド完了と結果を待っています…": {
+    "ja": "{0} のコマンド完了と結果を待っています…",
+    "en": "Waiting for command completion and results for {0}...",
+    "zh-CN": "正在等待 {0} 的命令完成和结果...",
+    "ko": "{0} 명령 완료 및 결과를 기다리는 중…",
+    "es": "Esperando que se complete el comando y los resultados de {0}...",
+    "fr": "En attente de la fin de la commande et des résultats pour {0}...",
+    "de": "Warten auf Befehlsabschluss und Ergebnisse für {0}...",
+    "pt-BR": "Aguardando conclusão do comando e resultados para {0}..."
+  },
+  "▶ 実行して結果確認": {
+    "ja": "▶ 実行して結果確認",
+    "en": "▶ Run and check the results",
+    "zh-CN": "▶ 运行并检查结果",
+    "ko": "▶ 실행하여 결과 확인",
+    "es": "▶ Ejecutar y comprobar los resultados.",
+    "fr": "▶ Exécutez et vérifiez les résultats",
+    "de": "▶ Führen Sie den Vorgang aus und überprüfen Sie die Ergebnisse",
+    "pt-BR": "▶ Execute e verifique os resultados"
+  },
+  "✓ 既知の秘密情報パターンは検出されませんでした": {
+    "ja": "✓ 既知の秘密情報パターンは検出されませんでした",
+    "en": "✓ No known secret patterns detected",
+    "zh-CN": "✓ 未检测到已知的秘密模式",
+    "ko": "✓ 알려진 비밀 정보 패턴이 감지되지 않았습니다.",
+    "es": "✓ No se detectaron patrones secretos conocidos",
+    "fr": "✓ Aucun modèle secret connu détecté",
+    "de": "✓ Keine bekannten geheimen Muster erkannt",
+    "pt-BR": "✓ Nenhum padrão secreto conhecido detectado"
+  },
+  "AIには確認後の内容だけを送信します。不要な行やホスト情報は削除できます。": {
+    "ja": "AIには確認後の内容だけを送信します。不要な行やホスト情報は削除できます。",
+    "en": "Only the confirmed details will be sent to AI.You can delete unnecessary lines and host information.",
+    "zh-CN": "只有确认的详细信息才会发送给 AI。您可以删除不需要的线路和主机信息。",
+    "ko": "AI에는 확인 후 내용만 전송합니다.불필요한 행이나 호스트 정보를 삭제할 수 있습니다.",
+    "es": "Sólo los detalles confirmados se enviarán a AI.Puede eliminar líneas innecesarias e información del host.",
+    "fr": "Seuls les détails confirmés seront envoyés à AI.Vous pouvez supprimer les lignes inutiles et les informations sur l'hôte.",
+    "de": "Es werden nur die bestätigten Angaben an AI übermittelt.Sie können unnötige Zeilen und Hostinformationen löschen.",
+    "pt-BR": "Apenas os detalhes confirmados serão enviados para AI.Você pode excluir linhas desnecessárias e informações do host."
+  },
+  "AI提案コマンドを {0}（{1}）で実行しますか？{2}{3}\n\n{4}": {
+    "ja": "AI提案コマンドを {0}（{1}）で実行しますか？{2}{3}\n\n{4}",
+    "en": "Do you want to run the AI suggested command with {0} ({1})?{2}{3}\n\n{4}",
+    "zh-CN": "您想使用 {0} ({1}) 运行 AI 建议的命令吗？{2}{3}\n\n{4}",
+    "ko": "AI 제안 명령을 {0}({1})로 실행하시겠습니까?{2}{3}\n\n{4}",
+    "es": "¿Quiere ejecutar el comando sugerido por AI con {0} ({1})?{2}{3}\n\n{4}",
+    "fr": "Voulez-vous exécuter la commande suggérée par AI avec {0} ({1}) ?{2}{3}\n\n{4}",
+    "de": "Möchten Sie den von der KI vorgeschlagenen Befehl mit {0} ({1}) ausführen?{2}{3}\n\n{4}",
+    "pt-BR": "Deseja executar o comando sugerido pela IA com {0} ({1})?{2}{3}\n\n{4}"
+  },
+  "コマンド結果を取得しました。送信内容を確認してください。": {
+    "ja": "コマンド結果を取得しました。送信内容を確認してください。",
+    "en": "I got the command result.Please check the content you sent.",
+    "zh-CN": "我得到了命令结果。请检查您发送的内容。",
+    "ko": "명령 결과를 얻었습니다.송신 내용을 확인하십시오.",
+    "es": "Obtuve el resultado del comando.Por favor revisa el contenido que enviaste.",
+    "fr": "J'ai eu le résultat de la commande. Veuillez vérifier le contenu que vous avez envoyé.",
+    "de": "Ich habe das Befehlsergebnis erhalten.Bitte überprüfen Sie den von Ihnen gesendeten Inhalt.",
+    "pt-BR": "Eu obtive o resultado do comando.Verifique o conteúdo que você enviou."
+  },
+  "一度に送信できる本文は12,000文字までです。分割してください。": {
+    "ja": "一度に送信できる本文は12,000文字までです。分割してください。",
+    "en": "The body text that can be sent at one time is up to 12,000 characters.Please split.",
+    "zh-CN": "一次可发送的正文最多 12,000 个字符。请分。",
+    "ko": "한 번에 보낼 수 있는 본문은 최대 12,000자입니다.분할하십시오.",
+    "es": "El cuerpo del texto que se puede enviar a la vez tiene hasta 12.000 caracteres.Por favor divídanse.",
+    "fr": "Le corps du texte pouvant être envoyé en une seule fois peut contenir jusqu'à 12 000 caractères.S'il vous plaît, divisez-vous.",
+    "de": "Der Textkörper, der gleichzeitig gesendet werden kann, beträgt bis zu 12.000 Zeichen.Bitte teilen.",
+    "pt-BR": "O corpo do texto que pode ser enviado de uma vez tem até 12.000 caracteres.Por favor, divida."
+  },
+  "確認してAIへ送信": {
+    "ja": "確認してAIへ送信",
+    "en": "Confirm and send to AI",
+    "zh-CN": "确认并发送至AI",
+    "ko": "확인하고 AI로 전송",
+    "es": "Confirmar y enviar a AI",
+    "fr": "Confirmer et envoyer à AI",
+    "de": "Bestätigen und an AI senden",
+    "pt-BR": "Confirme e envie para AI"
+  },
+  "確認済みコマンド結果": {
+    "ja": "確認済みコマンド結果",
+    "en": "Confirmed command results",
+    "zh-CN": "确认命令结果",
+    "ko": "확인된 명령 결과",
+    "es": "Resultados del comando confirmados",
+    "fr": "Résultats de commande confirmés",
+    "de": "Bestätigte Befehlsergebnisse",
+    "pt-BR": "Resultados de comando confirmados"
+  },
+  "古い{0}件のメッセージは表示を省略しています": {
+    "ja": "古い{0}件のメッセージは表示を省略しています",
+    "en": "Old {0} messages are omitted from display.",
+    "zh-CN": "旧的 {0} 消息从显示中省略。",
+    "ko": "이전 {0}개의 메시지는 표시를 생략합니다.",
+    "es": "Los mensajes antiguos {0} se omiten de la pantalla.",
+    "fr": "Les anciens messages {0} sont omis de l'affichage.",
+    "de": "Alte {0}-Meldungen werden nicht angezeigt.",
+    "pt-BR": "Mensagens {0} antigas são omitidas da exibição."
+  },
+  "選択範囲が大きすぎます。24,000文字以下に分けてください。": {
+    "ja": "選択範囲が大きすぎます。24,000文字以下に分けてください。",
+    "en": "Selection range is too large.Please break it down into 24,000 characters or less.",
+    "zh-CN": "选择范围太大。请将其分解为 24,000 个字符或更少。",
+    "ko": "선택 범위가 너무 큽니다.24,000자 이하로 나누십시오.",
+    "es": "El rango de selección es demasiado grande.Divídalo en 24.000 caracteres o menos.",
+    "fr": "La plage de sélection est trop grande.Veuillez le diviser en 24 000 caractères ou moins.",
+    "de": "Auswahlbereich ist zu groß.Bitte teilen Sie es in maximal 24.000 Zeichen auf.",
+    "pt-BR": "O intervalo de seleção é muito grande.Divida-o em 24.000 caracteres ou menos."
+  },
+  "対象: {0}（{1}）\n終了コード: {2}{3}{4}": {
+    "ja": "対象: {0}（{1}）\n終了コード: {2}{3}{4}",
+    "en": "Target: {0} ({1})\nExit code: {2}{3}{4}",
+    "zh-CN": "目标：{0} ({1})\n退出代码：{2}{3}{4}",
+    "ko": "대상: {0}({1})\n종료 코드: {2}{3}{4}",
+    "es": "Objetivo: {0} ({1})\nCódigo de salida: {2}{3}{4}",
+    "fr": "Cible : {0} ({1})\nCode de sortie : {2}{3}{4}",
+    "de": "Ziel: {0} ({1})\nExit-Code: {2}{3}{4}",
+    "pt-BR": "Alvo: {0} ({1})\nCódigo de saída: {2}{3}{4}"
+  },
+  "不明": {
+    "ja": "不明",
+    "en": "not clear",
+    "zh-CN": "不清楚",
+    "ko": "알 수 없음",
+    "es": "no claro",
+    "fr": "pas clair",
+    "de": "nicht klar",
+    "pt-BR": "não está claro"
+  },
+  " — 生成中…": {
+    "ja": " — 生成中…",
+    "en": " — generating…",
+    "zh-CN": " — 生成中……",
+    "ko": " — 생성 중…",
+    "es": " — generando…",
+    "fr": " — génération…",
+    "de": " — wird generiert…",
+    "pt-BR": " — gerando…"
+  },
+  "AIから最初の文字を待っています…": {
+    "ja": "AIから最初の文字を待っています…",
+    "en": "Waiting for the first text from AI…",
+    "zh-CN": "正在等待 AI 返回第一段文字……",
+    "ko": "AI의 첫 텍스트를 기다리는 중…",
+    "es": "Esperando el primer texto de la IA…",
+    "fr": "En attente du premier texte de l’IA…",
+    "de": "Warten auf den ersten Text der KI…",
+    "pt-BR": "Aguardando o primeiro texto da IA…"
+  },
+  "AIストリームIDが不正です。": {
+    "ja": "AIストリームIDが不正です。",
+    "en": "The AI stream ID is invalid.",
+    "zh-CN": "AI 流 ID 无效。",
+    "ko": "AI 스트림 ID가 잘못되었습니다.",
+    "es": "El ID del flujo de IA no es válido.",
+    "fr": "L’identifiant du flux IA est invalide.",
+    "de": "Die KI-Stream-ID ist ungültig.",
+    "pt-BR": "O ID do fluxo de IA é inválido."
+  },
+  "AIストリームから不正な応答を受信しました。": {
+    "ja": "AIストリームから不正な応答を受信しました。",
+    "en": "Received an invalid response from the AI stream.",
+    "zh-CN": "从 AI 流收到了无效响应。",
+    "ko": "AI 스트림에서 잘못된 응답을 받았습니다.",
+    "es": "Se recibió una respuesta no válida del flujo de IA.",
+    "fr": "Réponse invalide reçue du flux IA.",
+    "de": "Vom KI-Stream wurde eine ungültige Antwort empfangen.",
+    "pt-BR": "Foi recebida uma resposta inválida do fluxo de IA."
+  },
+  "AI応答が長すぎるため停止しました。": {
+    "ja": "AI応答が長すぎるため停止しました。",
+    "en": "Stopped because the AI response was too long.",
+    "zh-CN": "AI 响应过长，已停止。",
+    "ko": "AI 응답이 너무 길어 중지했습니다.",
+    "es": "Se detuvo porque la respuesta de la IA era demasiado larga.",
+    "fr": "Arrêt, car la réponse de l’IA était trop longue.",
+    "de": "Gestoppt, da die KI-Antwort zu lang war.",
+    "pt-BR": "Interrompido porque a resposta da IA era muito longa."
+  },
+  " — Web最新情報で検証済み": {
+    "ja": " — Web最新情報で検証済み",
+    "en": " — verified with current web sources",
+    "zh-CN": " — 已通过最新网络信息验证",
+    "ko": " — 최신 웹 정보로 검증됨",
+    "es": " — verificado con fuentes web actuales",
+    "fr": " — vérifié avec des sources web actuelles",
+    "de": " — mit aktuellen Webquellen verifiziert",
+    "pt-BR": " — verificado com fontes atuais da Web"
+  },
+  " — 最新情報キャッシュ再利用": {
+    "ja": " — 最新情報キャッシュ再利用",
+    "en": " — current research cache reused",
+    "zh-CN": " — 已复用最新信息缓存",
+    "ko": " — 최신 정보 캐시 재사용",
+    "es": " — caché de información actual reutilizada",
+    "fr": " — cache d’informations actuelles réutilisé",
+    "de": " — aktueller Informationscache wiederverwendet",
+    "pt-BR": " — cache de informações atuais reutilizado"
+  },
+  "最新情報を裏付けるWeb情報源を取得できませんでした。検索対応モデルとAPI設定を確認してください。": {
+    "ja": "最新情報を裏付けるWeb情報源を取得できませんでした。検索対応モデルとAPI設定を確認してください。",
+    "en": "Could not obtain web sources supporting current information. Check the search-capable model and API settings.",
+    "zh-CN": "无法获取支持最新信息的网络来源。请检查支持搜索的模型和 API 设置。",
+    "ko": "최신 정보를 뒷받침하는 웹 출처를 가져오지 못했습니다. 검색 지원 모델과 API 설정을 확인하세요.",
+    "es": "No se pudieron obtener fuentes web que respalden la información actual. Compruebe el modelo con búsqueda y la configuración de la API.",
+    "fr": "Impossible d’obtenir des sources Web étayant les informations actuelles. Vérifiez le modèle compatible avec la recherche et les paramètres de l’API.",
+    "de": "Es konnten keine Webquellen zur Bestätigung aktueller Informationen abgerufen werden. Prüfen Sie das suchfähige Modell und die API-Einstellungen.",
+    "pt-BR": "Não foi possível obter fontes da Web que sustentem as informações atuais. Verifique o modelo compatível com pesquisa e as configurações da API."
+  },
+  "回答前にWeb検索で最新情報を確認し、情報源を表示します。新しい検索には各AIサービスの検索料金が発生する場合があります。検証結果は暗号化して短時間だけ再利用し、期限後に自動削除します。第一モデルが一時的に利用できない場合は第二モデルへ一度だけ切り替えます。端末内容は確認済み範囲だけ送信します。": {
+    "ja": "回答前にWeb検索で最新情報を確認し、情報源を表示します。新しい検索には各AIサービスの検索料金が発生する場合があります。検証結果は暗号化して短時間だけ再利用し、期限後に自動削除します。第一モデルが一時的に利用できない場合は第二モデルへ一度だけ切り替えます。端末内容は確認済み範囲だけ送信します。",
+    "en": "Before answering, the app checks current information through web search and displays its sources. New searches may incur search fees from each AI service. Verified results are encrypted, reused only briefly, and automatically deleted after expiry. If the primary model is temporarily unavailable, the secondary model is tried once. Only reviewed terminal content is sent.",
+    "zh-CN": "回答前，应用会通过网络搜索核实最新信息并显示来源。新的搜索可能会产生各 AI 服务的搜索费用。验证结果经过加密，仅在短时间内重复使用，并在过期后自动删除。第一模型暂时不可用时，会尝试一次第二模型。仅发送经过确认的终端内容。",
+    "ko": "답변 전에 웹 검색으로 최신 정보를 확인하고 출처를 표시합니다. 새 검색에는 각 AI 서비스의 검색 요금이 발생할 수 있습니다. 검증 결과는 암호화되어 짧은 시간만 재사용되고 만료 후 자동 삭제됩니다. 첫 번째 모델을 일시적으로 사용할 수 없으면 두 번째 모델을 한 번 시도합니다. 검토된 터미널 내용만 전송합니다.",
+    "es": "Antes de responder, la aplicación comprueba información actual mediante búsqueda web y muestra las fuentes. Las búsquedas nuevas pueden generar cargos del servicio de IA. Los resultados verificados se cifran, se reutilizan brevemente y se eliminan al vencer. Si el primer modelo no está disponible temporalmente, se prueba una vez el segundo. Solo se envía contenido del terminal revisado.",
+    "fr": "Avant de répondre, l’application vérifie les informations actuelles par recherche Web et affiche les sources. Les nouvelles recherches peuvent entraîner des frais du service d’IA. Les résultats vérifiés sont chiffrés, brièvement réutilisés, puis supprimés à expiration. Si le premier modèle est temporairement indisponible, le second est essayé une fois. Seul le contenu du terminal vérifié est envoyé.",
+    "de": "Vor jeder Antwort prüft die App aktuelle Informationen per Websuche und zeigt die Quellen an. Neue Suchen können Suchgebühren des jeweiligen KI-Dienstes verursachen. Verifizierte Ergebnisse werden verschlüsselt, nur kurz wiederverwendet und nach Ablauf automatisch gelöscht. Ist das erste Modell vorübergehend nicht verfügbar, wird das zweite einmal versucht. Nur geprüfte Terminalinhalte werden gesendet.",
+    "pt-BR": "Antes de responder, o aplicativo verifica informações atuais pela pesquisa na Web e mostra as fontes. Novas pesquisas podem gerar cobranças do serviço de IA. Os resultados verificados são criptografados, reutilizados por pouco tempo e excluídos após expirar. Se o primeiro modelo estiver temporariamente indisponível, o segundo será tentado uma vez. Somente conteúdo de terminal revisado é enviado."
+  },
+  "結果待機を終了": {
+    "ja": "結果待機を終了",
+    "en": "Stop waiting for result",
+    "zh-CN": "停止等待结果",
+    "ko": "결과 대기 종료",
+    "es": "Dejar de esperar el resultado",
+    "fr": "Arrêter l’attente du résultat",
+    "de": "Warten auf Ergebnis beenden",
+    "pt-BR": "Parar de aguardar o resultado"
+  },
+  "{0} では前のAIコマンド結果を待機中です。待機を終了して、取得済みの部分結果を確認しますか？": {
+    "ja": "{0} では前のAIコマンド結果を待機中です。待機を終了して、取得済みの部分結果を確認しますか？",
+    "en": "A previous AI command result is still pending on {0}. Stop waiting and review the partial result already captured?",
+    "zh-CN": "{0} 仍在等待上一个 AI 命令的结果。是否停止等待并查看已捕获的部分结果？",
+    "ko": "{0}에서 이전 AI 명령 결과를 기다리는 중입니다. 대기를 종료하고 이미 캡처된 부분 결과를 확인하시겠습니까?",
+    "es": "Todavía se espera el resultado de un comando de IA anterior en {0}. ¿Dejar de esperar y revisar el resultado parcial ya capturado?",
+    "fr": "Le résultat d’une commande IA précédente est toujours attendu sur {0}. Arrêter l’attente et examiner le résultat partiel déjà capturé ?",
+    "de": "Auf {0} wird noch auf das Ergebnis eines vorherigen KI-Befehls gewartet. Warten beenden und das bereits erfasste Teilergebnis prüfen?",
+    "pt-BR": "Ainda há um resultado de comando de IA pendente em {0}. Parar de aguardar e revisar o resultado parcial já capturado?"
+  },
+  "AIコマンドの結果待機を終了して、ここまでの部分結果を確認しますか？": {
+    "ja": "AIコマンドの結果待機を終了して、ここまでの部分結果を確認しますか？",
+    "en": "Stop waiting for the AI command result and review the partial result captured so far?",
+    "zh-CN": "是否停止等待 AI 命令结果并查看目前捕获的部分结果？",
+    "ko": "AI 명령 결과 대기를 종료하고 지금까지 캡처된 부분 결과를 확인하시겠습니까?",
+    "es": "¿Dejar de esperar el resultado del comando de IA y revisar el resultado parcial capturado hasta ahora?",
+    "fr": "Arrêter l’attente du résultat de la commande IA et examiner le résultat partiel capturé jusqu’ici ?",
+    "de": "Warten auf das KI-Befehlsergebnis beenden und das bisher erfasste Teilergebnis prüfen?",
+    "pt-BR": "Parar de aguardar o resultado do comando de IA e revisar o resultado parcial capturado até agora?"
   }
 }

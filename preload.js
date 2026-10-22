@@ -139,6 +139,17 @@ contextBridge.exposeInMainWorld('api', {
     verify: () => ipcRenderer.invoke('winhello:verify'),
     unlock: () => ipcRenderer.invoke('winhello:unlock')
   },
+  ai: {
+    chat: (settings, messages, systemPrompt) => ipcRenderer.invoke('ai:chat', settings, messages, systemPrompt),
+    chatStream: async (settings, messages, systemPrompt, onEvent) => {
+      const requestId = `ai_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 12)}`;
+      const listener = (event, id, value) => { if (id === requestId && typeof onEvent === 'function') onEvent(value); };
+      ipcRenderer.on('ai:stream', listener);
+      try { return await ipcRenderer.invoke('ai:chat', settings, messages, systemPrompt, requestId); }
+      finally { ipcRenderer.removeListener('ai:stream', listener); }
+    },
+    listModels: (settings) => ipcRenderer.invoke('ai:listModels', settings)
+  },
   updates: {
     check: () => ipcRenderer.invoke('updates:check'),
     download: () => ipcRenderer.invoke('updates:download'),
